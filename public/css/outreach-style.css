@@ -1,0 +1,22 @@
+:root {
+  --primary-color: #257b5f;
+}
+
+#outreach-main h1 {
+  margin: 5rem 0rem 0em;
+  color: var(--primary-color);
+}
+#outreach-main h2 {
+    font-size: 1.7em;
+    line-height: 1.3;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.container-fluid {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.cal-placeholder {
+    width: 100%;
+}
