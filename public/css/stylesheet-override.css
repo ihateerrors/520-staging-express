@@ -1416,16 +1416,19 @@ a.button {
 .flickr-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
   height: 100%;
   padding: 50px 0;
   box-sizing: border-box;
+  text-align: left;
 }
 
 .flickr-header {
   margin-bottom: 20px; /* Space between header and carousel */
-  text-align: center;
+  text-align: left !important;
+  font-weight: 600;
+  margin-left: 12px;
 }
 
 
