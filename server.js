@@ -6,7 +6,7 @@ const port = process.env.PORT || 3001;  // use the PORT environment variable if 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');  
 
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Define the route for the root of the site
 app.get('/', (req, res) => {
