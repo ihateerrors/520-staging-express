@@ -1464,3 +1464,20 @@ a.button {
       width: 96%;
   }
 }
+
+
+.map-and-filters-container {
+  display: flex;
+  align-items: start; /* Align the top edges of the form and the map */
+  gap: 20px; /* Space between form and map */
+}
+
+#mapFilters {
+  flex: 1; /* Take up the available space, adjust as needed */
+  margin-right: 20px; /* Add some spacing */
+}
+
+.map-container {
+  flex: 3; /* Take up three times the space of the form, adjust as needed */
+  height: 500px; /* Set height as required */
+}

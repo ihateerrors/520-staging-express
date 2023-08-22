@@ -1,0 +1,24 @@
+
+<div class="map-and-filters-container">
+
+    <form id="mapFilters" onsubmit="handleFormSubmit(event)">
+        <label for="start">Start Date:</label>
+        <input type="date" id="start" name="start" value="2000-01-01" required>
+
+        <label for="end">End Date:</label>
+        <input type="date" id="end" name="end" value="2099-12-31" required>
+
+        <label for="constructionType">Construction Type:</label>
+        <select id="constructionType" name="constructionType" onchange="handleConstructionTypeChange(event)">
+            <option value="All">All</option>
+            <option value="Cameras">Cameras</option>
+            <!-- Add other types as needed -->
+        </select>
+
+        <input type="submit" value="Filter">
+    </form>
+
+    <div id="map" class="map-container"></div>
+
+
+</div>

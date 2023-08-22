@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
 
-
+<!-- 
 https://sr520construction.blob.core.windows.net/media/icon_Camera.png
 https://sr520construction.blob.core.windows.net/media/icon_high_impact_construction.png
 https://sr520construction.blob.core.windows.net/media/icon_trail_closure.png
-https://sr520construction.blob.core.windows.net/media/icon_whitedash-onred.png
+https://sr520construction.blob.core.windows.net/media/icon_whitedash-onred.png -->
 
 <html lang="en" dir="ltr">
 
@@ -59,8 +59,12 @@ https://sr520construction.blob.core.windows.net/media/icon_whitedash-onred.png
   <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
   <script src="https://kit.fontawesome.com/da8d22a218.js" crossorigin="anonymous"></script>
   <!-- leaftlet css js -->
-
-
+  <!-- leaftlet css js -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+  <!-- end leaflet scripts -->
 <style>
  .navbar a {
   text-decoration: none !important;
@@ -112,7 +116,10 @@ https://sr520construction.blob.core.windows.net/media/icon_whitedash-onred.png
                           </div>
                             <div class="pl-sm-4 pl-lg-3">
                               <p></p>
-                              <img src="/img/lakewaaug14.png" alt="Map of consutrction on lake washington" class="greenborder" loading="lazy">
+                              <!-- <img src="/img/lakewaaug14.png" alt="Map of consutrction on lake washington" class="greenborder" loading="lazy"> -->
+
+                              <%- include('partials/map') %>
+
                                 <p class="pt-5"><strong>Contact Info:</strong></p>
                                 <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong> 206-775-8885</p>
                                 <p><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
@@ -191,7 +198,8 @@ https://sr520construction.blob.core.windows.net/media/icon_whitedash-onred.png
  
 
 <!-- ### End footer ### -->  
-
+<script src="/js/data.js"></script>
+<script src="/js/map.js"></script>
 <script src="/Scripts/script1.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
   integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script> -->
