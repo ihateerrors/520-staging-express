@@ -1,9 +1,26 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const Project = require('./models/Project');
 const multer  = require('multer');
 const app = express();
+
+const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
+
+const accountName = '520construction';
+const accountKey = AZURE_STORAGE_ACCOUNT_KEY;
+const containerName = '520-uploads';
+
+const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+const blobServiceClient = new BlobServiceClient(
+  `https://${accountName}.blob.core.windows.net`,
+  sharedKeyCredential
+);
+
+const uploadToAzure = require('./azureUpload');
+
 
 // Connect to MongoDB Atlas
 const uri = 'mongodb+srv://mkennedy:T7Sj9quazfsg870Y@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority';
@@ -41,12 +58,12 @@ const storage = multer.diskStorage({
   const upload = multer({ storage: storage });
   
 
-  app.post('/api/projects', upload.single('file'), (req, res) => {
-    console.log(req.file);  // This will log details of the uploaded file
-    const project = new Project({
-        ...req.body,
-        filePath: req.file.path
-    });
+  app.post('/api/projects', upload.single('file'), async (req, res) => {
+    if (req.file && req.file.buffer) {
+        const url = await uploadToAzure(req.file.buffer, req.file.originalname);
+        req.body.imageUrl = url;  // Saves the URL to the image in database
+    }
+   });
 
     project.save()
         .then(savedProject => {
@@ -61,7 +78,7 @@ const storage = multer.diskStorage({
                 res.status(500).send('Internal server error');
             }
         });
-});
+
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
