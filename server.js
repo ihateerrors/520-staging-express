@@ -30,17 +30,18 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-app.use(flash());
 
-app.use(passport.initialize());
-app.use(passport.session());
+const accountName = '520construction';
+const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
+const containerName = '520-uploads';
 
-// Sending flash messages to all routes
-app.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    next();
-});
+const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+const blobServiceClient = new BlobServiceClient(
+  `https://${accountName}.blob.core.windows.net`,
+  sharedKeyCredential
+);
+
+const uploadToAzure = require('./azureUpload');
 
 // Passport config 
 passport.use(new LocalStrategy({
@@ -137,36 +138,31 @@ app.get('/latest-closures', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+  
+  const upload = multer({ storage: storage });
+  
 
+  app.post('/api/projects', upload.single('file'), async (req, res) => {
+    if (req.file && req.file.buffer) {
+        const url = await uploadToAzure(req.file.buffer, req.file.originalname);
+        req.body.imageUrl = url;  // Saves the URL to the image in database
+    }
+   });
 
-app.use('/', registerRoutes);
+    Project.save()
+        .then(savedProject => {
+            res.status(200).redirect('/');
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            if (err.name === 'ValidationError') {
+                let errorMessages = Object.values(err.errors).map(e => e.message);
+                res.status(400).send({ errors: errorMessages });
+            } else {
+                res.status(500).send('Internal server error');
+            }
+        });
 
-const loginRoutes = require('./routes/login'); 
-app.use('/', loginRoutes);
-
-
-// Universal route handler for static pages
-app.get('/:page', (req, res, next) => {
-    const pageName = req.params.page;
-    const viewPath = path.join(__dirname, 'views', `${pageName}.ejs`);
-
-    fs.exists(viewPath, (exists) => {
-        if (exists) {
-            res.render(pageName);
-        } else {
-            next();
-        }
-    });
-});
-
-// catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
-app.get('/projectDetails', (req, res) => {
-    res.redirect('/projectDetails');
-});
-
-// Connect to MongoDB
-const apiKey = process.env.DB_API_KEY;
-const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
