@@ -2,13 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const multer = require('multer');
 const app = express();
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const User = require('./models/User');
+const User = require('./models/User');  // Path to your User model
 
 // Middleware setup
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -17,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session, flash and passport setup
+// Session, flash and passport setup should come here
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -65,9 +66,6 @@ passport.deserializeUser(async (id, done) => {
 const registerRoutes = require('./routes/register'); 
 app.use('/', registerRoutes);
 
-const loginRoutes = require('./routes/login'); 
-app.use('/', loginRoutes);
-
 const projectRoutes = require('./routes/projects');
 app.use(projectRoutes);
 
@@ -75,10 +73,24 @@ app.get('/', (req, res) => {
     res.render('index', { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!' });
 });
 
-// catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
 app.get('/:page', (req, res) => {
     res.render(req.params.page, { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!' });
 });
+
+app.get('/addProject', (req, res) => {
+    res.render('projectForm');
+});
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+  
+const upload = multer({ storage: storage });
 
 // Connect to MongoDB
 const apiKey = process.env.DB_API_KEY;
@@ -101,3 +113,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+

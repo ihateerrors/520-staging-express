@@ -57,6 +57,21 @@ const projectSchema = new mongoose.Schema({
         type: String, // Or another relevant data type depending on how you save this.
         required: false
     },
+
+    bannerContent: {
+        type: String,
+        required: true,
+        enum: ['yes', 'no']  // It ensures only 'yes' or 'no' values are stored for this field
+    },
+    postDate: {
+        type: Date,
+        required: true
+    },
+    removeDate: {
+        type: Date,
+        default: null  // If no date is provided, null is set by default
+    },
+
     contact: {
         type: String,
         enum: ['address1', 'address2', 'address3'],  // Updated enum values

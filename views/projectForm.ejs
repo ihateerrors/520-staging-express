@@ -155,24 +155,26 @@
 
     <div class="mb-3">
  
-    <!-- Start Date -->
-    <div class="mb-3">
-        <label for="postDate" class="form-label">Post online on:</label>
-        <input type="date" class="form-control" id="postDate" name="postDate">
-    </div>
+<!-- Banner content? -->
+<div class="mb-3">
+    <label for="bannerContent" class="form-label">Banner content?</label>
+    <select class="form-control" id="bannerContent" name="bannerContent">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+</div>
 
-    <!-- End Date -->
-    <div class="mb-3">
-        <label for="removeDate" class="form-label">Remove post on:</label>
-        <input type="date" class="form-control" id="removeDate" name="removeDate">
-    </div>
-       </div>
+<!-- Start Date -->
+<div class="mb-3">
+    <label for="postDate" class="form-label">Post online on:</label>
+    <input type="date" class="form-control" id="postDate" name="postDate" required>
+</div>
 
-
-       <banner>
-       Banner content
-
-       </banner>
+<!-- End Date -->
+<div class="mb-3">
+    <label for="removeDate" class="form-label">Remove post on:</label>
+    <input type="date" class="form-control" id="removeDate" name="removeDate">
+</div>
 
     <!-- Contact Block -->
     <div class="mb-3">
@@ -188,14 +190,7 @@
     <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
-
-
-
         </section>
-
-
 
     </div>
 
