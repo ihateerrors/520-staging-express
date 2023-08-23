@@ -153,6 +153,27 @@
         </div>
     </div>
 
+    <div class="mb-3">
+ 
+    <!-- Start Date -->
+    <div class="mb-3">
+        <label for="postDate" class="form-label">Post online on:</label>
+        <input type="date" class="form-control" id="postDate" name="postDate">
+    </div>
+
+    <!-- End Date -->
+    <div class="mb-3">
+        <label for="removeDate" class="form-label">Remove post on:</label>
+        <input type="date" class="form-control" id="removeDate" name="removeDate">
+    </div>
+       </div>
+
+
+       <banner>
+       Banner content
+
+       </banner>
+
     <!-- Contact Block -->
     <div class="mb-3">
         <label for="contact" class="form-label">Contact Block</label>
@@ -177,6 +198,18 @@
 
 
     </div>
+
+    <% if(success_msg) { %>
+        <div class="alert alert-success">
+            <%= success_msg %>
+        </div>
+    <% } %>
+    
+    <% if(error_msg) { %>
+        <div class="alert alert-danger">
+            <%= error_msg %>
+        </div>
+    <% } %>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1do4A+gf8k5l7l4lMz4i3WDQn1Z7y/JonasIUNsobEU5nF4o5NaVa6b" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6g9Kv4dkd6" crossorigin="anonymous"></script>

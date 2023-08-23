@@ -47,7 +47,7 @@ const projectSchema = new mongoose.Schema({
             "Vibration"
         ]
     }],
-    graphicPhoto: {
+  imageUrl: {
         type: String,  // This assumes you will be saving a file path or URL to the image. 
         required: false
     },

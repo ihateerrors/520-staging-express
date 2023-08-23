@@ -1,36 +1,76 @@
 require('dotenv').config();
-
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const Project = require('./models/Project');
-const multer  = require('multer');
+const multer = require('multer');
 const app = express();
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');  // Path to your User model
+const registerRoutes = require('./routes/register'); 
+app.use('/', registerRoutes);
 
-const { BlobServiceClient, StorageSharedKeyCredential } = require('@azure/storage-blob');
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
 
-const accountName = '520construction';
-const accountKey = AZURE_STORAGE_ACCOUNT_KEY;
-const containerName = '520-uploads';
-
-const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
-const blobServiceClient = new BlobServiceClient(
-  `https://${accountName}.blob.core.windows.net`,
-  sharedKeyCredential
-);
-
-const uploadToAzure = require('./azureUpload');
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 
-// Connect to MongoDB Atlas
-const uri = 'mongodb+srv://mkennedy:T7Sj9quazfsg870Y@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority';
+app.use(passport.initialize());
+app.use(passport.session());
+
+// configure Passport 
+
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+}, async (email, password, done) => {
+    const user = await User.findOne({ email });
+    if (!user) {
+        return done(null, false, { message: 'Invalid email or password.' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return done(null, false, { message: 'Invalid email or password.' });
+    }
+
+    return done(null, user);
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    const user = await User.findById(id);
+    done(null, user);
+});
+
+// END passport config 
+
+const projectRoutes = require('./routes/projects');
+app.use(projectRoutes);
+
+const apiKey = process.env.DB_API_KEY;
+const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
 
 // Middleware setup
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.set('view engine', 'ejs');  // Set EJS as the templating engine
+app.set('view engine', 'ejs'); 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());  // Parse JSON payloads
-app.use(express.urlencoded({ extended: true }));  // Parse URL-encoded form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes setup
 app.get('/', (req, res) => {
@@ -45,7 +85,6 @@ app.get('/addProject', (req, res) => {
     res.render('projectForm');
 });
 
-// Configure storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads/')
@@ -53,32 +92,9 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
       cb(null, Date.now() + '-' + file.originalname)
     }
-  });
+});
   
-  const upload = multer({ storage: storage });
-  
-
-  app.post('/api/projects', upload.single('file'), async (req, res) => {
-    if (req.file && req.file.buffer) {
-        const url = await uploadToAzure(req.file.buffer, req.file.originalname);
-        req.body.imageUrl = url;  // Saves the URL to the image in database
-    }
-   });
-
-    project.save()
-        .then(savedProject => {
-            res.status(200).redirect('/');
-        })
-        .catch(err => {
-            console.error('Error:', err);
-            if (err.name === 'ValidationError') {
-                let errorMessages = Object.values(err.errors).map(e => e.message);
-                res.status(400).send({ errors: errorMessages });
-            } else {
-                res.status(500).send('Internal server error');
-            }
-        });
-
+const upload = multer({ storage: storage });
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
@@ -97,3 +113,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+
+
