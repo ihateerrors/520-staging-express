@@ -19,12 +19,17 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(flash());
-app.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    next();
-});
+const accountName = '520construction';
+const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
+const containerName = '520-uploads';
+
+const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
+const blobServiceClient = new BlobServiceClient(
+  `https://${accountName}.blob.core.windows.net`,
+  sharedKeyCredential
+);
+
+const uploadToAzure = require('./azureUpload');
 
 
 app.use(passport.initialize());
@@ -94,7 +99,30 @@ const storage = multer.diskStorage({
     }
 });
   
-const upload = multer({ storage: storage });
+  const upload = multer({ storage: storage });
+  
+
+  app.post('/api/projects', upload.single('file'), async (req, res) => {
+    if (req.file && req.file.buffer) {
+        const url = await uploadToAzure(req.file.buffer, req.file.originalname);
+        req.body.imageUrl = url;  // Saves the URL to the image in database
+    }
+   });
+
+    Project.save()
+        .then(savedProject => {
+            res.status(200).redirect('/');
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            if (err.name === 'ValidationError') {
+                let errorMessages = Object.values(err.errors).map(e => e.message);
+                res.status(400).send({ errors: errorMessages });
+            } else {
+                res.status(500).send('Internal server error');
+            }
+        });
+
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
