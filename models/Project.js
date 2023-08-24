@@ -77,7 +77,7 @@ const projectSchema = new mongoose.Schema({
         enum: ['address1', 'address2', 'address3'],  // Updated enum values
         required: false
     }
-});
+}, { timestamps: true });
 
 const Project = mongoose.model('Project', projectSchema);
 

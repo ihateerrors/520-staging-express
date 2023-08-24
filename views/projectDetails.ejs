@@ -67,13 +67,10 @@
             <div class="row">
                 <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
                     <div class="mt-4 mb-1" style="margin-left: 7%;"> 
-                        <% if (bannerProject) { %>
-                            <span style="font-size: 1.4em; font-weight: 700;"><%= bannerProject.activityName %> </span>
-                            <p><a href="/projects/<%= project._id %>">View Details</a>
-                            </p>
-                        <% } else { %>
-                            <p></p>
-                            <% } %>  
+                      <% if (typeof bannerContent !== 'undefined' && bannerContent) { %>
+                        <span style="font-size: 1.4em; font-weight: 700;"><%= bannerContent.activityName %> </span>
+                        <p><a href="/projects/<%= project._id %>">View Details</a></p>
+                    <% } %>
                     </div> 
                 </div>
             </div>
