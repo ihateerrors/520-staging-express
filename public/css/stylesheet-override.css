@@ -1481,3 +1481,102 @@ a.button {
   flex: 3; /* Take up three times the space of the form, adjust as needed */
   height: 500px; /* Set height as required */
 }
+
+
+#sidebarList {
+color: darkslategray !important;
+}
+.sidebarList li {
+  background-color: (#eeeeee80);
+
+   text-decoration: none !important;
+   border: #D9D9D9 2px solid;
+   border-radius: 5px;
+   position: relative;
+   transform: skewX(-10deg);
+   transition: all 0.3s;
+   font-size: 1em;
+   padding: 15px;
+   font-style: normal !important;
+   margin-bottom: 25px;
+   color: #011212;
+   list-style-type: none !important;
+   font-size: 16px;
+   text-align: left;
+   align-items: center;
+   justify-content: center;
+ }
+ 
+ .sidebarList li:hover {
+  background-color: rgb(238, 238, 238);
+  border: #eeeeee 2px solid;
+  color: #ffff !important;
+ }
+ .sidebarList li a { 
+  /* background-color: #eeeeee; */
+   text-decoration: none !important;
+   color: darkslategray;
+   /* color:#007b5f; */
+   font-style: normal !important;
+   font-weight: 600;
+  }
+ .sidebarList a:hover {
+   color: #005151 important;
+   text-decoration: underline;
+ }
+ 
+ .icon-text-pair {
+  display: flex;
+  align-items: flex-start;
+  color:#007b5f;
+  font-style: normal !important;
+}
+
+.icon-text-pair img {
+  margin-right: 10px; /* Adjust the spacing between the icon and text */
+  transform: skewX(10deg);
+}
+
+
+.icon-text-pair a {
+  color:#007b5f;
+  font-style: normal;
+}
+.icon-text-pair a:visited {
+  color: #007b5f;
+}
+
+
+.closure-item {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding: 5px 10px;
+  background-color: #fff;
+  border: 2px solid #d9d9d9;
+  transform: skew(10deg);
+  transition: background-color 0.3s;
+  list-style-type: none !important;
+}
+
+.closure-item:hover {
+  background-color: #d9d9d9;
+}
+
+.closure-link {
+  text-decoration: none;
+  color: black;
+  font-style: normal;
+  margin-left: 10px;
+}
+
+.icon-box {
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  text-align: center;
+  line-height: 25px;
+}
+
+

@@ -4,6 +4,7 @@ const router = express.Router();
 const { uploadToAzure } = require('../utils/azureUpload'); 
 const Project = require('../models/Project');
 const ensureAuthenticated = require('../middlewares/auth');
+const formatDate = require('../utils/dateHelpers');
 
 // Using memoryStorage to keep the uploaded file in memory
 const storage = multer.memoryStorage();
@@ -38,26 +39,50 @@ router.post('/api/projects', ensureAuthenticated, upload.single('file'), async (
         }
     }
 });
-
-// Route to fetch and display project details
-router.get('/projects/:projectId', ensureAuthenticated, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
-        const project = await Project.findById(req.params.projectId);
+        const closures = await Project.find({ /* Your conditions here if any */ }).limit(10); 
+        res.render('index', { closures: closures });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
-        // Fetch the most recent bannerContent
-        const bannerProject = await Project.findOne({ bannerContent: "yes" }).sort({ createdAt: -1 });
+router.get('/projects/:projectId', async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const project = await Project.findById(projectId); // assuming Project is your model
 
         if (!project) {
-            req.flash('error_msg', 'Project not found.');
-            return res.redirect('/someErrorPageOrHomePage'); 
+            res.status(404).send('Project not found');
+            return;
         }
 
-        // Render the EJS template with the project and bannerProject data
-        res.render('projectDetails', { project, bannerProject }); 
-    } catch (err) {
-        console.error('Error:', err);
-        req.flash('error_msg', 'Internal server error.');
-        res.redirect('/someErrorPageOrHomePage');
+        res.render('projectDetails', { project, formatDate });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/latest-closures', async (req, res) => {
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const closures = await Project.find({
+            endDate: { $gte: today }, 
+            postDate: { $lte: today }
+        })
+        .sort({ postDate: -1 }) // This sorts by postDate in descending order.
+        .limit(4)
+        .exec();
+
+        res.json(closures);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 });
 

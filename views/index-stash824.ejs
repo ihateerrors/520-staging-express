@@ -69,7 +69,7 @@
 
     <main>
 
-      <!-- <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
+      <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
         <div class="row">
             <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
                 <div class="mt-4 mb-1" style="margin-left: 7%;"> 
@@ -81,7 +81,7 @@
                 </div> 
             </div>
         </div>
-    </div> -->
+    </div>
      <!-- </div>  -->
 
 <!-- ###  Main container  ### -->
@@ -135,7 +135,12 @@
                 <div class="left2">
         
                   <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures</strong></p>
-                  <%- include('partials/closures') %>
+                  <% closures.forEach(closure => { %>
+                    <li class="closure-item">
+                        <span class="icon-box">🚧</span>
+                        <a href="/projects/<%= closure._id %>" class="closure-link"><%= closure.activityName %></a>
+                    </li>
+                <% }); %>
     
                     <br>
               </div>

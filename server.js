@@ -9,6 +9,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+const fs = require('fs');
+const Project = require('./models/Project');
 
 // Middleware setup
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -16,6 +18,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.locals.moment = require('moment');
 
 // Session, flash and passport setup
 app.use(session({
@@ -71,14 +74,45 @@ app.use('/', loginRoutes);
 const projectRoutes = require('./routes/projects');
 app.use(projectRoutes);
 
-app.get('/', (req, res) => {
-    res.render('index', { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!' });
+
+app.get('/', async (req, res) => {
+    try {
+        // Get the most recent project with bannerContent set to 'yes'
+        const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
+
+        if (!project) {
+            // Handle the scenario where no project with 'yes' for bannerContent is found
+            // You can simply render the index page without the project details or show a placeholder
+            return res.render('index', { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!' });
+        }
+
+        res.render('index', { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!', project });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
+
+// Universal route handler for static pages
+app.get('/:page', (req, res, next) => {
+    const pageName = req.params.page;
+    const viewPath = path.join(__dirname, 'views', `${pageName}.ejs`);
+
+    fs.exists(viewPath, (exists) => {
+        if (exists) {
+            res.render(pageName);
+        } else {
+            next(); // Pass control to the next handler, which could be your 404 page
+        }
+    });
+});
+
 
 // catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
 app.get('/projectDetails', (req, res) => {
     // Redirect to an error page or a specific project
-    res.redirect('/');
+    res.redirect('/projectDetails');
 });
 
 // Connect to MongoDB
