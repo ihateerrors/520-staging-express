@@ -76,8 +76,9 @@ app.get('/', (req, res) => {
 });
 
 // catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
-app.get('/:page', (req, res) => {
-    res.render(req.params.page, { title: '520 Construction Corner', header: 'Welcome to the 520 Construction Corner!' });
+app.get('/projectDetails', (req, res) => {
+    // Redirect to an error page or a specific project
+    res.redirect('/');
 });
 
 // Connect to MongoDB
