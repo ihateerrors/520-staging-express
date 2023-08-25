@@ -64,51 +64,7 @@ passport.deserializeUser(async (id, done) => {
     done(null, user);
 });
 
-// Route for the homepage
-// app.get('/', async (req, res) => {
-//     try {
-//         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
-
-//         // Always pass the project variable, even if it's null.
-//         res.render('index', { 
-//             title: '520 Construction Corner', 
-//             header: 'Welcome to the 520 Construction Corner!', 
-//             project
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
-
-// Route for the homepage
-app.get('/', async (req, res) => {
-    try {
-        const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
-
-        // Fetch all relevant closures. Adjust this if you need specific filtering.
-        const closures = await Project.find({}).sort({ postDate: -1 });
-
-        // Always pass both the project and closures variables, even if they're null or empty.
-        res.render('index', { 
-            title: '520 Construction Corner', 
-            header: 'Welcome to the 520 Construction Corner!', 
-            project,
-            closures
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-
-
-
-// Routes setup
+// Routes setup should come after the middleware
 const registerRoutes = require('./routes/register'); 
 app.use('/', registerRoutes);
 
@@ -117,6 +73,27 @@ app.use('/', loginRoutes);
 
 const projectRoutes = require('./routes/projects');
 app.use(projectRoutes);
+
+app.get('/', async (req, res) => {
+    try {
+        // Get the most recent project with bannerContent set to 'yes'
+        const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
+
+        // Fetch all relevant closures
+        const closures = await Project.find({}).sort({ postDate: -1 });
+
+        res.render('index', { 
+            title: '520 Construction Corner', 
+            header: 'Welcome to the 520 Construction Corner!', 
+            project, 
+            closures
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 // Universal route handler for static pages
 app.get('/:page', (req, res, next) => {
@@ -127,13 +104,15 @@ app.get('/:page', (req, res, next) => {
         if (exists) {
             res.render(pageName);
         } else {
-            next();
+            next(); // Pass control to the next handler, which could be your 404 page
         }
     });
 });
 
+
 // catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
 app.get('/projectDetails', (req, res) => {
+    // Redirect to an error page or a specific project
     res.redirect('/projectDetails');
 });
 

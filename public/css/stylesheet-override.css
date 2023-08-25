@@ -1554,11 +1554,19 @@ color: darkslategray !important;
   padding: 5px 10px;
   background-color: #fff;
   border: 2px solid #d9d9d9;
-  transform: skew(10deg);
+  transform: skew(-10deg);
   transition: background-color 0.3s;
   list-style-type: none !important;
+  text-decoration: none !important;
+  margin-bottom: 2em;
+  border-radius: 5px;
 }
 
+.closure-item a {
+  transform: skew(10deg);
+  text-decoration: none !important;
+  color: #005151;
+}
 .closure-item:hover {
   background-color: #d9d9d9;
 }

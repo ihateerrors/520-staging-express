@@ -69,20 +69,7 @@
 
     <main>
 
-      <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
-        <div class="row">
-            <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
-                <div class="mt-4 mb-1" style="margin-left: 7%;"> 
-                  <% if (project && project.bannerContent === 'yes') { %>
-                    <span style="font-size: 1.4em; font-weight: 700;"><%= project.activityName %> </span>
-                    <p><a href="/projects/<%= project._id %>">View Details</a></p>
-                <% } %>
-                
-                </div> 
-            </div>
-        </div>
-    </div>
-     <!-- </div>  -->
+
 
 <!-- ###  Main container  ### -->
      <div class="container4" style="padding-left: 5%; padding-right: 5%; margin-top: 20px; margin-bottom: 20px;"> 
@@ -135,14 +122,7 @@
                 <div class="left2">
         
                   <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures</strong></p>
-                  <ul>
-                    <% closures.forEach(closure => { %>
-                        <li class="closure-item">
-                            <span class="icon-box">🚧</span>
-                            <a href="/projects/<%= closure._id %>" class="closure-link"><%= closure.activityName %></a>
-                        </li>
-                    <% }); %>
-                </ul>
+                  <%- include('partials/closures') %>
     
                     <br>
               </div>
@@ -197,10 +177,10 @@
 
 </script>
 
-  <script src="/Scripts/script1.js"></script>
+
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
     integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script> -->
-  <script src="/Scripts/script2.js"></script>
+
   <!-- <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script> -->
   <script src="/Scripts/script3.js"></script>

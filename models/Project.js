@@ -25,6 +25,10 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    trafficDescription: {
+        type: String,
+        required: true
+    },
     activityType: [{
         type: String,
         enum: [
