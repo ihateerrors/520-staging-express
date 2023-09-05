@@ -303,9 +303,9 @@ img {
     float: left;
     margin-right: 30px;
 }
-#map img {
+/* #map img {
      -webkit-filter: saturate(0.3);
-}
+} */
 
 .legendItem {
     background-color: orange;
@@ -343,7 +343,7 @@ img {
 .sideLink > a {
     line-height: 1.5;
 }
-.dateFilter {
+/* .dateFilter {
     width: 120px;
     font-size: 16px;
     margin-left: 25px;
@@ -360,7 +360,7 @@ img {
 .ui-datepicker-trigger {
     width: 25px;
     margin-left: 3px!important;
-}
+} */
 
 .clearfix:before,
 .clearfix:after
@@ -666,14 +666,14 @@ p.tagline, #main p.tagline {
     overflow: auto;
     background-color: #017359;
 }
-input.searchButton {
+/* input.searchButton {
     background-color: #017359;
     border: 1px solid;
     border-top-color: #017359;
     border-left-color: #017359;
     border-right-color: #017359;
     border-bottom-color: #017359;
-}
+} */
 p, ul, ol, dl {
     line-height: 1.5em;
 }
@@ -821,23 +821,7 @@ input.searchButton {
 }
 
 @media (min-width: 992px) {
-    #header .topban {
-        height: 38px;
-    }
-    #main p.floatright {
-        float: right;
-        margin-left: 15px;
-    }
-    #main p.floatright > img:first-child {
-        max-width: 370px;
-    }
-    .formfield {
-        display: inline-block;
-        float: left;
-    }
-    .mainnav ul li a {
-        font-size: 1em;
-    }
+
    .leaflet-popup-content[style] {
         width: 500px!important;
     }
@@ -952,7 +936,7 @@ input.searchButton {
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
-fieldset {
+/* fieldset {
     border: 1px solid #ddd;
     padding: 0 1.4em 1.4em 1.4em;
     margin: 0 0 1.5em 0;
@@ -973,7 +957,7 @@ textarea {
 
 .editor-field {
     margin: 0.5em 0 0 0;
-}
+} */
 
 
 /* Styles for validation helpers

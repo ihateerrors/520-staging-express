@@ -161,26 +161,15 @@
         <input type="file" class="form-control" id="file" name="file">
     </div>
 
-
+    <!-- Map  -->
     <div class="mb-3">
         <label class="form-label">Map</label>
-    
-        <!-- Color and width pickers added above the map -->
-        <div class="map-controls">
-            <label for="colorPicker">Choose a color:</label>
-            <input type="color" id="colorPicker" name="color" value="#3388ff">
-    
-            <label for="widthPicker" style="margin-left: 20px;">Choose line width:</label>
-            <input type="number" id="widthPicker" name="width" min="1" max="10" value="3">
+        <div id="map" style="width: 1200px; height: 400px;">    
         </div>
-        
-        <!-- Your existing map container -->
-        <div id="map" style="width: 1200px; height: 600px;">    
-        </div>
-    
         <input type="hidden" id="mapData" name="mapData">
     </div>
-    
+
+ 
  
 <!-- Banner content? -->
 <div class="mb-3">
@@ -242,106 +231,39 @@
 
 
 <script>
-// Initialize map
-const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
 
-const drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-const defaultColor = '#3388ff';  // A default color to start with
-const defaultWidth = 3;         // A default width
+    const drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
 
-// Cache DOM elements
-const colorPickerElement = document.getElementById('colorPicker');
-const widthPickerElement = document.getElementById('widthPicker');
-const mapDataElement = document.getElementById('mapData');
+    const defaultColor = '#3388ff';  // A default color to start with
+   const defaultWidth = 3;         // A default width
 
-// Ensure DOM elements are available
-if (!colorPickerElement || !widthPickerElement || !mapDataElement) {
-    console.error('Required DOM elements not found.');
-}
 
-const drawControl = new L.Control.Draw({
-    draw: {
-        polygon: {
-            shapeOptions: {
-                color: defaultColor
-            }
+    const drawControl = new L.Control.Draw({
+        draw: {
+            polygon: true,
+            polyline: true,
+            rectangle: true,
+            circle: true,
+            marker: true
         },
-        polyline: {
-            shapeOptions: {
-                color: defaultColor,
-                weight: defaultWidth
-            }
-        },
-        rectangle: {
-            shapeOptions: {
-                color: defaultColor
-            }
-        },
-        circle: {
-            shapeOptions: {
-                color: defaultColor
-            }
-        },
-        marker: true
-    },
-    edit: {
-        featureGroup: drawnItems,
-        edit: false
-    }
-});
-map.addControl(drawControl);
-
-map.on('draw:created', function(event) {
-    const layer = event.layer;
-
-    // Adding style data directly to the layer so it gets included in the GeoJSON
-    const selectedColor = colorPickerElement.value;
-    const selectedWidth = parseInt(widthPickerElement.value);
-
-    if (layer instanceof L.Polyline) {
-        layer.setStyle({
-            color: selectedColor,
-            weight: selectedWidth
-        });
-    } else if (layer instanceof L.Polygon || layer instanceof L.Rectangle || layer instanceof L.Circle) {
-        layer.setStyle({
-            color: selectedColor
-        });
-    }
-
-    drawnItems.addLayer(layer);
-
-    // Save the drawn shape data for form submission
-    const shapes = drawnItems.toGeoJSON();
-    mapDataElement.value = JSON.stringify(shapes);
-});
-
-// Interface for user customization
-colorPickerElement.addEventListener('input', (event) => {
-    const selectedColor = event.target.value;
-    const selectedWidth = parseInt(widthPickerElement.value);
-    
-    drawControl.setDrawingOptions({
-        polygon: { shapeOptions: { color: selectedColor } },
-        polyline: { shapeOptions: { color: selectedColor, weight: selectedWidth } },
-        rectangle: { shapeOptions: { color: selectedColor } },
-        circle: { shapeOptions: { color: selectedColor } }
+        edit: {
+            featureGroup: drawnItems,
+            edit: false
+        }
     });
-});
+    map.addControl(drawControl);
 
-widthPickerElement.addEventListener('input', (event) => {
-    const selectedWidth = parseInt(event.target.value);
-    const selectedColor = colorPickerElement.value;
-    
-    drawControl.setDrawingOptions({
-        polyline: { shapeOptions: { weight: selectedWidth, color: selectedColor } }
+    map.on('draw:created', function(event) {
+        const layer = event.layer;
+        drawnItems.addLayer(layer);
+        // Save the drawn shape data for form submission
+        const shapes = drawnItems.toGeoJSON();
+        document.getElementById('mapData').value = JSON.stringify(shapes);
     });
-});
-
-
 </script>
 
 

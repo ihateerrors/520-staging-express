@@ -18,6 +18,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
 
 <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+
+<!-- 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script> -->
+
 <!-- Google Maps JavaScript API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
 <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
@@ -105,17 +110,81 @@
 <!-- Leaflet JS -->
 <!-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
 const map = L.map('map').setView([47.6407, -122.2971], 15);
 
-// Defaults for rendering the styles
-const defaultColor = '#3388ff';
-const defaultWidth = 3;
-
 L.gridLayer.googleMutant({
-    type: 'roadmap',
+    type: 'roadmap',  // Choose from 'roadmap', 'satellite', 'terrain', or 'hybrid'
     maxZoom: 20,
     apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
 }).addTo(map);
+
+const drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+const defaultColor = '#3388ff';  // A default color to start with
+const defaultWidth = 3;         // A default width
+
+const drawControl = new L.Control.Draw({
+    draw: {
+        polygon: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        polyline: {
+            shapeOptions: {
+                color: defaultColor,
+                weight: defaultWidth
+            }
+        },
+        rectangle: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        circle: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        marker: true
+    },
+    edit: {
+        featureGroup: drawnItems,
+        edit: false
+    }
+});
+map.addControl(drawControl);
+
+map.on('draw:created', function(event) {
+    const layer = event.layer;
+    drawnItems.addLayer(layer);
+    // Save the drawn shape data for form submission
+    const shapes = drawnItems.toGeoJSON();
+    document.getElementById('mapData').value = JSON.stringify(shapes);
+});
+
+// Interface for user customization
+document.getElementById('colorPicker').addEventListener('input', (event) => {
+    const selectedColor = event.target.value;
+    drawControl.setDrawingOptions({
+        polygon: { shapeOptions: { color: selectedColor } },
+        polyline: { shapeOptions: { color: selectedColor, weight: parseInt(document.getElementById('widthPicker').value) } },
+        rectangle: { shapeOptions: { color: selectedColor } },
+        circle: { shapeOptions: { color: selectedColor } }
+    });
+});
+
+document.getElementById('widthPicker').addEventListener('input', (event) => {
+    const selectedWidth = parseInt(event.target.value);
+    drawControl.setDrawingOptions({
+        polyline: { shapeOptions: { weight: selectedWidth, color: document.getElementById('colorPicker').value } }
+    });
+});
+
 
 const activityIcons = {
     "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -126,7 +195,6 @@ const activityIcons = {
     "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
     "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
 };
-
 
 function fetchMapData(startDate = '', endDate = '', types = []) {
     let apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
@@ -143,13 +211,7 @@ function fetchMapData(startDate = '', endDate = '', types = []) {
                         return;
                     }
 
-                    let geoJSONData;
-                        try {
-                            geoJSONData = JSON.parse(project.mapData);
-                        } catch (error) {
-                            console.warn(`Failed to parse mapData for project with ID ${project._id}:`, error);
-                            return; // Skip this project and move to the next one.
-                        }
+                    const geoJSONData = JSON.parse(project.mapData);
                     const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
                     const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
                     const timingFeaturesHTML = project.timingFeatures.map(feature => `
@@ -165,7 +227,9 @@ function fetchMapData(startDate = '', endDate = '', types = []) {
                             <span style="font-weight: 600">Time:</span> ${project.time}</p>
                             <div class="timing-features">${timingFeaturesHTML}</div>                         
                             <p>${project.description || "Not specified"}</p>
+
                             <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
+
                             <div class="popup-image mt-2">                            
                             ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="img-fluid">` : ''}
                             </div>
@@ -181,31 +245,30 @@ function fetchMapData(startDate = '', endDate = '', types = []) {
                     const customIcon = L.icon({
                         iconUrl: iconUrl,
                         iconSize: [25, 25],
+                        // iconAnchor: [12, 41],
                         popupAnchor: [0, -41]
                     });
-
-
                     const geoJSONLayer = L.geoJSON(geoJSONData, {
-                        style: function(feature) {
-                            console.log("Feature properties:", feature.properties);
-                            return {
-                                color: feature.properties.color || defaultColor,
-                                weight: feature.properties.width || defaultWidth
-                            };
-                        },
-                        pointToLayer: function (feature, latlng) {
-                            return L.marker(latlng, { icon: customIcon });
-                        },
-                        onEachFeature: function (feature, layer) {
-                            layer.bindPopup(popupContent, {
-                                autoPan: true,
-                                autoPanPaddingTopLeft: L.point(10, 50),
-                                autoPanPaddingBottomRight: L.point(10, 10)
-                            });
-                        }
-                    }).addTo(map);
-                    map.fitBounds(geoJSONLayer.getBounds());
-                });
+                            style: function(feature) {
+                                return {
+                                    color: feature.properties.color || defaultColor,  // Use default color if not present
+                                    weight: feature.properties.width || defaultWidth  // Use default width if not present
+                                };
+                            },
+                            pointToLayer: function (feature, latlng) {
+                                return L.marker(latlng, { icon: customIcon });
+                            },
+                            onEachFeature: function (feature, layer) {
+                                layer.bindPopup(popupContent, {
+                                    autoPan: true,
+                                    autoPanPaddingTopLeft: L.point(10, 50),
+                                    autoPanPaddingBottomRight: L.point(10, 10)
+                                });
+                            }
+                        }).addTo(map);
+                        map.fitBounds(geoJSONLayer.getBounds());
+
+                      });
             }
         })
         .catch(error => console.error('Error fetching map data:', error));
@@ -239,14 +302,20 @@ document.querySelector('form').addEventListener('submit', function (e) {
     if (document.getElementById('streetLane').checked) types.push('Street and lane closure');
     if (document.getElementById('trail').checked) types.push('Trail closure');
     if (document.getElementById('ramp').checked) types.push('Ramp closure');
-    if (document.getElementById('highImpact').checked) types.push('High Impact');
+    if (document.getElementById('highImpact').checked) types.push('High-impact construction');
+    if (document.getElementById('Cameras').checked) types.push('Cameras');
+
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.TileLayer) return;
+        map.removeLayer(layer);
+    });
 
     fetchMapData(startDate, endDate, types);
 });
 
+});
 
 </script>
-
 
 </body>
 </html>

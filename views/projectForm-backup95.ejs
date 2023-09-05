@@ -242,25 +242,15 @@
 
 
 <script>
-// Initialize map
 const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 const drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
 
-const defaultColor = '#3388ff';  // A default color to start with
-const defaultWidth = 3;         // A default width
-
-// Cache DOM elements
-const colorPickerElement = document.getElementById('colorPicker');
-const widthPickerElement = document.getElementById('widthPicker');
-const mapDataElement = document.getElementById('mapData');
-
-// Ensure DOM elements are available
-if (!colorPickerElement || !widthPickerElement || !mapDataElement) {
-    console.error('Required DOM elements not found.');
-}
+const defaultColor = '#c10a0a;';  // A default color to start with
+const defaultWidth = 8;         // A default width
 
 const drawControl = new L.Control.Draw({
     draw: {
@@ -294,21 +284,19 @@ const drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
+
 map.on('draw:created', function(event) {
     const layer = event.layer;
 
     // Adding style data directly to the layer so it gets included in the GeoJSON
-    const selectedColor = colorPickerElement.value;
-    const selectedWidth = parseInt(widthPickerElement.value);
-
     if (layer instanceof L.Polyline) {
         layer.setStyle({
-            color: selectedColor,
-            weight: selectedWidth
+            color: document.getElementById('colorPicker').value,
+            weight: parseInt(document.getElementById('widthPicker').value)
         });
     } else if (layer instanceof L.Polygon || layer instanceof L.Rectangle || layer instanceof L.Circle) {
         layer.setStyle({
-            color: selectedColor
+            color: document.getElementById('colorPicker').value
         });
     }
 
@@ -316,31 +304,27 @@ map.on('draw:created', function(event) {
 
     // Save the drawn shape data for form submission
     const shapes = drawnItems.toGeoJSON();
-    mapDataElement.value = JSON.stringify(shapes);
+    document.getElementById('mapData').value = JSON.stringify(shapes);
 });
 
+
 // Interface for user customization
-colorPickerElement.addEventListener('input', (event) => {
+document.getElementById('colorPicker').addEventListener('input', (event) => {
     const selectedColor = event.target.value;
-    const selectedWidth = parseInt(widthPickerElement.value);
-    
     drawControl.setDrawingOptions({
         polygon: { shapeOptions: { color: selectedColor } },
-        polyline: { shapeOptions: { color: selectedColor, weight: selectedWidth } },
+        polyline: { shapeOptions: { color: selectedColor, weight: parseInt(document.getElementById('widthPicker').value) } },
         rectangle: { shapeOptions: { color: selectedColor } },
         circle: { shapeOptions: { color: selectedColor } }
     });
 });
 
-widthPickerElement.addEventListener('input', (event) => {
+document.getElementById('widthPicker').addEventListener('input', (event) => {
     const selectedWidth = parseInt(event.target.value);
-    const selectedColor = colorPickerElement.value;
-    
     drawControl.setDrawingOptions({
-        polyline: { shapeOptions: { weight: selectedWidth, color: selectedColor } }
+        polyline: { shapeOptions: { weight: selectedWidth, color: document.getElementById('colorPicker').value } }
     });
 });
-
 
 </script>
 
