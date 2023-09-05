@@ -30,12 +30,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
 app.use(flash());
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Sending flash messages to all routes
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
@@ -137,36 +133,8 @@ app.get('/latest-closures', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
-
-app.use('/', registerRoutes);
-
-const loginRoutes = require('./routes/login'); 
-app.use('/', loginRoutes);
-
-
-// Universal route handler for static pages
-app.get('/:page', (req, res, next) => {
-    const pageName = req.params.page;
-    const viewPath = path.join(__dirname, 'views', `${pageName}.ejs`);
-
-    fs.exists(viewPath, (exists) => {
-        if (exists) {
-            res.render(pageName);
-        } else {
-            next();
-        }
-    });
-});
-
-// catch-all route -- keep this at the bottom so it doesn't interfere with specific routes
-app.get('/projectDetails', (req, res) => {
-    res.redirect('/projectDetails');
-});
-
-// Connect to MongoDB
-const apiKey = process.env.DB_API_KEY;
-const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
+  
+const upload = multer({ storage: storage });
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
