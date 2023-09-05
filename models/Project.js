@@ -37,7 +37,8 @@ const projectSchema = new mongoose.Schema({
             "Street or lane closure",
             "Trail closure",
             "Ramp closure",
-            "High-impact construction"
+            "High-impact construction",
+            "Cameras"
         ]
     }],
     impactType: [{
@@ -52,13 +53,16 @@ const projectSchema = new mongoose.Schema({
         ]
     }],
   imageUrl: {
-        type: String,  // This assumes you will be saving a file path or URL to the image. 
+        type: String,  // saves to Azure database which generates the URL stored in MOngoDB
         required: false
     },
-    // For the map, it depends on how you're storing this. 
-    // Assuming you might save a JSON object or a string representation of coordinates
+    // For the map
+    location: {
+        type: String,
+        required: false
+    },
     mapData: {
-        type: String, // Or another relevant data type depending on how you save this.
+        type: mongoose.Mixed,  // Storing the drawn shapes as objects
         required: false
     },
 
@@ -86,3 +90,10 @@ const projectSchema = new mongoose.Schema({
 const Project = mongoose.model('Project', projectSchema);
 
 module.exports = Project;
+
+
+
+
+
+
+

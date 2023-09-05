@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const app = express();
-const session = require('express-session');
+const session = require('express-session'); 
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -11,6 +11,10 @@ const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const fs = require('fs');
 const Project = require('./models/Project');
+const projectRoutes = require('./routes/projects').router;
+const { fetchRecentClosures } = require('./routes/projects');
+const registerRoutes = require('./routes/register'); 
+const latestBannerProjectRoute = require('./routes/latest-banner-project');
 
 // Middleware setup
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -64,25 +68,6 @@ passport.deserializeUser(async (id, done) => {
     done(null, user);
 });
 
-// Route for the homepage
-// app.get('/', async (req, res) => {
-//     try {
-//         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
-
-//         // Always pass the project variable, even if it's null.
-//         res.render('index', { 
-//             title: '520 Construction Corner', 
-//             header: 'Welcome to the 520 Construction Corner!', 
-//             project
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
-
-// Route for the homepage
 app.get('/', async (req, res) => {
     try {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
@@ -105,18 +90,60 @@ app.get('/', async (req, res) => {
 });
 
 
+app.use(projectRoutes);
 
 
+app.use(latestBannerProjectRoute);
 
-// Routes setup
-const registerRoutes = require('./routes/register'); 
+
+//map Routes
+
+app.get('/map-page', async (req, res) => {
+    try {
+        const closures = await Project.find({});
+        res.render('map-page', { closures });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/contact', async (req, res) => {
+    try {
+        const closuresData = await fetchRecentClosures();
+        res.render('contact', { closures: closuresData });
+    } catch (error) {
+        console.error("Error in /contact route:", error);
+        res.status(500).send("Server error");
+    }
+});
+
+app.get('/events', async (req, res) => {
+    try {
+        const closuresData = await fetchRecentClosures();
+        res.render('events', { closures: closuresData });
+    } catch (error) {
+        console.error("Error in /events route:", error);
+        res.status(500).send("Server error");
+    }
+});
+
+app.get('/latest-closures', async (req, res) => {
+    try {
+        const closuresData = await fetchRecentClosures(); // This is assuming you've defined fetchRecentClosures() function elsewhere in your code
+        res.json(closuresData);
+    } catch (error) {
+        console.error("Error in /latest-closures route:", error);
+        res.status(500).send("Server error");
+    }
+});
+
+
 app.use('/', registerRoutes);
 
 const loginRoutes = require('./routes/login'); 
 app.use('/', loginRoutes);
 
-const projectRoutes = require('./routes/projects');
-app.use(projectRoutes);
 
 // Universal route handler for static pages
 app.get('/:page', (req, res, next) => {

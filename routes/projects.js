@@ -10,6 +10,27 @@ const formatDate = require('../utils/dateHelpers');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.get('/api/projects', async (req, res) => {
+    try {
+        let filters = {};
+
+        // Check for the presence of query parameters and set filters
+        if (req.query.startDate) filters.startDate = { $gte: new Date(req.query.startDate) };
+        if (req.query.endDate) filters.endDate = { $lte: new Date(req.query.endDate) };
+        if (req.query.types) filters.constructionType = { $in: req.query.types.split(",") }; // assuming you've a `constructionType` field in your model
+        if (req.query.cameras) filters.cameras = req.query.cameras === 'true'; // assuming you've a `cameras` field in your model
+
+        // If there are no query parameters, it will fetch all projects
+        const projects = await Project.find(filters);
+
+        res.json(projects);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 // Protect the route and render the form to the user
 router.get('/projectForm', ensureAuthenticated, (req, res) => {
     res.render('projectForm');
@@ -86,6 +107,19 @@ router.get('/latest-closures', async (req, res) => {
     }
 });
 
-module.exports = router;
 
+// Utility function to fetch recent closures
 
+const fetchRecentClosures = async () => {
+    try {
+        return await Project.find({ /* Your conditions here if any */ }).limit(10);
+    } catch (error) {
+        console.error("Error fetching recent closures:", error);
+        throw error;
+    }
+};
+
+module.exports = {
+    router,
+    fetchRecentClosures
+};

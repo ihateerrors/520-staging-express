@@ -204,3 +204,58 @@
 </body>
 
 </html>
+
+
+
+
+
+
+<script>
+  const map = L.map('map').setView([47.6407, -122.2971], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  const activityIcons = {
+      "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      // ... same as before
+  };
+
+  function fetchMapData(startDate = '', endDate = '', types = [], cameras = false) {
+      let apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}&cameras=${cameras}`;
+      console.log('Fetching data from:', apiUrl);  // Debugging line
+
+      fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+              console.log('Data received:', data);  // Debugging line
+
+              if (data && data.length > 0) {
+                  data.forEach(project => {
+                      console.log('Processing project:', project);  // Debugging line
+
+                      // ... same code as before
+                      const customIcon = L.icon({
+                          iconUrl: activityIcons[project.activityType[0]],
+                          // ... same settings as before
+                      });
+
+                      const geoJSONLayer = L.geoJSON(JSON.parse(project.mapData), {
+                          pointToLayer: function (feature, latlng) {
+                              return L.marker(latlng, { icon: customIcon });
+                          },
+                          // ... same code as before
+                      }).addTo(map);
+                  });
+              }
+          })
+          .catch(error => console.error('Error fetching map data:', error));
+  }
+
+  // Initial fetch without filters
+  fetchMapData();
+
+  document.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      // ... same code as before
+  });
+</script>

@@ -1,26 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-<!-- 
-https://sr520construction.blob.core.windows.net/520-uploads/wsdot-logo-white.svg
-
-https://sr520construction.blob.core.windows.net/520-uploads/2023-0809-Montlake-drone-pano-27-compressed.jpg
-
-
-icons:
-
-
-https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png
-https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png
-https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png
-https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png
-
-https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
-
-
- -->
-
-
 <head>
   <meta charset="utf-8" />
 
@@ -33,7 +13,7 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
   <meta name="MobileOptimized" content="width" />
   <meta name="HandheldFriendly" content="true" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- <link rel="icon" href="favicon.ico" /> -->
+  <link rel="icon" href="favicon.ico" />
   <!-- <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" /> -->
   <!-- <script src="/sites/default/files/google_tag/gtm_kjkscvk/google_tag.script.js?rtoq0t" defer></script> -->
 
@@ -42,21 +22,22 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
     type="text/css" />
 
   <link rel="stylesheet" media="all" href="/css/styles1.css" />
+  <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+    integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
   <link rel="stylesheet" media="all" href="/css/styles2.css" />
-  <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" defer />
+  <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" />
   <link rel="stylesheet" media="all" href="/css/styles3.css" />
   <link rel="stylesheet" media="all" href="/css/stylesheet-override.css" />
   <link rel="stylesheet" media="all"
     href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
   <link rel="stylesheet" media="all"
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
-  <link rel="stylesheet" media="all"
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap" />
 
+ 
   <script src="https://kit.fontawesome.com/da8d22a218.js" crossorigin="anonymous"></script>
-  <!-- leaftlet css js -->
+
 
 
 <style>
@@ -72,6 +53,9 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
   
 
     <!-- #### END NAV section ##### --> 
+
+
+
         <main>
 
           <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
@@ -86,6 +70,7 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                 </div>
             </div>
         </div>
+        
             <div class="container4" style="padding-left: 5%; padding-right: 5%; margin-top: 20px; margin-bottom: 20px;"> 
         
                <div class="container-fluid">
@@ -93,7 +78,7 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                     <div class="blockhead col-lg-9 col-md-12 col-sm-12" style="display: block;">
                         <div class="pl-sm-4 pl-lg-3">
                             
-                            <h1 class="wdot-dkgreen"><%= project.activityName %></h1>                         
+                            <h1 class="wdot-dkgreen"><%= project.activityName %></h1>                            </h1>
                             <div class="border-bottom border-success"></div>
                         </div>
                     </div>
@@ -104,9 +89,8 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                         <div class="col-lg-9 col-sm-12">
                           <div class="row pl-sm-4 pl-lg-3 pt-5">
                             <div class="col-lg-9 col-sm-12">
-                           
-                              <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
-                              <p><strong>Time:</strong> <%= project.time %></p>
+                                <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
+                                <p><strong>Time:</strong> <%= project.time %></p>
                               <!-- <div class="row">
                                 <i class="fa-solid fa-circle-check fa-2xl pt-4 pl-4" style="color: #007b5f;"></i>
                                 <p class="pl-3 wdot-dkgreen"><strong>Around-the-clock</strong></p>
@@ -116,8 +100,8 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                                     <li><%= project.type %></li>
                                 <% }); %>
                                 </ul></p>
-                              <p><strong>Activity description: </strong><%= project.description ? project.description : 'Description not available' %></p>
-                              <p>Traffic: SR 520 will be closed in both directions across Lake Washington from 11 p.m. Friday, August 25, until 5 a.m. Monday, August 28. Westbound SR 520 will close between 92nd Avenue Northeast in Clyde Hill and I-5 in Seattle. Eastbound SR 520 will close between Montlake Boulevard in Seattle and 92nd Avenue Northeast in Clyde Hill. The SR 520 Trail will remain open.</p>
+                                <p><strong>Activity description: </strong><%= project.description ? project.description : 'Description not available' %></p>
+                              <p><strong>Traffic:</strong> SR 520 will be closed in both directions across Lake Washington from 11 p.m. Friday, August 25, until 5 a.m. Monday, August 28. Westbound SR 520 will close between 92nd Avenue Northeast in Clyde Hill and I-5 in Seattle. Eastbound SR 520 will close between Montlake Boulevard in Seattle and 92nd Avenue Northeast in Clyde Hill. The SR 520 Trail will remain open.</p>
                             </div>
                             <!-- <div class="col-lg-7 col-sm-12">
                               <div class="text-lg-right text-md-start">
@@ -125,6 +109,14 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                               </div>
                             </div> -->
                           </div>
+
+                          <div class="pl-sm-4 pl-lg-3">
+                            <p></p>
+                           <!-- map -->
+
+                           
+                          </div>
+
                             <div class="pl-sm-4 pl-lg-3">
                               <p></p>
                               <img src=<%= project.imageUrl %> alt="Map of consutrction on lake washington" class="greenborder" loading="lazy">
@@ -134,12 +126,14 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                                 
                             </div>
                         </div>
-                                                <div class="col-lg-3 vanishing">
+                                                <div class="col-lg-3">
                           <!-- Card 1 -->
                           <div class="left2">
                      
                             <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures</strong></p>
-                            <%- include('partials/closures') %>
+                            <ul id="sidebarList" class="sidebarList"></ul>
+
+                            
                               
                               <br>
                         </div>
@@ -151,16 +145,21 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
                   </div>
                 </div>   
                 </div>
-                </div>       
-                     </div>
+                </div>
+        
+         
+            </div>
         </div>
         
-                
+        
+        
           </div>
         </div>
 
         </main>
   
+
+
 
 <!-- ## Start footer ###  -->
 <footer class="footer">
@@ -201,14 +200,33 @@ https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png
  
 
 <!-- ### End footer ### -->  
+    <!-- scripts to get the closures -->
+    <script>
+      fetch('/latest-closures')
+      .then(response => response.json())
+      .then(closures => {
+          const sidebarList = document.getElementById('sidebarList');
+  
+          closures.forEach(closure => {
+              const listItem = document.createElement('li');
+              const link = document.createElement('a');
+              link.href = `/projects/${closure._id}`;
+              link.innerText = closure.activityName;
+              listItem.appendChild(link);
+              sidebarList.appendChild(listItem);
+          });
+      })
+      .catch(error => console.error('Error fetching latest closures:', error));
+  </script>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script
   type="text/javascript">window.NREUM || (NREUM = {}); NREUM.info = {"beacon": "bam.nr-data.net", "licenseKey": "NRJS-a8107692ea83444c1a2", "applicationID": "858811128", "transactionName": "NVQHN0UEXhJUBkxQWgweJABDDF8PGiFKTEUDXTkNWAFVPXYKVk1HDV0JBkU5fg5RAG5QUBVyCg1DF18NWQBKFAsUWAAU", "queueTime": 0, "applicationTime": 477, "atts": "GRMEQQ0eTRw=", "errorBeacon": "bam.nr-data.net", "agent": ""}</script>
 
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
   
   <!-- Code injected by live-server -->
   <script>

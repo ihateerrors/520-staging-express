@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script>
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script> -->
   <script>window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}; gtag("js", new Date()); gtag("set", "developer_id.dMDhkMT", true); gtag("config", "UA-970887-21", {"groups": "default", "anonymize_ip": true, "page_placeholder": "PLACEHOLDER_page_path"});</script>
   <link rel="canonical" href="#" />
   <meta name="description"
@@ -21,38 +21,29 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
     type="text/css" />
 
-  <link rel="stylesheet" media="all" href="/css/styles1.css" />
+  <!-- <link rel="stylesheet" media="all" href="/css/styles1.css" /> -->
   <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
     integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
-  <link rel="stylesheet" media="all" href="/css/styles2.css" />
+<!-- 
+  <link rel="stylesheet" media="all" href="/css/styles2.css" /> -->
   <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" />
   <link rel="stylesheet" media="all" href="/css/styles3.css" />
-  <link rel="stylesheet" media="all" href="/css/stylesheet-override.css" />
+  <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
   <link rel="stylesheet" media="all"
     href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
   <link rel="stylesheet" media="all"
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
-  <link rel="stylesheet" media="all"
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap" />
-  <link rel="stylesheet" media="all"
-    href="https://fonts.googleapis.com/css2?family=Gayathri:wght@100;400;700&amp;display=swap" />
-  <link rel="stylesheet" media="all"
-    href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&amp;display=swap" />
-  <link rel="stylesheet" media="all"
-    href="https://fonts.googleapis.com/css2?family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" />
 
-  <!-- <link rel="stylesheet" type="text/css" href="/css/bootstrap-grid.min.css" /> -->
-  <!-- <link rel="stylesheet" media="all"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
-  <script src="/Scripts/jquery-min.js"></script> -->
-  <!-- <script src="https://use.fontawesome.com/ee1c3da296.js"></script> -->
-  <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> -->
+ 
   <script src="https://kit.fontawesome.com/da8d22a218.js" crossorigin="anonymous"></script>
-  <!-- leaftlet css js -->
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
 
+  <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+  <!-- Google Maps JavaScript API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+  <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 <style>
  .navbar a {
   text-decoration: none !important;
@@ -67,142 +58,95 @@
 
     <!-- #### END NAV section ##### --> 
 
-
-
         <main>
 
-          <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
-            <div class="row">
-                <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
-                    <div class="mt-4 mb-1" style="margin-left: 7%;"> 
-                      <% if  (project.bannerContent === 'yes') { %>
-                        <span style="font-size: 1.4em; font-weight: 700;"><%= project.activityName %> </span>
-                        <p><a href="/projects/<%= project._id %>">View Details</a></p>
-                    <% } %>
-                    </div> 
-                </div>
-            </div>
-        </div>
-        
-            <div class="container4" style="padding-left: 5%; padding-right: 5%; margin-top: 20px; margin-bottom: 20px;"> 
+           <div class="container4" style="padding-left: 5%;  margin-top: 20px; margin-bottom: 20px;"> 
         
                <div class="container-fluid">
                   <div class="row"> 
                     <div class="blockhead col-lg-9 col-md-12 col-sm-12" style="display: block;">
                         <div class="pl-sm-4 pl-lg-3">
                             
-                            <h1 class="wdot-dkgreen"><%= project.activityName %></h1>                            </h1>
+                            <h1 class="wdot-dkgreen"><%= project.activityName %></h1>                          
                             <div class="border-bottom border-success"></div>
                         </div>
                     </div>
-                  </div>
+                             </div>
                 </div>
                 <div class="container-fluid">
-                    <div class="row">     
-                        <div class="col-lg-9 col-sm-12">
+                    <!-- <div class="row">      -->
+                        <!-- <div class="col-lg-9 col-sm-12"> -->
                           <div class="row pl-sm-4 pl-lg-3 pt-5">
                             <div class="col-lg-9 col-sm-12">
+                              <div class="project-content">
+                                <div class="content-left">
                                 <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
-                                <p><strong>Time:</strong> <%= project.time %></p>
-                              <!-- <div class="row">
-                                <i class="fa-solid fa-circle-check fa-2xl pt-4 pl-4" style="color: #007b5f;"></i>
-                                <p class="pl-3 wdot-dkgreen"><strong>Around-the-clock</strong></p>
-                              </div> -->
-                              <p><strong>Activity type:</strong><ul>
+                                <p><strong>Time:</strong> <%= project.time %></p>                         
+                                <p> <strong>Activity type/s:</strong><ul style="display: inline-flex; flex-direction: row; list-style-type: none; font-size: 18px;">
                                 <% project.activityType.forEach(function(type) { %>
-                                    <li><%= project.type %></li>
+                                    <li><img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> <%= project.activityType %></li>
                                 <% }); %>
                                 </ul></p>
-                                <p><strong>Activity description: </strong><%= project.description ? project.description : 'Description not available' %></p>
-                              <p><strong>Traffic:</strong> SR 520 will be closed in both directions across Lake Washington from 11 p.m. Friday, August 25, until 5 a.m. Monday, August 28. Westbound SR 520 will close between 92nd Avenue Northeast in Clyde Hill and I-5 in Seattle. Eastbound SR 520 will close between Montlake Boulevard in Seattle and 92nd Avenue Northeast in Clyde Hill. The SR 520 Trail will remain open.</p>
+                                <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
+                              <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
                             </div>
-                            <!-- <div class="col-lg-7 col-sm-12">
-                              <div class="text-lg-right text-md-start">
-                                <img src="/img/" alt="" loading="lazy">
-                              </div>
-                            </div> -->
+
+                              <div class="imagearea">
+                                <img class="img-fluid" src=<%= project.imageUrl %>>
+                               </div>
+                              </div> 
+                            </div>
+                            <!-- sidebar start -->
+                            <div class="col-lg-3">
+                              <!-- Card 1 -->
+                                <div class="closure-sidebar">                         
+                                    <h4 class="text-center wdot-dkgreen ml-3"><strong>Current and upcoming closures</strong></h4><br>
+                                    <ul id="sidebarList" class="sidebarList"></ul>                                                        
+                                      <br>
+                               </div>                                        
+                             </div>
+                             <!-- sidebar end -->                                                
+                          </div>   
+
+                        <div class="mt-5">
+                         <div class="greenborder"> 
+                                      <div id="map" style="max-height: 400px;"></div>
+                           </div>
+                           <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
+                           <div class="mt-2">
+                         
+                            <!-- <img src=<%= project.imageUrl %>> -->
+                              <p class="pt-2"><strong>Contact Info:</strong></p>
+                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong> 206-775-8885</p>
+                                                            
                           </div>
-                            <div class="pl-sm-4 pl-lg-3">
-                              <p></p>
-                              <img src=<%= project.imageUrl %> alt="Map of consutrction on lake washington" class="greenborder" loading="lazy">
-                                <p class="pt-5"><strong>Contact Info:</strong></p>
-                                <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong> 206-775-8885</p>
-                                <p><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
-                                
-                            </div>
-                        </div>
-                                                <div class="col-lg-3">
-                          <!-- Card 1 -->
-                          <div class="left2">
+                          </div>
+                  
+                        <!-- </div> -->
+                        <!-- <div class="col-lg-3">
+                       
+                            <div style="margin-left: 5em; margin-right: -100px;">
                      
-                            <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures</strong></p>
-                            <ul id="sidebarList" class="sidebarList"></ul>
+                                <h4 class="text-center wdot-dkgreen ml-3"><strong>Current and upcoming closures</strong></h4><br>
+                                <ul id="sidebarList" class="sidebarList"></ul>                                                        
+                                  <br>
+                           </div>                                        
+                       </div> -->
 
-                            
-                              
-                              <br>
-                        </div>
-                                        
-                          </div>
-                    </div>
+
+<!-- 
+                    </div> -->
                 </div>
-                      <br>
-                  </div>
-                </div>   
-                </div>
-                </div>
-        
-         
+                <br>
             </div>
-        </div>
-        
-        
-        
-          </div>
-        </div>
-
-        </main>
+          </main>
   
 
 
 
 <!-- ## Start footer ###  -->
-<footer class="footer">
-  <div class="container">
-    <div class="row" style="display: flex; flex-direction: row; flex-wrap: wrap;">
-      <div class="col-md-3">
-        <div class="logo-container" style="margin-bottom: 12px; display: block; width: 267px; height: 43px; margin-right: 14px;">
-          <img class="foot-logo" src="/Content/images/wsdot-logo-white.png" alt="WSDOT logo" width="267px" height="43px" />
-        </div>
-      </div>
 
-      <div class="col-md-2">
-        <ul class="footerrow">
-          <li><a href="contact">Contact</a></li>
-          <li><a href="https://wsdot.wa.gov/about/americans-disabilities-act-ada">Accessibility</a></li>
-          <li><a href="https://wsdot.wa.gov/about/title-vi-limited-english-proficiency">Title VI</a></li>
- 
-        </ul>
-   </div><div class="col-md-6">
-        <div class="social-row" style="margin-top: 18px;">
-  
-          <a href="https://www.facebook.com/wsdot" target="_blank" class="social-link"><i class="fa-brands fa-facebook" style="text-decoration: none;"></i> </a>
-
-          <a href="https://twitter.com/wsdot_520" target="_blank" class="social-link"><i class="fab fa-twitter"></i> </a>
-
-          <a href="https://www.instagram.com/wsdot/" target="_blank" class="social-link"><i class="fab fa-instagram"></i> </a>
-
-          <a href="https://www.youtube.com/playlist?list=PLEvVhy_eoUuDlR31tXgXNYbNKFhZ5k0p_" target="_blank" class="social-link"><i class="fab fa-youtube"></i></a>
-
-          <a href="https://www.flickr.com/photos/wsdot/collections/72157626070884650/" target="_blank" class="social-link"><i class="fab fa-flickr"></i></a>            </ul>
- 
-      </div>
-    </div> 
-  </div>
-  <div class="copyright" style="text-align: center; margin-top: 5px;">Copyright WSDOT &copy;
-    2023</div>
-</footer>
- 
+<%- include('partials/footer') %>
 
 <!-- ### End footer ### -->  
     <!-- scripts to get the closures -->
@@ -222,55 +166,76 @@
           });
       })
       .catch(error => console.error('Error fetching latest closures:', error));
+
   </script>
 
+
+<!-- 
+<script>
+  const map = L.map('map').setView([47.6407, -122.2971], 13);  // SR 520 area
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  const projectId = '<%= project._id %>'; 
+
+  fetch(`/api/projects/${projectId}`)
+      .then(response => response.json())
+      .then(project => {
+          if (project.mapData) {
+              const geoJSONData = JSON.parse(project.mapData);
+              L.geoJSON(geoJSONData).addTo(map);
+          }
+      })
+      .catch(error => console.error('Error fetching map data:', error));
+</script> -->
+
+
+
+<script>
+  
+  const activityIcons = {
+        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
+        "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
+    };
+
+    const map = L.map('map').setView([47.6407, -122.2971], 15);
+
+        L.gridLayer.googleMutant({
+        type: 'roadmap', 
+        maxZoom: 20,
+        apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+        }).addTo(map);
+
+ const projectId = '<%= project._id %>'; 
+
+fetch(`/api/projects/${projectId}`)
+  .then(response => response.json())
+  .then(project => {
+    if (project.mapData) {
+      const geoJSONData = JSON.parse(project.mapData);
+      L.geoJSON(geoJSONData).addTo(map);
+    }
+  })
+  .catch(error => console.error('Error fetching map data:', error));
+</script>
+
+
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script
   type="text/javascript">window.NREUM || (NREUM = {}); NREUM.info = {"beacon": "bam.nr-data.net", "licenseKey": "NRJS-a8107692ea83444c1a2", "applicationID": "858811128", "transactionName": "NVQHN0UEXhJUBkxQWgweJABDDF8PGiFKTEUDXTkNWAFVPXYKVk1HDV0JBkU5fg5RAG5QUBVyCg1DF18NWQBKFAsUWAAU", "queueTime": 0, "applicationTime": 477, "atts": "GRMEQQ0eTRw=", "errorBeacon": "bam.nr-data.net", "agent": ""}</script>
 
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+
+      
+      <script src="/js/mapRender.js"></script>
+
   
-  <!-- Code injected by live-server -->
-  <script>
-      // <![CDATA[  <-- For SVG support
-      if ('WebSocket' in window) {
-          (function () {
-              function refreshCSS() {
-                  var sheets = [].slice.call(document.getElementsByTagName("link"));
-                  var head = document.getElementsByTagName("head")[0];
-                  for (var i = 0; i < sheets.length; ++i) {
-                      var elem = sheets[i];
-                      var parent = elem.parentElement || head;
-                      parent.removeChild(elem);
-                      var rel = elem.rel;
-                      if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-                          var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-                          elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-                      }
-                      parent.appendChild(elem);
-                  }
-              }
-              var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-              var address = protocol + window.location.host + window.location.pathname + '/ws';
-              var socket = new WebSocket(address);
-              socket.onmessage = function (msg) {
-                  if (msg.data == 'reload') window.location.reload();
-                  else if (msg.data == 'refreshcss') refreshCSS();
-              };
-              if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-                  console.log('Live reload enabled.');
-                  sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-              }
-          })();
-      }
-      else {
-          console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-      }
-      // ]]>
-  </script>
   </body>
   
   </html>
