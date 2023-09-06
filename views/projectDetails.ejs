@@ -78,8 +78,8 @@
                         <!-- <div class="col-lg-9 col-sm-12"> -->
                           <div class="row pl-sm-4 pl-lg-3 pt-5">
                             <div class="col-lg-9 col-sm-12">
-                              <div class="project-content">
-                                <div class="content-left">
+                              <div class="project-content ">
+                                <div class="content-left col-lg-6">
                                 <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
                                 <p><strong>Time:</strong> <%= project.time %></p>                         
                                 <p> <strong>Activity type/s:</strong><ul style="list-style-type: none; font-size: 18px;">
@@ -87,15 +87,26 @@
                                     <li><img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> <%= project.activityType %></li>
                                 <% }); %>
                                 </ul></p>
+                              </div>
+                              
+                              <div class="content-right col-lg-6">
+                                <img id="showDialog" class="img-fluid w-100" src=<%= project.imageUrl %> alt=<%= project.imageAlt %>>
+                            
+                              </div>
+                              <div class="pt-5">
                                 <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
-                              <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
-                            </div>
+                                <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
+                              </div>
+                            </div> 
+                          </div>
+                          <!-- ### Photo Lightbox ###  -->
+                          <dialog id="light-box">
+                            <figure>
+                              <img class="lightbox-img" src=<%= project.imageUrl %> alt=<%= project.imageAlt %>>
+                            </figure>
+                              <button id="close-btn">Close</button>
 
-                              <div class="imagearea">
-                                <img class="img-fluid" src=<%= project.imageUrl %>>
-                               </div>
-                              </div> 
-                            </div>
+                          </dialog>
                             <!-- sidebar start -->
                             <div class="col-lg-3">
                               <!-- Card 1 -->
@@ -248,7 +259,7 @@ fetch(`/api/projects/${projectId}`)
 
       
       <script src="/js/mapRender.js"></script>
-
+<script src="/js/lightbox.js"></script>
   
   </body>
   
