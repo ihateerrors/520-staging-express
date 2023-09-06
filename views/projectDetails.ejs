@@ -154,7 +154,6 @@
   
 
 
-
 <!-- ## Start footer ###  -->
 
 <%- include('partials/footer') %>
@@ -194,7 +193,7 @@
     "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
 };
 
-const map = L.map('map').setView([47.6407, -122.2971], 17);
+const map = L.map('map').setView([47.6407, -122.2971], 16);
 
 L.gridLayer.googleMutant({
     type: 'roadmap',
@@ -228,7 +227,7 @@ fetch(`/api/projects/${projectId}`)
 
                     const customIcon = L.icon({
                         iconUrl: iconUrl,
-                        iconSize: [25, 25],
+                        iconSize: [30, 30],
                         popupAnchor: [0, -41]
                     });
 

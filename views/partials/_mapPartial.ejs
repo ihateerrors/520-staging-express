@@ -166,7 +166,7 @@ function fetchMapData(startDate = '', endDate = '', types = []) {
                             <div class="timing-features">${timingFeaturesHTML}</div>                         
                             <p>${project.description || "Not specified"}</p>
                             <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
-                            <div class="popup-image mt-2">                            
+                            <div class="popup-image mt-2" style="max-width: 450px; object-fit: cover;">                            
                             ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="img-fluid">` : ''}
                             </div>
                         </div>
