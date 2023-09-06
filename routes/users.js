@@ -1,13 +1,13 @@
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const saltRounds = 10;
 
 // Hashing a password
-bcrypt.hash('myPassword', saltRounds, function(err, hash) {
+bcryptjs.hash('myPassword', saltRounds, function(err, hash) {
     // Store hash in database
 });
 
 // Comparing a password
-bcrypt.compare('myPassword', hash, function(err, result) {
+bcryptjs.compare('myPassword', hash, function(err, result) {
     if(result) {
         // Passwords match
     } else {
