@@ -66,8 +66,6 @@ body {
   margin-left: 5px;
   padding: 12px 24px;
   border-radius: 5px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
   position: relative;
   transform: skewX(-10deg);
   transition: all 0.3s;
