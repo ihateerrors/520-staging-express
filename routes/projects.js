@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const multer = require('multer');
 const router = express.Router();
 const { uploadToAzure } = require('../utils/azureUpload'); 
@@ -73,7 +74,14 @@ router.get('/', async (req, res) => {
 router.get('/projects/:projectId', async (req, res) => {
     try {
         const projectId = req.params.projectId;
-        const project = await Project.findById(projectId); // assuming Project is your model
+
+        // Check if projectId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            res.status(400).send('Invalid Project ID');
+            return;
+        }
+
+        const project = await Project.findById(projectId);
 
         if (!project) {
             res.status(404).send('Project not found');
@@ -121,5 +129,6 @@ const fetchRecentClosures = async () => {
 
 module.exports = {
     router,
-    fetchRecentClosures
+    fetchRecentClosures,
+    upload
 };
