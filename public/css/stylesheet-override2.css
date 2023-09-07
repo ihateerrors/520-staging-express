@@ -92,7 +92,7 @@ body {
   background-color: #1d3b1e;
   color: #fff;
 }
-
+#sg_SubmitButton,
 .parallelogram-link-sm {
   display: block;
   background-color: #007b5f;
@@ -109,9 +109,15 @@ body {
   transition: all 0.3s;
   float: bottom;
 }
+#sg_SubmitButton {
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
 
 .parallelogram-link-sm a {
   font-size: 20px;
+  transform: skewX(-20deg);
+
 }
 
 .parallelogram-link-sm::before {
