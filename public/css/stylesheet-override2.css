@@ -1759,6 +1759,8 @@ h3 {
 }
 
 .popup-content .popup-image img {
-    margin-top: 20px;     /* This adds space above the image */
- color: #c10a0a;
+  margin-top: 20px;     /* This adds space above the image */
+  color: #c10a0a;
+  width: 500px;
+  max-height: 300px;
 }
