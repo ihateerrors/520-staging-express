@@ -99,6 +99,15 @@ app.get('/index', async (req, res) => {
 
 //map Routes
 
+app.get('/', async (req, res) => {
+    try {
+        const closures = await Project.find({});
+        res.render('/', { closures });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 app.get('/contact', async (req, res) => {
     try {
