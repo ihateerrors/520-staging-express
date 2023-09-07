@@ -1751,6 +1751,10 @@ h3 {
   width: 100%;
 }
 
+#showDialog {
+  cursor: pointer;
+}
+
 section.flickr-area {
   align-items: center;
   justify-content: center;
