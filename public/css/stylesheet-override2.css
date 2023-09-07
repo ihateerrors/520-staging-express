@@ -920,7 +920,6 @@ padding-right: 14px; */
 }
 .icon-box {
   clip-path: circle(45% at center);
-
 }
 
 .map2 {
@@ -1741,12 +1740,31 @@ h3 {
   color: #c10a0a;
 }
 
-
 #light-box {
   max-width: 1400px;
-  
 }
 .lightbox-img {
-  width: 100% ;
+  width: 100%;
 }
 
+section.flickr-area {
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9;
+}
+
+div.flickr-carousel {
+  border-radius: 15px;
+  border: 5px solid #d9d9d9;
+}
+.flickr-carousel iframe {
+  /* border-radius: 15px ; */
+  border: 2px solid #d9d9d9;
+}
+
+.sidebar-cards .card {
+  min-height: 550px;
+  min-width: 300px;
+  max-width: 400px;
+  border-radius: 10px;
+}
