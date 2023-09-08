@@ -364,8 +364,8 @@ border-width: 1px 1px 5px;
 }
 
 .map-tab {
-  /* border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0; */
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   margin: 0 0 0 10px;
 }
 
@@ -1770,7 +1770,7 @@ div.flickr-carousel {
   border: 2px solid #d9d9d9;
 }
 
-.sidebar-cards .card {
+ .card {
   min-height: 550px;
   min-width: 300px;
   max-width: 420px;
