@@ -55,30 +55,34 @@
 
         <div id="construction-map">
           <div class="row">     
-            <div class="col-lg-9 col-md-12 col-sm-12">   
+            <div class="col-lg-9 col-md-12 col-sm-12" style="display: block;">   
                   <div class="togglerow" style="justify-content: space-between;"> 
                   <button id="map1Button" class="parallelogram-link map-tab" >SR 520 Construction Map</button>
                   <button id="map2Button" class="parallelogram-link map-tab" >WSDOT Travel Map</button>
                 </div>
                   <!-- Map Column -->
               
-                  <!-- <div class="mapcontainer"> -->
-                  <div id="map1" class="d-block mapcontainer">
+                  
+                        <div class="mapcontainer">
+                                  <div id="map1" style="display: block; border: 3px solid hotpink">
 
-                    <%- include('partials/_mapPartial.ejs') %>               
-       
+                                    <%- include('partials/_mapPartial.ejs') %>               
+                      
+                                      </div>
+
+                                      <!-- iframe Map -->
+                        
+                                  <div id="map2" class="d-none"><p></p> 
+                                    <iframe src="https://wsdot.com/Travel/Real-time/Map/?featuretype=camera&featureid=9648" width="100%"  height="775px"></iframe>                
+                                  
+                                  </div>   
+                             
+                                </div >
+                                <p style="font-size: 18px; font-weight: 400;"><i>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </i></p>  
                       </div>
-
-              <!-- iframe Map -->
-        
-            <div id="map2" class="d-none"><p></p> 
-              <iframe src="https://wsdot.com/Travel/Real-time/Map/?featuretype=camera&featureid=9648" width="100%"  height="750px"></iframe>                
-            
-            </div>            
-        
-           <!-- Map Toggle Button -->       
-           <p style="font-size: 18px; font-weight: 400;"><i>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </i></p><br>         
-              </div>    
+             
+             
+               
               <!-- Right Sidebar -->
               <div class="col-lg-3 vanishing pt-5 mt-5">
                 <!-- Card 1 -->
@@ -95,9 +99,11 @@
                     <br>
                   </div>                              
                 </div>
+                 
              <!-- END Right Sidebar col -->
+                </div>
              </div>
-          </div>
+         
         </div>   
       </div>
     </div>
