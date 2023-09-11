@@ -100,6 +100,22 @@ app.get('/index', async (req, res) => {
 //map Routes
 
 
+app.get('/program', (req, res) => {
+    res.render('program'); // assuming 'program' is the name of your view file
+});
+
+app.get('/montlake-project', (req, res) => {
+    res.render('montlake-project');
+});
+
+app.get('/i5-connection-project', (req, res) => {
+    res.render('i5-connection-project');
+});
+
+app.get('/portage-bay-project', (req, res) => {
+    res.render('portage-bay-project');
+});
+
 app.get('/contact', async (req, res) => {
     try {
         const closuresData = await fetchRecentClosures();
