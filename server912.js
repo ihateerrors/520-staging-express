@@ -16,35 +16,30 @@ const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register'); 
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
-const projectRoutes = require('./routes/projects');
 
 // Middleware setup
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs'); 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.locals.moment = require('moment');
 
-// Session setup
+app.use(registerRoutes);
+app.use(loginRoutes);
+app.use(latestBannerProjectRoute);
+
+// Session, flash and passport setup
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
 
-// Passport and flash setup
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// Route setups
-app.use(projectRoutes.router);
-app.use(registerRoutes);
-app.use(loginRoutes);
-app.use(latestBannerProjectRoute);
-
-// Azure Blob setup
 const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = '520-uploads';
@@ -80,6 +75,29 @@ passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
     done(null, user);
 });
+
+app.get('/', async (req, res) => {
+    try {
+        const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
+
+        // Fetch all relevant closures. Adjust this if you need specific filtering.
+        const closures = await Project.find({}).sort({ postDate: -1 });
+
+        // Always pass both the project and closures variables, even if they're null or empty.
+        res.render('index', { 
+            title: '520 Construction Corner', 
+            header: 'Welcome to the 520 Construction Corner!', 
+            project,
+            closures
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 //map Routes
 
@@ -120,7 +138,16 @@ app.get('/events', async (req, res) => {
     }
 });
 
-
+app.get('/latest-closures', async (req, res) => {
+    try {
+        const closuresData = await fetchRecentClosures(); // This is assuming you've defined fetchRecentClosures() function elsewhere in your code
+        res.json(closuresData);
+    } catch (error) {
+        console.error("Error in /latest-closures route:", error);
+        res.status(500).send("Server error");
+    }
+});
+  
 // Connect to MongoDB
 const apiKey = process.env.DB_API_KEY;
 const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
