@@ -4,7 +4,7 @@ const multer = require('multer');
 const router = express.Router();
 const { uploadToAzure } = require('../utils/azureUpload'); 
 const Project = require('../models/Project');
-// const ensureAuthenticated = require('../middlewares/auth');
+const ensureAuthenticated = require('../middlewares/auth');
 const formatDate = require('../utils/dateHelpers');
 
 // Using memoryStorage to keep the uploaded file in memory
@@ -36,11 +36,11 @@ router.get('/api/projects', async (req, res) => {
 
 
 // Protect the route and render the form to the user
-router.get('/projectForm', (req, res) => {
+router.get('/projectForm', ensureAuthenticated, (req, res) => {
     res.render('projectForm');
 });
 
-router.post('/api/projects', upload.single('file'), async (req, res) => {
+router.post('/api/projects', ensureAuthenticated, upload.single('file'), async (req, res) => {
     try {
         if (req.file && req.file.buffer) {
             const azureFileUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
