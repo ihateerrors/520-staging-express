@@ -242,14 +242,15 @@
 
 
 <script>
-    const map = L.map('map').setView([47.6407, -122.2971], 15); // SR 520 area
+// Initialize map
+const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 const drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
 
-const defaultColor = '#3388ff'; // A default color to start with
-const defaultWidth = 3; // A default width
+const defaultColor = '#3388ff';  // A default color to start with
+const defaultWidth = 3;         // A default width
 
 // Cache DOM elements
 const colorPickerElement = document.getElementById('colorPicker');
@@ -322,7 +323,7 @@ map.on('draw:created', function(event) {
 colorPickerElement.addEventListener('input', (event) => {
     const selectedColor = event.target.value;
     const selectedWidth = parseInt(widthPickerElement.value);
-
+    
     drawControl.setDrawingOptions({
         polygon: { shapeOptions: { color: selectedColor } },
         polyline: { shapeOptions: { color: selectedColor, weight: selectedWidth } },
@@ -334,7 +335,7 @@ colorPickerElement.addEventListener('input', (event) => {
 widthPickerElement.addEventListener('input', (event) => {
     const selectedWidth = parseInt(event.target.value);
     const selectedColor = colorPickerElement.value;
-
+    
     drawControl.setDrawingOptions({
         polyline: { shapeOptions: { weight: selectedWidth, color: selectedColor } }
     });
