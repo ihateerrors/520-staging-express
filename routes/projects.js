@@ -11,7 +11,10 @@ const formatDate = require('../utils/dateHelpers');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.get('/api/test', (req, res) => res.send('Test successful!'));
+
 router.get('/api/projects', async (req, res) => {
+    console.log("Entered /api/projects route");
     try {
         let filters = {};
 
@@ -71,27 +74,43 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/projects/:projectId', async (req, res) => {
+// router.get('/projects/:projectId', async (req, res) => {
+//     try {
+//         const projectId = req.params.projectId;
+
+//         // Check if projectId is a valid ObjectId
+//         if (!mongoose.Types.ObjectId.isValid(projectId)) {
+//             res.status(400).send('Invalid Project ID');
+//             return;
+//         }
+
+//         const project = await Project.findById(projectId);
+
+//         if (!project) {
+//             res.status(404).send('Project not found');
+//             return;
+//         }
+
+//         res.render('projectDetails', { project, formatDate });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+router.get('/projects/:id', async (req, res) => {
     try {
-        const projectId = req.params.projectId;
-
-        // Check if projectId is a valid ObjectId
-        if (!mongoose.Types.ObjectId.isValid(projectId)) {
-            res.status(400).send('Invalid Project ID');
-            return;
-        }
-
-        const project = await Project.findById(projectId);
-
+        const project = await Project.findById(req.params.id);
         if (!project) {
-            res.status(404).send('Project not found');
-            return;
+            return res.status(404).json({ msg: 'Project not found' });
         }
-
-        res.render('projectDetails', { project, formatDate });
+        res.json(project);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        console.error(error.message);
+        if (error.kind == 'ObjectId') {
+            return res.status(404).json({ msg: 'Project not found' });
+        }
+        res.status(500).send('Server error');
     }
 });
 

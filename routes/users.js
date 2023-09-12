@@ -15,7 +15,7 @@ bcryptjs.compare('myPassword', hash, function(err, result) {
     }
 });
 
-
+module.exports = router;
 
 
 

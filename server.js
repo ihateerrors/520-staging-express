@@ -11,12 +11,13 @@ const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const fs = require('fs');
 const Project = require('./models/Project');
-const projectRoutes = require('./routes/projects');
 const { fetchRecentClosures } = require('./routes/projects');
+const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register'); 
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
-const { upload } = require('./routes/projects');
+const projectRoutes = require('./routes/projects');
+app.use(projectRoutes.router);
 
 // Middleware setup
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -25,6 +26,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.locals.moment = require('moment');
+
+app.use(registerRoutes);
+app.use(loginRoutes);
+app.use(latestBannerProjectRoute);
 
 // Session, flash and passport setup
 app.use(session({
@@ -36,7 +41,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(projectRoutes.router);
 
 const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
@@ -74,7 +78,7 @@ passport.deserializeUser(async (id, done) => {
     done(null, user);
 });
 
-app.get('/index', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
 
@@ -136,16 +140,7 @@ app.get('/events', async (req, res) => {
     }
 });
 
-app.get('/latest-closures', async (req, res) => {
-    try {
-        const closuresData = await fetchRecentClosures(); // This is assuming you've defined fetchRecentClosures() function elsewhere in your code
-        res.json(closuresData);
-    } catch (error) {
-        console.error("Error in /latest-closures route:", error);
-        res.status(500).send("Server error");
-    }
-});
-  
+
 // Connect to MongoDB
 const apiKey = process.env.DB_API_KEY;
 const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
