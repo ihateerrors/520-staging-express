@@ -4,9 +4,8 @@ const multer = require('multer');
 const router = express.Router();
 const { uploadToAzure } = require('../utils/azureUpload'); 
 const Project = require('../models/Project');
-// const ensureAuthenticated = require('../middlewares/auth');
 const formatDate = require('../utils/dateHelpers');
-
+const ensureAuthenticated = require('../middlewares/auth');
 // Using memoryStorage to keep the uploaded file in memory
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -28,16 +27,16 @@ router.get('/api/projects', async (req, res) => {
         const projects = await Project.find(filters);
 
         res.json(projects);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Internal Server Error');
+            }
 });
 
 
 // Protect the route and render the form to the user
-router.get('/projectForm', (req, res) => {
-    res.render('projectForm');
+router.get('/projectForm', ensureAuthenticated, (req, res) => {
+    res.render('projectForm', { success_msg: null })
 });
 
 router.post('/api/projects', upload.single('file'), async (req, res) => {
@@ -74,9 +73,9 @@ router.get('/', async (req, res) => {
     }
 });
 
-// router.get('/projects/:projectId', async (req, res) => {
+// router.get('/projects/:id', async (req, res) => {
 //     try {
-//         const projectId = req.params.projectId;
+//         const projectId = req.params.id;
 
 //         // Check if projectId is a valid ObjectId
 //         if (!mongoose.Types.ObjectId.isValid(projectId)) {
