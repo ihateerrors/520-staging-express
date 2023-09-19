@@ -52,20 +52,50 @@ const projectSchema = new mongoose.Schema({
             "Vibration"
         ]
     }],
-  imageUrl: {
-        type: String,  // saves to Azure database which generates the URL stored in MOngoDB
+    imageUrl: {
+        type: String,  // saves to Azure database which generates the URL stored in MongoDB
         required: false
     },
-    // For the map
     location: {
         type: String,
         required: false
     },
-    mapData: {
-        type: mongoose.Mixed,  // Storing the drawn shapes as objects
-        required: false
-    },
+    // mapData: {
+    //     type: {
+    //         type: String,
+    //         enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
+    //         required: false
+    //     },
+    //     features: {
+    //         type: [mongoose.Schema.Types.Mixed]
+    //     }
+    // },
 
+    mapData: {
+        type: {
+            type: String,
+            enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
+            required: false
+        },
+        features: [{
+            type: {
+                type: String,
+                enum: ['Feature', 'Point', 'LineString', 'Polygon']
+            },
+            properties: {
+                type: mongoose.Schema.Types.Mixed,
+                default: {}
+            },
+            geometry: {
+                type: {
+                    type: String,
+                    enum: ['Point', 'LineString', 'Polygon']
+                },
+                coordinates: [mongoose.Schema.Types.Mixed]
+            }
+        }]
+    },
+    
     bannerContent: {
         type: String,
         required: true,
@@ -79,10 +109,9 @@ const projectSchema = new mongoose.Schema({
         type: Date,
         default: null  // If no date is provided, null is set by default
     },
-
     contact: {
         type: String,
-        enum: ['address1', 'address2', 'address3'],  // Updated enum values
+        enum: ['address1', 'address2', 'address3'],  // Placeholder enum values - replace these with actual values
         required: false
     }
 }, { timestamps: true });
@@ -90,10 +119,3 @@ const projectSchema = new mongoose.Schema({
 const Project = mongoose.model('Project', projectSchema);
 
 module.exports = Project;
-
-
-
-
-
-
-

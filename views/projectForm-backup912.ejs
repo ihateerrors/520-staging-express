@@ -236,15 +236,29 @@
 
 
 <!-- Your Form's HTML -->
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-
-
 <script>
-// Initialize map
-const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+const map = L.map('map').setView([47.6407, -122.2971], 15);  
+const defaultColor = '#f4661a';
+const defaultWidth = 8;
+
+const activityIcons = {
+    "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+    "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+    "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+    "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+    "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+    "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
+    "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
+};
+
+
+// Add Google Mutant layer
+L.gridLayer.googleMutant({
+    type: 'roadmap',
+    maxZoom: 20,
+    apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+}).addTo(map);
 
 const drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
@@ -340,7 +354,6 @@ widthPickerElement.addEventListener('input', (event) => {
         polyline: { shapeOptions: { weight: selectedWidth, color: selectedColor } }
     });
 });
-
 
 </script>
 

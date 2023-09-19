@@ -14,13 +14,14 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk" async defer></script>
 
 
- <!-- <script>
+<!-- <script>
     (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
       key: "AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk",
       v: "weekly"
 
     }); 
-</script>  -->
+</script> -->
+
 
 <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -227,41 +228,42 @@ type="text/css" />
             <%= error_msg %>
         </div>
     <% } %>
-<!-- END Form's HTML -->
+<!-- Your Form's HTML -->
+
 <script>
-    const map = L.map('map').setView([47.6407, -122.2971], 15);
-    
-    // Add Google Mutant layer
-    L.gridLayer.googleMutant({
-        type: 'roadmap',
-        maxZoom: 20,
-        apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
-    }).addTo(map);
-    
-    // Drawing controls
-    const drawnItems = new L.FeatureGroup().addTo(map);
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    }).addTo(map);
-    
-    map.on(L.Draw.Event.CREATED, function(event) {
-        const layer = event.layer;
-        drawnItems.addLayer(layer);
+const map = L.map('map').setView([47.6407, -122.2971], 15);  
+
+// Add Google Mutant layer
+L.gridLayer.googleMutant({
+    type: 'roadmap',
+    maxZoom: 20,
+    apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+}).addTo(map);
+
+// Drawing controls
+const drawnItems = new L.FeatureGroup().addTo(map);
+const drawControl = new L.Control.Draw({
+    edit: {
+        featureGroup: drawnItems
+    }
+}).addTo(map);
+
+map.on(L.Draw.Event.CREATED, function(event) {
+    const layer = event.layer;
+    drawnItems.addLayer(layer);
+});
+
+map.on(L.Draw.Event.EDITED, function(event) {
+    const layers = event.layers;
+    layers.eachLayer(function(layer) {
+        // Update the layers here if necessary
     });
-    
-    map.on(L.Draw.Event.EDITED, function(event) {
-        const layers = event.layers;
-        layers.eachLayer(function(layer) {
-            // Update the layers here if necessary
-        });
-    });
-    
-    const defaultColor = '#f4661a';
-    const defaultWidth = 8;
-    
-    const activityIcons = {
+});
+
+const defaultColor = '#f4661a';
+const defaultWidth = 8;
+
+const activityIcons = {
         "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
         "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
         "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -270,8 +272,8 @@ type="text/css" />
         "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
         "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
     };
-    
-    function fetchMapData(startDate = '', endDate = '', types = []) {
+
+function fetchMapData(startDate = '', endDate = '', types = []) {
         let apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
         console.log('Fetching data from:', apiUrl);
     
@@ -354,74 +356,53 @@ type="text/css" />
     }
     
     fetchMapData();
-    
-    // Get reference to the mapData element from the form
-    const mapDataElement = document.getElementById('mapData');
-    if (mapDataElement && mapDataElement.value) {
-        try {
-            const geoJSONData = JSON.parse(mapDataElement.value);
-            
-            // Render the form's map data on the map
-            L.geoJSON(geoJSONData, {
-                style: function(feature) {
-                    return {
-                        color: feature.properties.color || defaultColor,
-                        weight: feature.properties.width || defaultWidth
-                    };
-                }
-            }).addTo(map);
-    
-        } catch (error) {
-            console.warn("Failed to parse mapData from form:", error);
-        }
-    }
-    
-    let previousView = null;
-    
-    map.on('popupopen', function() {
-        previousView = {
-            center: map.getCenter(),
-            zoom: map.getZoom()
-        };
-    });
-    
-    map.on('popupclose', function() {
-        if (previousView) {
-            map.setView(previousView.center, previousView.zoom);
-        }
-    });
-    
-    document.querySelector('form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-    
-        // Extract form data
-        const formData = new FormData(e.target);
-    
-        // Convert drawn items to geoJSON and add to the form data
-        const drawnData = drawnItems.toGeoJSON();
-        formData.append('mapData', JSON.stringify(drawnData));
-    
-        // POST request to send form data and drawn items to the server
-        try {
-            const response = await fetch('/api/projects', {
-                method: 'POST',
-                body: formData
-            });
-    
-            if (response.ok) {
-                // Handle success, maybe redirect or show a message
-                window.location.href = "/projectForm"; // Redirect to the same form, for example
-            } else {
-                // Handle any server errors, show the user an error message
-                const data = await response.json();
-                console.error("Error saving project:", data.error);
+
+// Get reference to the mapData element from the form
+const mapDataElement = document.getElementById('mapData');
+if (mapDataElement && mapDataElement.value) {
+    try {
+        const geoJSONData = JSON.parse(mapDataElement.value);
+        
+        // Render the form's map data on the map
+        L.geoJSON(geoJSONData, {
+            style: function(feature) {
+                return {
+                    color: feature.properties.color || defaultColor,
+                    weight: feature.properties.width || defaultWidth
+                };
             }
-        } catch (error) {
-            console.error("Failed to submit form:", error);
-        }
-    });
-    </script>
-    
+        }).addTo(map);
+
+    } catch (error) {
+        console.warn("Failed to parse mapData from form:", error);
+    }
+}
+
+let previousView = null;
+
+map.on('popupopen', function() {
+    previousView = {
+        center: map.getCenter(),
+        zoom: map.getZoom()
+    };
+});
+
+map.on('popupclose', function() {
+    if (previousView) {
+        map.setView(previousView.center, previousView.zoom);
+    }
+});
+
+document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(checkbox => checkbox.value);
+
+    fetchMapData(startDate, endDate, types);
+});
+   </script> 
   </body>
 </html>
 

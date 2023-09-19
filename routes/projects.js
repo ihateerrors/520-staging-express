@@ -54,7 +54,10 @@ router.get('/api/projects', async (req, res) => {
 });
 
 router.get('/projectForm', ensureAuthenticated, (req, res) => {
-    res.render('projectForm', { success_msg: null });
+    res.render('projectForm', { 
+        success_msg: req.flash('success_msg'), 
+        error_msg: req.flash('error_msg')
+    });
 });
 
 router.post('/api/projects', upload.single('file'), async (req, res) => {
@@ -63,6 +66,15 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             const azureFileUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
+        }
+
+        // Parse mapData
+        try {
+            req.body.mapData = JSON.parse(req.body.mapData);
+        } catch (error) {
+            console.error('Failed to parse mapData:', error);
+            req.flash('error_msg', 'Failed to parse mapData.');
+            return res.redirect('/projectForm');
         }
 
         const project = new Project(req.body);
@@ -76,11 +88,12 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             req.flash('error_msg', 'Error in creating the event: ' + errorMessages.join(', '));
             res.redirect('/projectForm');
         } else {
-            req.flash('error_msg', 'Internal server error.');
+            req.flash('error_msg', 'Internal server error, yo');
             res.redirect('/projectForm');
         }
     }
 });
+
 
 router.get('/', async (req, res) => {
     try {

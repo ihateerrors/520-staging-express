@@ -1773,9 +1773,12 @@ max-height: 300px;
 .popup-content .popup-image img {
   margin-top: 20px; /* This adds space above the image */
   color: #c10a0a;
-  max-width: fit-content;
+  max-width: 480px;
 }
 
+#popimg {
+  max-width: 480px;
+}
 
 #showDialog {
   cursor: pointer;

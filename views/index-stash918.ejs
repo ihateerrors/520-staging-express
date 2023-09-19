@@ -126,19 +126,39 @@
 
 <!-- ### End footer ### -->
 
-<script>
-    // Create the Leaflet map
-    const map = L.map('map').setView([47.6407, -122.2971], 15);
-    
-    // Add Google Map layer to Leaflet map
-    L.gridLayer.googleMutant({
-        type: 'roadmap',
-        maxZoom: 20,
-        apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
-    }).addTo(map);
 
-    // Define activity icons
-    const activityIcons = {
+
+<script>
+  
+
+function fetchMapData(startDate = '', endDate = '', types = []) {
+        let apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+        console.log('Fetching data from:', apiUrl);
+    
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+                if (data && data.length > 0) {
+                    data.forEach(project => {
+                        if (typeof project.mapData !== 'string') {
+                            console.warn(`Invalid mapData for project with ID ${project._id}`);
+                            return;
+                        }
+    
+                        let geoJSONData;
+                        try {
+                            geoJSONData = JSON.parse(project.mapData);
+                        } catch (error) {
+                            console.warn(`Failed to parse mapData for project with ID ${project._id}:`, error);
+                            return; // Skip this project and move to the next one.
+                        }
+    
+
+                        const defaultColor = '#f4661a';
+const defaultWidth = 8;
+
+const activityIcons = {
         "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
         "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
         "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -147,34 +167,14 @@
         "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
         "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
     };
-    
-    // Define default styling values
-    const defaultColor = '#f4661a';
-    const defaultWidth = 8;
-    
-    // Function to fetch map data and display it on the map
-    function fetchMapData(startDate = '', endDate = '', types = []) {
-        const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
-        console.log('Fetching data from:', apiUrl);
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data received:', data);
-                if (data && data.length > 0) {
-                    data.forEach(project => {
-                        if (!project.mapData || typeof project.mapData !== 'object') {
-                            console.warn(`Invalid mapData for project with ID ${project._id}`);
-                            return;
-                        }
-                        
                         const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
                         const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
                         const timingFeaturesHTML = project.timingFeatures.map(feature => `
                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
                             ${feature}
                         `).join(' ');
-
+    
                         const popupContent = `
                             <div class="popup-content">
                                 <h3>${project.activityName}</h3>
@@ -189,20 +189,20 @@
                                 </div>
                             </div>
                         `;
-
+    
                         const iconUrl = activityIcons[project.activityType[0]];
                         if (!iconUrl) {
                             console.warn(`No icon URL found for type: ${project.activityType[0]}`);
                             return;
                         }
-
+    
                         const customIcon = L.icon({
                             iconUrl: iconUrl,
                             iconSize: [25, 25],
                             popupAnchor: [0, -41]
                         });
-
-                        L.geoJSON(project.mapData, {
+    
+                        const geoJSONLayer = L.geoJSON(geoJSONData, {
                             style: function(feature) {
                                 return {
                                     color: feature.properties.color || defaultColor,
@@ -220,61 +220,62 @@
                                 });
                             }
                         }).addTo(map);
+                        map.fitBounds(geoJSONLayer.getBounds());
                     });
                 }
             })
             .catch(error => console.error('Error fetching map data:', error));
     }
     
-    // Initial fetch of map data
     fetchMapData();
 
-    // Get reference to the mapData element from the form
-    const mapDataElement = document.getElementById('mapData');
-    if (mapDataElement && mapDataElement.value) {
-        try {
-            const geoJSONData = JSON.parse(mapDataElement.value);
-                      L.geoJSON(geoJSONData, {
-                style: function(feature) {
-                    return {
-                        color: feature.properties.color || defaultColor,
-                        weight: feature.properties.width || defaultWidth
-                    };
-                }
-            }).addTo(map);
+// Get reference to the mapData element from the form
+const mapDataElement = document.getElementById('mapData');
+if (mapDataElement && mapDataElement.value) {
+    try {
+        const geoJSONData = JSON.parse(mapDataElement.value);
+        
+        // Render the form's map data on the map
+        L.geoJSON(geoJSONData, {
+            style: function(feature) {
+                return {
+                    color: feature.properties.color || defaultColor,
+                    weight: feature.properties.width || defaultWidth
+                };
+            }
+        }).addTo(map);
 
-        } catch (error) {
-            console.warn("Failed to parse mapData from form:", error);
-        }
+    } catch (error) {
+        console.warn("Failed to parse mapData from form:", error);
     }
+}
 
-    let previousView = null;
+let previousView = null;
 
-    map.on('popupopen', function() {
-        previousView = {
-            center: map.getCenter(),
-            zoom: map.getZoom()
-        };
-    });
+map.on('popupopen', function() {
+    previousView = {
+        center: map.getCenter(),
+        zoom: map.getZoom()
+    };
+});
 
-    map.on('popupclose', function() {
-        if (previousView) {
-            map.setView(previousView.center, previousView.zoom);
-        }
-    });
+map.on('popupclose', function() {
+    if (previousView) {
+        map.setView(previousView.center, previousView.zoom);
+    }
+});
 
-    // Handle form submission and fetch data based on filters
-    document.querySelector('form').addEventListener('submit', function (e) {
-        e.preventDefault();
+document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-        const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(checkbox => checkbox.value);
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(checkbox => checkbox.value);
 
-        fetchMapData(startDate, endDate, types);
-    });
+    fetchMapData(startDate, endDate, types);
+});
+   
 </script>
-
 
 
 
