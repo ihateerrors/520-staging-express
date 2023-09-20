@@ -211,7 +211,7 @@
   const defaultWidth = 8;
   
   function fetchMapDataForProject(projectId) {
-      const apiUrl = `/api/projects/${projectId}`;
+      const apiUrl = `/api/projects/${projectId}/mapData`;
 
       fetch(apiUrl)
           .then(response => response.json())
@@ -270,7 +270,7 @@
                   popupAnchor: [0, -41]
               });
 
-              L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
+              L.geoJSON(geoJSONData, {
                   style: function(feature) {
                       return {
                           color: feature.properties.color || defaultColor,
@@ -292,8 +292,10 @@
           .catch(error => console.error('Error fetching map data:', error));
   }
 
-  // Extract the projectId from the URL or some other method
-  const projectId = '${project._id}'; // Replace <YOUR_PROJECT_ID> with the appropriate method to get the ID
+  // Extract the projectId from the URL
+  const urlParts = window.location.pathname.split('/');
+  const projectId = urlParts[2];  // Assumes the URL structure is like /projects/<projectId>
+
   fetchMapDataForProject(projectId);
 </script>
 

@@ -293,20 +293,20 @@ type="text/css" />
                     ${feature}
                 `).join(' ');
   
-                const popupContent = `
-                    <div class="popup-content">
-                        <h3>${project.activityName}</h3>
-                        <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
-                        <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
-                        <span style="font-weight: 600">Time:</span> ${project.time}</p>
-                        <div class="timing-features">${timingFeaturesHTML}</div>                         
-                        <p>${project.description || "Not specified"}</p>
-                        <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
-                        <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
-                        ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
-                        </div>
-                    </div>
-                `;
+                // const popupContent = `
+                //     <div class="popup-content">
+                //         <h3>${project.activityName}</h3>
+                //         <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
+                //         <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
+                //         <span style="font-weight: 600">Time:</span> ${project.time}</p>
+                //         <div class="timing-features">${timingFeaturesHTML}</div>                         
+                //         <p>${project.description || "Not specified"}</p>
+                //         <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
+                //         <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
+                //         ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
+                //         </div>
+                //     </div>
+                // `;
   
                 const iconUrl = activityIcons[project.activityType[0]];
                 if (!iconUrl) {
@@ -342,11 +342,7 @@ type="text/css" />
             .catch(error => console.error('Error fetching map data:', error));
     }
   
-    // Extract the projectId from the URL
-    const urlParts = window.location.pathname.split('/');
-    const projectId = urlParts[2];  // Assumes the URL structure is like /projects/<projectId>
-  
-    fetchMapDataForProject(projectId);
+
   </script>
   
     
