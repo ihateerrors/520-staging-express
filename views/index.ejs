@@ -11,7 +11,7 @@
     content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="favicon.ico" />
+  <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
   
   <title>SR 520 Construction | WSDOT</title>
 
@@ -128,7 +128,7 @@
 
 <script>
     // Create the Leaflet map
-    const map = L.map('map').setView([47.6407, -122.2971], 15);
+    const map = L.map('map').setView([47.6407, -122.2971], 13);
     
     // Add Google Map layer to Leaflet map
     L.gridLayer.googleMutant({
@@ -212,7 +212,7 @@
 
                     const customIcon = L.icon({
                         iconUrl: iconUrl,
-                        iconSize: [30, 30],
+                        iconSize: [26, 26],
                         popupAnchor: [0, -41]
                     });
 
@@ -245,7 +245,7 @@ const cameras = [
 // Define the camera icon
 const cameraIcon = L.icon({
     iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png',
-    iconSize: [30, 30], // size of the icon
+    iconSize: [26, 26], // size of the icon
     popupAnchor: [0, -15] // point from which the popup should open relative to the iconAnchor
 });
 
