@@ -212,9 +212,65 @@
 
                     const customIcon = L.icon({
                         iconUrl: iconUrl,
-                        iconSize: [25, 25],
+                        iconSize: [30, 30],
                         popupAnchor: [0, -41]
                     });
+
+
+                    // start cameras
+     // Sample data for the cameras
+const cameras = [
+    { 
+        lat: 47.644611, 
+        lng: -122.304694, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_3/view_1'
+    },
+    { 
+        lat: 47.645056, 
+        lng: -122.301972, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_1/view_1'
+    },
+    { 
+        lat: 47.644861, 
+        lng: -122.298111, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_2/view_1'
+    },
+    { 
+        lat: 47.644861, 
+        lng: -122.298583, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_4/view_1'
+    }
+];
+
+// Define the camera icon
+const cameraIcon = L.icon({
+    iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png',
+    iconSize: [30, 30], // size of the icon
+    popupAnchor: [0, -15] // point from which the popup should open relative to the iconAnchor
+});
+
+// Add each camera to the map
+cameras.forEach(camera => {
+    const marker = L.marker([camera.lat, camera.lng], { icon: cameraIcon }).addTo(map);
+
+    // Attach a popup with the iframe to the camera
+
+marker.bindPopup(
+    `<div style="width: 100%; padding: 15px;"> 
+         <p>
+            <iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe>
+        </p>
+    </div>`,
+    {
+        maxWidth: 480,  // This should align with whatever max width you've set
+        minWidth: 480,  // You can set this to be the minimum size you want the popup to take
+    }
+);
+});
+
+
+// END camera section 
+
 
                     L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
                         style: function(feature) {

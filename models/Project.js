@@ -23,11 +23,11 @@ const projectSchema = new mongoose.Schema({
     }],
     description: {
         type: String,
-        required: true
+        required: false
     },
     trafficDescription: {
         type: String,
-        required: true
+        required: false
     },
     activityType: [{
         type: String,
@@ -43,6 +43,7 @@ const projectSchema = new mongoose.Schema({
     }],
     impactType: [{
         type: String,
+        required: false,
         enum: [
             "Bike/pedestrian",
             "Light",
@@ -60,49 +61,15 @@ const projectSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    // mapData: {
-    //     type: {
-    //         type: String,
-    //         enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
-    //         required: false
-    //     },
-    //     features: {
-    //         type: [mongoose.Schema.Types.Mixed]
-    //     }
-    // },
-
-    // mapData: {
-    //     type: {
-    //         type: mongoose.Schema.Types.Mixed,
-    //         enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
-    //         required: false
-    //     },
-    //     features: [{
-    //         type: {
-    //             type: mongoose.Schema.Types.Mixed,
-    //             enum: ['Feature', 'Point', 'LineString', 'Polygon']
-    //         },
-    //         properties: {
-    //             type: mongoose.Schema.Types.Mixed,
-    //             default: {}
-    //         },
-    //         geometry: {
-    //             type: {
-    //                 type: mongoose.Schema.Types.Mixed,
-    //                 enum: ['Point', 'LineString', 'Polygon']
-    //             },
-    //             coordinates: [mongoose.Schema.Types.Mixed]
-    //         }
-    //     }]
-    // },
 
     mapData: {
-        type: mongoose.Schema.Types.Mixed
+        type: mongoose.Schema.Types.Mixed,
+        required: false
     },
     
     bannerContent: {
         type: String,
-        required: true,
+        required: false,
         enum: ['yes', 'no']  // It ensures only 'yes' or 'no' values are stored for this field
     },
     postDate: {
