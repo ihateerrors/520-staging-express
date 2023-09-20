@@ -126,8 +126,8 @@
                           </div>   
 
                         <div class="mt-5">
-                         <div class="greenborder"> 
-                                      <div id="map" style="max-height: 400px;"></div>
+                         <div class="greenborder" style="display: flex;"> 
+                                      <div id="map" width: 100%;></div>
                            </div>
                            <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
                            <div class="mt-2">
@@ -189,70 +189,91 @@
 
 
 <script>
+  // Create the Leaflet map
+  const map = L.map('map').setView([47.6407, -122.2971], 13);
+  
+  // Add Google Map layer to Leaflet map
+  L.gridLayer.googleMutant({
+      type: 'roadmap',
+      maxZoom: 20,
+      apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+  }).addTo(map);
+
+  // Define activity icons
   const activityIcons = {
-    "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-    "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-    "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-    "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-    "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
-    "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
-    "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
-};
+      "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+      "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+      "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+  };
+  
+  // Define default styling values
+  const defaultColor = '#f4661a';
+  const defaultWidth = 8;
+  const projectId = window.location.pathname.split('/').pop();
+  function fetchMapDataForProject(projectId) {
+      const apiUrl = `/api/projects/${projectId}`;
+   
 
-const map = L.map('map').setView([47.6407, -122.2971], 16);
+      fetch(apiUrl)
+          .then(response => response.json())
+          .then(project => {
+              if (!project.mapData || !Array.isArray(project.mapData)) {
+                  console.warn(`Invalid mapData for project with ID ${project._id}`);
+                  return;
+              }
+              
+              let geoJSONData = null;
+              if (typeof project.mapData[1] === 'string') {
+                  try {
+                      geoJSONData = JSON.parse(project.mapData[1]);
+                  } catch (e) {
+                      console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                      return;
+                  }
+              }
 
-L.gridLayer.googleMutant({
-    type: 'roadmap',
-    maxZoom: 20,
-    apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
-}).addTo(map);
+              if (!geoJSONData) {
+                  console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                  return;
+              }
 
-const projectId = '<%= project._id %>';
+              const iconUrl = activityIcons[project.activityType[0]];
+              if (!iconUrl) {
+                  console.warn(`No icon URL found for type: ${project.activityType[0]}`);
+                  return;
+              }
 
-fetch(`/api/projects/${projectId}`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        return response.json();
-    })
-    .then(project => {
-        if (project.mapData) {
-            const geoJSONData = JSON.parse(project.mapData);
+              const customIcon = L.icon({
+                  iconUrl: iconUrl,
+                  iconSize: [26, 26]
+              });
 
-            // Create the GeoJSON layer and assign it to a variable so we can use its bounds
-            const geoJSONLayer = L.geoJSON(geoJSONData, {
-                pointToLayer: function (feature, latlng) {
-                    const activityType = feature.properties.activityType ? feature.properties.activityType[0] : null;
-                    const iconUrl = activityIcons[activityType];
+              L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
+                  style: function(feature) {
+                      return {
+                          color: feature.properties.color || defaultColor,
+                          weight: feature.properties.width || defaultWidth
+                      };
+                  },
+                  pointToLayer: function (feature, latlng) {
+                      return L.marker(latlng, { icon: customIcon });
+                  }
+              }).addTo(map);
+          })
+          .catch(error => console.error('Error fetching map data:', error));
+  }
 
-                    if (!iconUrl) {
-                        console.warn(`No icon URL found for type: ${activityType}`);
-                        return L.marker(latlng);  // Default marker
-                    }
+  // Extract the projectId from the URL or some other method
 
-                    const customIcon = L.icon({
-                        iconUrl: iconUrl,
-                        iconSize: [30, 30],
-                        popupAnchor: [0, -41]
-                    });
 
-                    return L.marker(latlng, { icon: customIcon });
-                }
-            });
-
-            // Ensure all markers are visible in the map's view
-            map.fitBounds(geoJSONLayer.getBounds(), { padding: [10, 10] });
-
-            // Add the GeoJSON layer to the map
-            geoJSONLayer.addTo(map);
-        }
-    })
-    .catch(error => console.error('Error fetching map data:', error));
-
+  fetchMapDataForProject(projectId);
 </script>
 
-</script>
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -263,7 +284,7 @@ fetch(`/api/projects/${projectId}`)
   <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
       
-      <script src="/js/mapRender.js"></script>
+      <!-- <script src="/js/mapRender.js"></script> -->
 <script src="/js/lightbox.js"></script>
   
   </body>

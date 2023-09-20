@@ -12,28 +12,30 @@ const upload = multer({ storage: storage });
 
 router.get('/api/test', (req, res) => res.send('Test successful!'));
 
-router.get('/projects/:projectId', async (req, res) => {
-    try {
-        const projectId = req.params.projectId;
 
-        if (!mongoose.Types.ObjectId.isValid(projectId)) {
-            res.status(400).send('Invalid Project ID');
-            return;
-        }
 
-        const project = await Project.findById(projectId);
+// router.get('/projects/:projectId', async (req, res) => {
+//     try {
+//         const projectId = req.params.projectId;
 
-        if (!project) {
-            res.status(404).send('Project not found');
-            return;
-        }
+//         if (!mongoose.Types.ObjectId.isValid(projectId)) {
+//             res.status(400).send('Invalid Project ID');
+//             return;
+//         }
 
-        res.render('projectDetails', { project, formatDate });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-});
+//         const project = await Project.findById(projectId);
+
+//         if (!project) {
+//             res.status(404).send('Project not found');
+//             return;
+//         }
+
+//         res.render('projectDetails', { project, formatDate });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
 router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
