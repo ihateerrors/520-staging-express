@@ -152,82 +152,97 @@
     const defaultColor = '#f4661a';
     const defaultWidth = 8;
     
-    // Function to fetch map data and display it on the map
     function fetchMapData(startDate = '', endDate = '', types = []) {
-        const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
-        console.log('Fetching data from:', apiUrl);
+    const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+    console.log('Fetching data from:', apiUrl);
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Data received:', data);
-                if (data && data.length > 0) {
-                    data.forEach(project => {
-                        if (!project.mapData || typeof project.mapData !== 'object') {
-                            console.warn(`Invalid mapData for project with ID ${project._id}`);
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data received:', data);
+            if (data && data.length > 0) {
+                data.forEach(project => {
+                    if (!project.mapData || !Array.isArray(project.mapData)) {
+                        console.warn(`Invalid mapData for project with ID ${project._id}`);
+                        return;
+                    }
+                    
+                    let geoJSONData = null;
+                    if (typeof project.mapData[1] === 'string') {
+                        try {
+                            geoJSONData = JSON.parse(project.mapData[1]);
+                        } catch (e) {
+                            console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
                             return;
                         }
-                        
-                        const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
-                        const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
-                        const timingFeaturesHTML = project.timingFeatures.map(feature => `
-                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
-                            ${feature}
-                        `).join(' ');
+                    }
 
-                        const popupContent = `
-                            <div class="popup-content">
-                                <h3>${project.activityName}</h3>
-                                <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
-                                <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
-                                <span style="font-weight: 600">Time:</span> ${project.time}</p>
-                                <div class="timing-features">${timingFeaturesHTML}</div>                         
-                                <p>${project.description || "Not specified"}</p>
-                                <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
-                                <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
-                                ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
-                                </div>
+                    if (!geoJSONData) {
+                        console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                        return;
+                    }
+
+                    const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+                    const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+                    const timingFeaturesHTML = project.timingFeatures.map(feature => `
+                        <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                        ${feature}
+                    `).join(' ');
+
+                    const popupContent = `
+                        <div class="popup-content">
+                            <h3>${project.activityName}</h3>
+                            <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
+                            <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
+                            <span style="font-weight: 600">Time:</span> ${project.time}</p>
+                            <div class="timing-features">${timingFeaturesHTML}</div>                         
+                            <p>${project.description || "Not specified"}</p>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
+                            <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
+                            ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
                             </div>
-                        `;
+                        </div>
+                    `;
 
-                        const iconUrl = activityIcons[project.activityType[0]];
-                        if (!iconUrl) {
-                            console.warn(`No icon URL found for type: ${project.activityType[0]}`);
-                            return;
-                        }
+                    const iconUrl = activityIcons[project.activityType[0]];
+                    if (!iconUrl) {
+                        console.warn(`No icon URL found for type: ${project.activityType[0]}`);
+                        return;
+                    }
 
-                        const customIcon = L.icon({
-                            iconUrl: iconUrl,
-                            iconSize: [25, 25],
-                            popupAnchor: [0, -41]
-                        });
-
-                        L.geoJSON(project.mapData, {
-                            style: function(feature) {
-                                return {
-                                    color: feature.properties.color || defaultColor,
-                                    weight: feature.properties.width || defaultWidth
-                                };
-                            },
-                            pointToLayer: function (feature, latlng) {
-                                return L.marker(latlng, { icon: customIcon });
-                            },
-                            onEachFeature: function (feature, layer) {
-                                layer.bindPopup(popupContent, {
-                                    autoPan: true,
-                                    autoPanPaddingTopLeft: L.point(10, 50),
-                                    autoPanPaddingBottomRight: L.point(10, 10)
-                                });
-                            }
-                        }).addTo(map);
+                    const customIcon = L.icon({
+                        iconUrl: iconUrl,
+                        iconSize: [25, 25],
+                        popupAnchor: [0, -41]
                     });
-                }
-            })
-            .catch(error => console.error('Error fetching map data:', error));
-    }
-    
-    // Initial fetch of map data
-    fetchMapData();
+
+                    L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
+                        style: function(feature) {
+                            return {
+                                color: feature.properties.color || defaultColor,
+                                weight: feature.properties.width || defaultWidth
+                            };
+                        },
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, { icon: customIcon });
+                        },
+                        onEachFeature: function (feature, layer) {
+                            layer.bindPopup(popupContent, {
+                                autoPan: true,
+                                autoPanPaddingTopLeft: L.point(10, 50),
+                                autoPanPaddingBottomRight: L.point(10, 10)
+                            });
+                        }
+                    }).addTo(map);
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching map data:', error));
+}
+
+// Initial fetch of map data
+fetchMapData();
+
 
     // Get reference to the mapData element from the form
     const mapDataElement = document.getElementById('mapData');

@@ -62,27 +62,34 @@ router.get('/projectForm', ensureAuthenticated, (req, res) => {
 
 router.post('/api/projects', upload.single('file'), async (req, res) => {
     try {
+        // Handling file upload
         if (req.file && req.file.buffer) {
             const azureFileUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
 
-        // Parse mapData
-        try {
-            req.body.mapData = JSON.parse(req.body.mapData);
-        } catch (error) {
-            console.error('Failed to parse mapData:', error);
-            req.flash('error_msg', 'Failed to parse mapData.');
-            return res.redirect('/projectForm');
+        // Conditional parsing of mapData
+        if (typeof req.body.mapData === 'string') {
+            try {
+                console.log("Raw mapData:", req.body.mapData);
+                req.body.mapData = JSON.parse(req.body.mapData);
+            } catch (error) {
+                console.error('Failed to parse mapData:', error);
+                req.flash('error_msg', 'Failed to parse mapData.');
+                return res.redirect('/projectForm');
+            }
         }
 
+        // Creating and saving the project
         const project = new Project(req.body);
         await project.save();
         req.flash('success_msg', 'Construction event created successfully.');
         res.redirect('/projectForm');
     } catch (err) {
         console.error('Error:', err);
+        
+        // Handle validation error
         if (err.name === 'ValidationError') {
             let errorMessages = Object.values(err.errors).map(e => e.message);
             req.flash('error_msg', 'Error in creating the event: ' + errorMessages.join(', '));
@@ -93,6 +100,7 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
         }
     }
 });
+
 
 
 router.get('/', async (req, res) => {

@@ -71,29 +71,33 @@ const projectSchema = new mongoose.Schema({
     //     }
     // },
 
+    // mapData: {
+    //     type: {
+    //         type: mongoose.Schema.Types.Mixed,
+    //         enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
+    //         required: false
+    //     },
+    //     features: [{
+    //         type: {
+    //             type: mongoose.Schema.Types.Mixed,
+    //             enum: ['Feature', 'Point', 'LineString', 'Polygon']
+    //         },
+    //         properties: {
+    //             type: mongoose.Schema.Types.Mixed,
+    //             default: {}
+    //         },
+    //         geometry: {
+    //             type: {
+    //                 type: mongoose.Schema.Types.Mixed,
+    //                 enum: ['Point', 'LineString', 'Polygon']
+    //             },
+    //             coordinates: [mongoose.Schema.Types.Mixed]
+    //         }
+    //     }]
+    // },
+
     mapData: {
-        type: {
-            type: String,
-            enum: ['FeatureCollection', 'Feature', 'Point', 'LineString', 'Polygon'],
-            required: false
-        },
-        features: [{
-            type: {
-                type: String,
-                enum: ['Feature', 'Point', 'LineString', 'Polygon']
-            },
-            properties: {
-                type: mongoose.Schema.Types.Mixed,
-                default: {}
-            },
-            geometry: {
-                type: {
-                    type: String,
-                    enum: ['Point', 'LineString', 'Polygon']
-                },
-                coordinates: [mongoose.Schema.Types.Mixed]
-            }
-        }]
+        type: mongoose.Schema.Types.Mixed
     },
     
     bannerContent: {
