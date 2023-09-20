@@ -14,28 +14,28 @@ router.get('/api/test', (req, res) => res.send('Test successful!'));
 
 
 
-// router.get('/projects/:projectId', async (req, res) => {
-//     try {
-//         const projectId = req.params.projectId;
+router.get('/projects/:projectId', async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
 
-//         if (!mongoose.Types.ObjectId.isValid(projectId)) {
-//             res.status(400).send('Invalid Project ID');
-//             return;
-//         }
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            res.status(400).send('Invalid Project ID');
+            return;
+        }
 
-//         const project = await Project.findById(projectId);
+        const project = await Project.findById(projectId);
 
-//         if (!project) {
-//             res.status(404).send('Project not found');
-//             return;
-//         }
+        if (!project) {
+            res.status(404).send('Project not found');
+            return;
+        }
 
-//         res.render('projectDetails', { project, formatDate });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
+        res.render('projectDetails', { project, formatDate });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
@@ -102,6 +102,37 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
         }
     }
 });
+
+
+router.get('/api/projects/:projectId/mapData', async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            res.status(400).send('Invalid Project ID');
+            return;
+        }
+
+        const project = await Project.findById(projectId);
+
+        if (!project) {
+            res.status(404).send('Project not found');
+            return;
+        }
+
+        if (!project.mapData) {
+            res.status(404).send('Map data not found for the project');
+            return;
+        }
+
+        res.json(project.mapData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 
 
 

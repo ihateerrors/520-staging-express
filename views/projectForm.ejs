@@ -233,70 +233,122 @@ type="text/css" />
     <% } %>
 </div>
 <!-- END Form's HTML -->
+
+
 <script>
-    const map = L.map('map').setView([47.6407, -122.2971], 15);
+    // Create the Leaflet map
+    const map = L.map('map').setView([47.6407, -122.2971], 13);
     
-    // Add Google Mutant layer
+    // Add Google Map layer to Leaflet map
     L.gridLayer.googleMutant({
         type: 'roadmap',
         maxZoom: 20,
         apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
     }).addTo(map);
+  
+    // Define activity icons
+    const activityIcons = {
+        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+    };
     
-    // Drawing controls
-    const drawnItems = new L.FeatureGroup().addTo(map);
-    const drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    }).addTo(map);
+    // Define default styling values
+    const defaultColor = '#f4661a';
+    const defaultWidth = 8;
     
-    map.on(L.Draw.Event.CREATED, function(event) {
-        const layer = event.layer;
-        drawnItems.addLayer(layer);
-    });
-    
-    map.on(L.Draw.Event.EDITED, function(event) {
-        const layers = event.layers;
-        layers.eachLayer(function(layer) {
-            // Update the layers here if necessary
-        });
-    });
-    
-   
-    document.querySelector('form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-    
-        // Extract form data
-        const formData = new FormData(e.target);
-    
-        // Convert drawn items to geoJSON and add to the form data
-        const drawnData = drawnItems.toGeoJSON();
-        formData.append('mapData', JSON.stringify(drawnData));
-    
-        // POST request to send form data and drawn items to the server
-        try {
-            const response = await fetch('/api/projects', {
-                method: 'POST',
-                body: formData
-            });
-    
-            if (response.ok) {
-                // Handle success, maybe redirect or show a message
-                window.location.href = "/projectForm"; // Redirect to the same form, for example
-            } else {
-                // Handle any server errors, show the user an error message
-                const data = await response.json();
-                console.error("Error saving project:", data.error);
-            }
-        } catch (error) {
-            console.error("Failed to submit form:", error);
-        }
-    });
-
-
-
-    </script>
+    function fetchMapDataForProject(projectId) {
+        const apiUrl = `/api/projects/${projectId}/mapData`;
+  
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(project => {
+                if (!project.mapData || !Array.isArray(project.mapData)) {
+                    console.warn(`Invalid mapData for project with ID ${project._id}`);
+                    return;
+                }
+                
+                let geoJSONData = null;
+                if (typeof project.mapData[1] === 'string') {
+                    try {
+                        geoJSONData = JSON.parse(project.mapData[1]);
+                    } catch (e) {
+                        console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                        return;
+                    }
+                }
+  
+                if (!geoJSONData) {
+                    console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                    return;
+                }
+  
+                const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+                const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+                const timingFeaturesHTML = project.timingFeatures.map(feature => `
+                    <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                    ${feature}
+                `).join(' ');
+  
+                const popupContent = `
+                    <div class="popup-content">
+                        <h3>${project.activityName}</h3>
+                        <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
+                        <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
+                        <span style="font-weight: 600">Time:</span> ${project.time}</p>
+                        <div class="timing-features">${timingFeaturesHTML}</div>                         
+                        <p>${project.description || "Not specified"}</p>
+                        <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
+                        <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
+                        ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
+                        </div>
+                    </div>
+                `;
+  
+                const iconUrl = activityIcons[project.activityType[0]];
+                if (!iconUrl) {
+                    console.warn(`No icon URL found for type: ${project.activityType[0]}`);
+                    return;
+                }
+  
+                const customIcon = L.icon({
+                    iconUrl: iconUrl,
+                    iconSize: [26, 26],
+                    popupAnchor: [0, -41]
+                });
+  
+                L.geoJSON(geoJSONData, {
+                    style: function(feature) {
+                        return {
+                            color: feature.properties.color || defaultColor,
+                            weight: feature.properties.width || defaultWidth
+                        };
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, { icon: customIcon });
+                    },
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(popupContent, {
+                            autoPan: true,
+                            autoPanPaddingTopLeft: L.point(10, 50),
+                            autoPanPaddingBottomRight: L.point(10, 10)
+                        });
+                    }
+                }).addTo(map);
+            })
+            .catch(error => console.error('Error fetching map data:', error));
+    }
+  
+    // Extract the projectId from the URL
+    const urlParts = window.location.pathname.split('/');
+    const projectId = urlParts[2];  // Assumes the URL structure is like /projects/<projectId>
+  
+    fetchMapDataForProject(projectId);
+  </script>
+  
     
   </body>
 </html>

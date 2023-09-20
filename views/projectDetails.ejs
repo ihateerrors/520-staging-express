@@ -185,9 +185,6 @@
 
   </script>
 
-
-
-
 <script>
   // Create the Leaflet map
   const map = L.map('map').setView([47.6407, -122.2971], 13);
@@ -212,10 +209,9 @@
   // Define default styling values
   const defaultColor = '#f4661a';
   const defaultWidth = 8;
-  const projectId = window.location.pathname.split('/').pop();
+  
   function fetchMapDataForProject(projectId) {
       const apiUrl = `/api/projects/${projectId}`;
-   
 
       fetch(apiUrl)
           .then(response => response.json())
@@ -240,6 +236,28 @@
                   return;
               }
 
+              const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+              const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+              const timingFeaturesHTML = project.timingFeatures.map(feature => `
+                  <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                  ${feature}
+              `).join(' ');
+
+              const popupContent = `
+                  <div class="popup-content">
+                      <h3>${project.activityName}</h3>
+                      <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
+                      <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
+                      <span style="font-weight: 600">Time:</span> ${project.time}</p>
+                      <div class="timing-features">${timingFeaturesHTML}</div>                         
+                      <p>${project.description || "Not specified"}</p>
+                      <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
+                      <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
+                      ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
+                      </div>
+                  </div>
+              `;
+
               const iconUrl = activityIcons[project.activityType[0]];
               if (!iconUrl) {
                   console.warn(`No icon URL found for type: ${project.activityType[0]}`);
@@ -248,7 +266,8 @@
 
               const customIcon = L.icon({
                   iconUrl: iconUrl,
-                  iconSize: [26, 26]
+                  iconSize: [26, 26],
+                  popupAnchor: [0, -41]
               });
 
               L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
@@ -260,6 +279,13 @@
                   },
                   pointToLayer: function (feature, latlng) {
                       return L.marker(latlng, { icon: customIcon });
+                  },
+                  onEachFeature: function (feature, layer) {
+                      layer.bindPopup(popupContent, {
+                          autoPan: true,
+                          autoPanPaddingTopLeft: L.point(10, 50),
+                          autoPanPaddingBottomRight: L.point(10, 10)
+                      });
                   }
               }).addTo(map);
           })
@@ -267,11 +293,9 @@
   }
 
   // Extract the projectId from the URL or some other method
-
-
+  const projectId = '${project._id}'; // Replace <YOUR_PROJECT_ID> with the appropriate method to get the ID
   fetchMapDataForProject(projectId);
 </script>
-
 
 
 
