@@ -44,7 +44,7 @@ router.get('/api/projects', async (req, res) => {
 
         if (req.query.startDate) filters.startDate = { $gte: new Date(req.query.startDate) };
         if (req.query.endDate) filters.endDate = { $lte: new Date(req.query.endDate) };
-        if (req.query.types) filters.constructionType = { $in: req.query.types.split(",") };
+        if (req.query.types) filters.activityType = { $in: req.query.types.split(",") };
         if (req.query.cameras) filters.cameras = req.query.cameras === 'true';
 
         const projects = await Project.find(filters);
