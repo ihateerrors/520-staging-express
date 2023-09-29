@@ -87,16 +87,29 @@ passport.deserializeUser(async (id, done) => {
 app.get('/', async (req, res) => {
     try {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
+        const allClosures = await Project.find({}).sort({ postDate: -1 });
 
-        // Fetch all relevant closures. Adjust this if you need specific filtering.
-        const closures = await Project.find({}).sort({ postDate: -1 });
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);  // set to start of the day
 
-        // Always pass both the project and closures variables, even if they're null or empty.
-        res.render('index', { 
-            title: '520 Construction Corner', 
-            header: 'Welcome to the 520 Construction Corner!', 
+        const currentClosures = allClosures.filter(closure => {
+            const startDate = new Date(closure.startDate);
+            const endDate = new Date(closure.endDate);
+            return startDate <= today && today <= endDate;
+        });
+
+        const upcomingClosures = allClosures.filter(closure => {
+            const startDate = new Date(closure.startDate);
+            return startDate > today;
+        });
+
+        res.render('index', {
+            title: '520 Construction Corner',
+            header: 'Welcome to the 520 Construction Corner!',
             project,
-            closures
+            closures: allClosures, 
+            currentClosures, 
+            upcomingClosures
         });
 
     } catch (error) {
@@ -104,6 +117,7 @@ app.get('/', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 
 //map Routes

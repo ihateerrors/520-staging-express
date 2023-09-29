@@ -88,18 +88,32 @@
                 <!-- Card 1 -->
                 <div style="margin-left: 25px;">
         
-                  <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures </strong></p>
-
-                  <!-- <div id="sidebarList">  -->
-                             <% closures.forEach(closure => { %>
-                              <li class="closure-item">
-                                  <span class="icon-box"><img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img"></span>&nbsp;&nbsp;
-                                  <a href="/projects/<%= closure._id %>" ><%= closure.activityName %></a>
-                              </li>
-                              <% }); %>
-                     <!-- </div> -->
-
-
+                              <p class="text-center wdot-dkgreen"><strong>Closures Today</strong></p>
+             
+                     <% if (typeof currentClosures !== 'undefined' && currentClosures) { %>
+                      
+                        <% currentClosures.forEach(closure => { %>
+                            <li class="closure-item">
+                                <span class="icon-box"><img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img"></span>&nbsp;&nbsp;
+                                <a href="/projects/<%= closure._id %>"><%= closure.activityName %></a>
+                            </li>
+                        <% }); %>
+                    <% } %>
+                    
+           
+                   
+                    <% if (typeof upcomingClosures !== 'undefined' && upcomingClosures && upcomingClosures.length > 0) { %>
+                        <p class="text-center wdot-dkgreen"><strong>Upcoming closures</strong></p>    
+                        <% upcomingClosures.forEach(closure => { %>
+                            <li class="closure-item">
+                                <span class="icon-box"><img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img"></span>&nbsp;&nbsp;
+                                <a href="/projects/<%= closure._id %>"><%= closure.activityName %></a>
+                            </li>
+                        <% }); %>
+                    <% } else { %>
+                        <li class="closure-item" style="display: none;">No upcoming closures</li>
+                    <% } %>
+                    
                     <br>
                   </div>                              
                 </div>
@@ -197,10 +211,7 @@
                             <span style="font-weight: 600">Time:</span> ${project.time}</p>
                             <div class="timing-features">${timingFeaturesHTML}</div>                         
                             <p>${project.description || "Not specified"}</p>
-                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
-                            <div class="popup-image mt-2" style="max-width: 480px; object-fit: cover;">                            
-                            ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="popimg" id="popimg" style="display: flex; max-width: 480px;">` : ''}
-                            </div>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #cbdcbcb; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
                         </div>
                     `;
 
@@ -299,6 +310,20 @@ marker.bindPopup(
 // Initial fetch of map data
 fetchMapData();
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the current date
+    var today = moment().format('YYYY-MM-DD');
+
+    // Calculate the date two weeks from today
+    var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
+
+    // Set the placeholder value for the start date input
+    document.getElementById('start').setAttribute('value', today);
+
+    // Set the value value for the end date input
+    document.getElementById('end').setAttribute('value', twoWeeksLater);
+});
+
 
     // Get reference to the mapData element from the form
     const mapDataElement = document.getElementById('mapData');
@@ -344,12 +369,10 @@ fetchMapData();
 
         fetchMapData(startDate, endDate, types);
     });
+
+
+
 </script>
-
-
-
-
-
 
 
 

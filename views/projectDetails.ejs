@@ -13,7 +13,7 @@
   <meta name="MobileOptimized" content="width" />
   <meta name="HandheldFriendly" content="true" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="favicon.ico" />
+  <!-- <link rel="icon" href="favicon.ico" /> -->
   <!-- <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" /> -->
   <!-- <script src="/sites/default/files/google_tag/gtm_kjkscvk/google_tag.script.js?rtoq0t" defer></script> -->
 
@@ -41,7 +41,7 @@
 
   <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
   <!-- Google Maps JavaScript API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk" defer></script>
   <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 <style>
  .navbar a {
@@ -89,10 +89,15 @@
                               </div>
                               
                               <div class="content-right col-lg-6">
-                                <figure>
-                                <img id="showDialog" class="img-fluid w-100" src=<%= project.imageUrl %> alt=<%= project.imageAlt %>>
-                                <figcaption><em>Click on image to expand</em></figcaption>
-                                </figure>
+                                
+                                  <% if (project.imageUrl && project.imageUrl.trim() !== '') { %>
+                                    <figure>
+                                    <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>">
+                                    <figcaption><em>Click on image to expand</em></figcaption>
+                                  </figure>
+                                <% } %>
+                                
+                              
                               </div>
                               <div class="pt-5">
                                 <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
@@ -187,7 +192,7 @@
 
 <script>
   // Create the Leaflet map
-  const map = L.map('map').setView([47.6407, -122.2971], 17);
+  const map = L.map('map').setView([47.6407, -122.2971], 8);
 
   // Add Google Map layer to Leaflet map
   L.gridLayer.googleMutant({
