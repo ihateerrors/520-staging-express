@@ -37,7 +37,18 @@
 <p></p>
     <main>
 
-
+        <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
+            <div class="row">
+                <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
+                    <div class="mt-4 mb-1" style="margin-left: 7%;"> 
+                      <% if  (project.bannerContent === 'yes') { %>
+                        <span style="font-size: 1.4em; font-weight: 700;"><%= project.activityName %> </span>
+                        <p><a href="/projects/<%= project._id %>">View Details</a></p>
+                    <% } %>
+                    </div> 
+                </div>
+            </div>
+        </div>
 
 <!-- ###  Main container  ### -->
      <div class="container4" style="padding-left: 5%; padding-right: 3%; margin-top: 20px; margin-bottom: 20px;"> 
@@ -203,15 +214,22 @@
                         ${feature}
                     `).join(' ');
 
+                    const activityTypeHTML = project.activityType.map(type => `
+                        <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                        ${type}
+                    `).join(' ');
+
+
+
                     const popupContent = `
                         <div class="popup-content">
                             <h3>${project.activityName}</h3>
                             <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
                             <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
                             <span style="font-weight: 600">Time:</span> ${project.time}</p>
-                            <div class="timing-features">${timingFeaturesHTML}</div>                         
+                            <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>                         
                             <p>${project.description || "Not specified"}</p>
-                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #cbdcbcb; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
                         </div>
                     `;
 
