@@ -37,10 +37,10 @@
 <p></p>
     <main>
 
-        <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: 1.5em; z-index: -1;">
+        <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: .8em; padding-bottom: 1.2em; z-index: -1;">
             <div class="row">
                 <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
-                    <div class="mt-4 mb-1" style="margin-left: 7%;"> 
+                    <div class="mt-4 mb-1" style="margin-left: 7%; margin-right: 4%; width: 100%;"> 
                       <% if  (project.bannerContent === 'yes') { %>
                         <span style="font-size: 1.4em; font-weight: 700;"><%= project.activityName %> </span>
                         <p><a href="/projects/<%= project._id %>">View Details</a></p>
