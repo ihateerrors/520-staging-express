@@ -54,9 +54,6 @@ router.get('/api/projects', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-router.get('/dashboard', (req, res) => {
-    res.render('dashboard'); // Render the 'dashboard.ejs' view
-});
 
 router.get('/projectForm', ensureAuthenticated, (req, res) => {
     res.render('projectForm', { 
@@ -137,33 +134,6 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-// router.get('/', async (req, res) => {
-//     try {
-//         const today = new Date();
-//         today.setHours(0, 0, 0, 0);  
-
-//         const allClosures = await Project.find({}).limit(10);
-
-//         const currentClosures = allClosures.filter(closure => {
-//             const startDate = new Date(closure.startDate); 
-//             const endDate = new Date(closure.endDate);     
-//             return startDate <= today && today <= endDate;
-//         });
-
-//         const upcomingClosures = allClosures.filter(closure => {
-//             const startDate = new Date(closure.startDate);
-//             return startDate > today;
-//         });
-
-    
-//         res.render('index', { closures: allClosures, currentClosures, upcomingClosures });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
-
 
 router.get('/latest-closures', async (req, res) => {
     try {
