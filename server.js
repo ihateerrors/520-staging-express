@@ -11,12 +11,12 @@ const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
+const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
+
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register'); 
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
-const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
 const projectRoutes = require('./routes/projects');
-
 
 // Middleware setup
 
@@ -41,12 +41,18 @@ app.use(passport.session());
 app.use(flash());
 
 
-app.use(projectRoutes.router);
 app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
+app.use(projectRoutes.router);
 
-const accountName = 'sr520construction';
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+    const err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = '520-uploads';
 

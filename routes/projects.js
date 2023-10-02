@@ -54,6 +54,9 @@ router.get('/api/projects', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+router.get('/dashboard', (req, res) => {
+    res.render('dashboard'); // Render the 'dashboard.ejs' view
+});
 
 router.get('/projectForm', ensureAuthenticated, (req, res) => {
     res.render('projectForm', { 
