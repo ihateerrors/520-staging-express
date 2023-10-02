@@ -12,8 +12,6 @@ const upload = multer({ storage: storage });
 
 router.get('/api/test', (req, res) => res.send('Test successful!'));
 
-
-
 router.get('/projects/:projectId', async (req, res) => {
     try {
         const projectId = req.params.projectId;
