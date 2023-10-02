@@ -57,10 +57,10 @@ const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = '520-uploads';
 
 const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
-const blobServiceClient = new BlobServiceClient(
-  `https://${accountName}.blob.core.windows.net`,
-  sharedKeyCredential
-);
+// const blobServiceClient = new BlobServiceClient(
+//   `https://${accountName}.blob.core.windows.net`,
+//   sharedKeyCredential
+// );
 
 // Passport config 
 passport.use(new LocalStrategy({
