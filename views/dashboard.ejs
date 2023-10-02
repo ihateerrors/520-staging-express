@@ -2,28 +2,11 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8" />
-  <title>SR 520 Construction | Construction Entry Form </title>
+  <title>SR 520 Construction Dashboard </title>
 
-    <!-- Leaflet and Leaflet.draw CDN -->
-<!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk" async defer></script> -->
-
-
- <!-- <script>
-    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-      key: "AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk",
-      v: "weekly"
-
-    }); 
-</script>  -->
-
-<!-- <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> -->
+<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
+<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
 type="text/css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
@@ -31,16 +14,60 @@ type="text/css" />
   </head>
   <body>
     <div class="container">
-        <section class="form-area mt-5 ml-5 mr-5">
 
-            <div class="container-md">
-                <h1>Welcome to the 520 Construction Dashbaord! </h1>
-                <h2>Here's a subheading</h2>      
-                <p>Here's an intro paragraph. </p>
-            </div>
+   
+              <div class="blockhead" style="display: block; margin: 3%;"> 
+            <h1 class="wdot-dkgreen">SR 520 Construction Corner Dashboard</h1>
+            <p><strong></strong></p>
             <a href="/projectForm" style="display: inline-block; padding: 10px 20px; background-color: #004d40; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
-            </a>
+            </a><br><br>
+        </div>
+  
+        <section class="past-closures" style="margin: 3%;">
+
+            <div class="accordion" id="closureAccordion">
+                <% closures.forEach((closure, index) => { %>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<%= index %>">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                                <%= closure.activityName %>
+                            </button>
+                        </h2>
+                        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
+                            <div class="accordion-body">
+                                <strong>Start Date:</strong> <%= closure.startDate.toDateString() %><br>
+                                <strong>End Date:</strong> <%= closure.endDate ? closure.endDate.toDateString() : 'N/A' %><br>
+                                <strong>Time:</strong> <%= closure.time || 'N/A' %><br>
+                                <strong>Timing Features:</strong> <%= closure.timingFeatures.join(', ') %><br>
+                                <strong>Description:</strong> <%= closure.description || 'N/A' %><br>
+                                <strong>Traffic Description:</strong> <%= closure.trafficDescription || 'N/A' %><br>
+                                <strong>Activity Type:</strong> <%= closure.activityType.join(', ') %><br>
+                                <strong>Impact Type:</strong> <%= closure.impactType.join(', ') %><br>
+                                <strong>Image URL:</strong>
+                                <% if (closure.imageUrl) { %>
+                                    <a href="<%= closure.imageUrl %>" target="_blank">
+                                        <img class="img-fluid" src="<%= closure.imageUrl %>" alt="Closure Image" style="max-width: 300px;"> <!-- Adjust width as needed -->
+                                    </a>
+                                <% } else { %>
+                                    N/A
+                                <% } %>                                
+                                <br>                               
+                                <strong>Location:</strong> <%= closure.location || 'N/A' %><br>
+                                <strong>Map Data:</strong> <%= JSON.stringify(closure.mapData) || 'N/A' %><br>
+                                <strong>Banner Content:</strong> <%= closure.bannerContent || 'N/A' %><br>
+                                <strong>Post Date:</strong> <%= closure.postDate.toDateString() %><br>
+                                <strong>Remove Date:</strong> <%= closure.removeDate ? closure.removeDate.toDateString() : 'N/A' %><br>
+                                <strong>Contact:</strong> <%= closure.contact || 'N/A' %><br>
+                                <strong>Created At:</strong> <%= closure.createdAt.toDateString() %><br>
+                                <strong>Updated At:</strong> <%= closure.updatedAt.toDateString() %><br>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            
+   
         </section>
 
     </div>

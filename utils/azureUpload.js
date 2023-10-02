@@ -15,7 +15,16 @@ const containerClient = blobServiceClient.getContainerClient(containerName);
 
 const uploadToAzure = async (buffer, fileName) => {
     const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-    await blockBlobClient.uploadData(buffer);
+    
+    // The headers we want to set for the blob
+    const blobUploadOptions = {
+        blobHTTPHeaders: {
+            // This ensures the browser tries to display the image instead of downloading it.
+            blobContentDisposition: `inline; filename=${fileName}`
+        }
+    };
+    
+    await blockBlobClient.uploadData(buffer, blobUploadOptions);
     return blockBlobClient.url;
 };
 
