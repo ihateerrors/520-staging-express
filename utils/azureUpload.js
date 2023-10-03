@@ -13,18 +13,28 @@ const blobServiceClient = new BlobServiceClient(
 // Create a container client
 const containerClient = blobServiceClient.getContainerClient(containerName);
 
+// Utility function to determine the MIME type based on the file extension
+function getMimeType(fileName) {
+    const extension = fileName.split('.').pop().toLowerCase();
+    const mimeTypes = {
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif'
+    };
+    return mimeTypes[extension] || 'application/octet-stream'; // Default to binary stream if unknown
+}
+
 const uploadToAzure = async (buffer, fileName) => {
+    const contentType = getMimeType(fileName);
     const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-    
-    // The headers we want to set for the blob
-    const blobUploadOptions = {
+    const uploadOptions = {
         blobHTTPHeaders: {
-            // This ensures the browser tries to display the image instead of downloading it.
+            blobContentType: contentType,
             blobContentDisposition: `inline; filename=${fileName}`
         }
     };
-    
-    await blockBlobClient.uploadData(buffer, blobUploadOptions);
+    await blockBlobClient.uploadData(buffer, uploadOptions);
     return blockBlobClient.url;
 };
 
