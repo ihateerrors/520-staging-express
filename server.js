@@ -9,10 +9,11 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+
 const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
-
+const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your directory structure
 // Routes imports
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
@@ -47,6 +48,7 @@ app.use(projectRoutes.router);
 app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
+app.use(pdfRoutes);
 
 const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
@@ -127,13 +129,13 @@ app.get('/program', (req, res) => {
     res.render('program'); // assuming 'program' is the name of your view file
 });
 
-app.get('/montlake-project', (req, res) => {
-    res.render('montlake-project');
-});
+// app.get('/montlake-project', (req, res) => {
+//     res.render('montlake-project');
+// });
 
-app.get('/i5-connection-project', (req, res) => {
-    res.render('i5-connection-project');
-});
+// app.get('/i5-connection-project', (req, res) => {
+//     res.render('i5-connection-project');
+// });
 
 app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');

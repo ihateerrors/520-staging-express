@@ -9,6 +9,26 @@ const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.get('/pdf-upload', (req, res) => {
+    res.render('pdf-upload');
+});
+
+// Handle PDF uploads
+router.post('/upload-pdf', upload.fields([{ name: 'montlakeNoiseReport' }, { name: 'i5NoiseReport' }]), async (req, res) => {
+    if (req.files.montlakeNoiseReport) {
+        const file = req.files.montlakeNoiseReport[0];
+        await uploadToAzure(file.buffer, file.originalname);
+    }
+
+    if (req.files.i5NoiseReport) {
+        const file = req.files.i5NoiseReport[0];
+        await uploadToAzure(file.buffer, file.originalname);
+    }
+
+    res.redirect('/dashboard'); // Or wherever you'd like to redirect after a successful upload
+});
+
+
 router.get('/api/test', (req, res) => res.send('Test successful!'));
 
 router.get('/api/projects/mapData', async (req, res) => {

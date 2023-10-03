@@ -20,9 +20,10 @@ function getMimeType(fileName) {
         'png': 'image/png',
         'jpg': 'image/jpeg',
         'jpeg': 'image/jpeg',
-        'gif': 'image/gif'
+        'gif': 'image/gif',
+        'pdf': 'application/pdf'
     };
-    return mimeTypes[extension] || 'application/octet-stream'; // Default to binary stream if unknown
+    return mimeTypes[extension] || 'application/octet-stream';
 }
 
 const uploadToAzure = async (buffer, fileName) => {
