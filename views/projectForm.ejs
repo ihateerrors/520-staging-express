@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <title>SR 520 Construction | Construction Entry Form </title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> 
+<link rel="stylesheet" media="all" href="/css/styles3.css" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 
     <!-- Leaflet and Leaflet.draw CDN -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
@@ -80,14 +86,14 @@ type="text/css" />
         <section class="form-area mt-5 ml-5 mr-5">
             <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
                 <h1 class="wdot-dkgreen" style="font-size: 42px; line-height: 50px; margin-top: 60px;">Hi 520 Construction Team!</h1>
-                <h2>This is where you can create a shiny, artisianal construction event.</h2>
+                <p>This is where you can create a shiny, artisianal construction event.</p>
                 <p><strong></strong></p>
                 <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                   Return to Dashboard
                 </a><br><br>
             </div>
  
-    <form action="/api/projects" method="post" enctype="multipart/form-data">
+    <form action="/api/projects" method="post" enctype="multipart/form-data" style="font-size: 18px;">
 
         <!-- Construction Activity Name -->
         <div class="mb-3">
@@ -139,20 +145,22 @@ type="text/css" />
         </div>
     
         <!-- Activity Description -->
-        <div class="mb-3">
+        <div class="mb-3" style="font-size: 18px;">
             <label for="description" class="form-label">Activity Description</label>
             <textarea class="form-control" id="description" rows="4" name="description"></textarea>
         </div>
     
          <!-- Activity Description -->
     
-        <!-- Activity Type -->    <div class="mb-3">
+        <!-- Activity Type -->    <div class="mb-3 fw-600" style="font-size: 18px;">
             <label for="trafficDescription" class="form-label">Traffic Description</label>
             <textarea class="form-control" id="trafficDescription" rows="4" name="trafficDescription"></textarea>
-        </div>
-        <div class="mb-3">
-            <p>Activity Type</p>
-            <div class="form-check">
+        </div><p></p>
+       
+            <div class="mb-3" >
+                <p style="font-size: 20px; font-weight: 600;">Activity Type</p>
+            <div class="form-check" style="font-size: 18px;">
+               
                 <input class="form-check-input" type="checkbox" value="Full highway closure" id="fullHighway" name="activityType[]">
                 <label class="form-check-label" for="fullHighway">Full highway closure</label>
             </div>
@@ -183,8 +191,8 @@ type="text/css" />
         </div>
     
         <!-- Impact Type -->
-        <div class="mb-3">
-            <p>Impact Type</p>
+        <div class="mb-3" style="font-size: 18px;">
+            <p >Impact Type</p>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="Bike/pedestrian" id="bikePedestrian" name="impactType[]">
                 <label class="form-check-label" for="bikePedestrian">Bike/pedestrian</label>
@@ -212,11 +220,11 @@ type="text/css" />
         </div>
     
         <!-- Graphic/Photo Upload -->
-        <div class="mb-3">
+        <div class="mb-3" style="font-size: 18px;">
             <label for="file" class="form-label">Upload a Graphic/Photo</label>
             <input type="file" class="form-control" id="file" name="file">
         </div>
-    <div class="mb-3">
+    <div class="mb-3" style="font-size: 18px;">
         <label class="form-label">Map</label>
     
         <!-- Color and width pickers added above the map -->
@@ -261,9 +269,9 @@ type="text/css" />
     <div class="mb-3">
         <label for="contact" class="form-label">Contact Block</label>
         <select class="form-select" id="contact" name="contact">
-            <option value="address1">Address 1</option>
-            <option value="address2">Address 2</option>
-            <option value="address3">Address 3</option>
+            <option value="address1">206-777-8885</option>
+            <option value="address2">206-316-2559</option>
+            <option value="address3">206-200-9484</option>
             <!-- Add more options as needed -->
         </select>
     </div>
@@ -271,7 +279,8 @@ type="text/css" />
     <!-- Submit Button -->
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-        </section>
+        <p></p>
+        <p></p>
 
     </div>
     <% if (success_msg && success_msg.length > 0) { %>
@@ -286,6 +295,7 @@ type="text/css" />
         </div>
     <% } %>
 </div>
+</section>
 <!-- END Form's HTML -->
 <script>
     const map = L.map('map').setView([47.6407, -122.2971], 15);
