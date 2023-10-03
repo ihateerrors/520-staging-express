@@ -93,7 +93,7 @@ type="text/css" />
                                 <strong>Description:</strong> <%= closure.description || 'N/A' %><br>
                                 <strong>Traffic Description:</strong> <%= closure.trafficDescription || 'N/A' %><br>
                                 <strong>Activity Type:</strong> <%= closure.activityType.join(', ') %><br>
-                                <strong>Impact Type:</strong> <%= closure.impactType.join(', ') %><br>
+                                <strong>Impact Type:</strong> <%= closure.impactType.join(', ') %><br><br>
                                 <strong>Image URL:</strong>
                                 <% if (closure.imageUrl) { %>
                                     <a href="<%= closure.imageUrl %>" target="_blank">
@@ -101,8 +101,8 @@ type="text/css" />
                                     </a>
                                 <% } else { %>
                                     N/A
-                                <% } %> 
-                                <p><em>Click on image to open in a new tab -- this is the sharable permalink for the image.</em></p>                               
+                                <% } %> <br>
+                                <p style="font-size: 14px;"><em>Click on image to open in a new tab -- this is the sharable permalink for the image.</em></p>                               
                                 <br>                               
                                 <strong>Location:</strong> <%= closure.location || 'N/A' %><br>
                                 <strong>Map Data:</strong> <%= JSON.stringify(closure.mapData) || 'N/A' %><br>
