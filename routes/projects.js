@@ -6,11 +6,64 @@ const { uploadToAzure } = require('../utils/azureUpload');
 const Project = require('../models/Project');
 const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.get('/api/test', (req, res) => res.send('Test successful!'));
+
+router.get('/api/projects/mapData', async (req, res) => {
+    try {
+        // Extract filters from query parameters
+        const { startDate, endDate, types } = req.query;
+
+        // Convert types string to an array
+        const activityTypes = types ? types.split(",") : [];
+
+        // Formulate the query object
+        const query = {};
+
+        if (activityTypes.length && !activityTypes.includes('all')) {
+            query.activityType = { $in: activityTypes };
+        }
+
+        if (startDate && endDate) {
+            query.startDate = { $gte: new Date(startDate) };
+            query.endDate = { $lte: new Date(endDate) };
+        }
+
+        // Fetch both mapData and activityType from the database
+        const projects = await Project.find(query).select('mapData activityType');
+        
+        res.json({ projects });
+    } catch (error) {
+        console.error("Error fetching project data:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.post('/api/projects/mapData', async (req, res) => {
+    const filters = req.body;
+    const activityTypes = filters.activityTypes || [];
+
+    let query = {};
+
+    if (activityTypes.length && !activityTypes.includes('all')) {
+        query.activityType = { $in: activityTypes };
+    }
+
+    query.startDate = { $gte: new Date(filters.startDate) };
+    query.endDate = { $lte: new Date(filters.endDate) };
+
+    try {
+        // Fetch both mapData and activityType from the database
+        const projects = await Project.find(query).select('mapData activityType');
+        res.json({ projects });
+    } catch (error) {
+        console.error('Error fetching filtered projects:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 router.get('/projects/:projectId', async (req, res) => {
     try {

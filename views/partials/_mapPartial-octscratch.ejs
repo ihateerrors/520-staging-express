@@ -94,17 +94,12 @@
 
 
         <script>
-            // Create the Leaflet map
-            const map = L.map('map').setView([47.6407, -122.2971], 13);
-            
-            // Add Google Map layer to Leaflet map
+                const map = L.map('map').setView([47.6407, -122.2971], 13);
             L.gridLayer.googleMutant({
                 type: 'roadmap',
                 maxZoom: 20,
                 apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
             }).addTo(map);
-        
-            // Define activity icons
             const activityIcons = {
                 "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -114,19 +109,11 @@
                 "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
                 "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
             };
-
-            const mapLayerGroup = L.layerGroup().addTo(map);
-
-                        // Define default styling values
-            const defaultColor = '#f4661a';
-            const defaultWidth = 8;      
-
-            function fetchMapData(startDate = '', endDate = '', types = []) { 
-                   // Clear previous map layers
-            mapLayerGroup.clearLayers();
+                  const defaultColor = '#f4661a';
+            const defaultWidth = 8;            
+            function fetchMapData(startDate = '', endDate = '', types = []) {
             const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
-            console.log('Fetching data from:', apiUrl);
-        
+            console.log('Fetching data from:', apiUrl);        
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -170,76 +157,18 @@
                                     <p>${project.description || "Not specified"}</p>
                                     <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
                                 </div>
-                            `;
-        
+                            `;        
                             const iconUrl = activityIcons[project.activityType[0]];
                             if (!iconUrl) {
                                 console.warn(`No icon URL found for type: ${project.activityType[0]}`);
                                 return;
-                            }
-        
+                            }        
                             const customIcon = L.icon({
                                 iconUrl: iconUrl,
                                 iconSize: [26, 26],
                                 popupAnchor: [0, -41]
                             });
-        
-        
-                            // start cameras
-             // Sample data for the cameras
-        const cameras = [
-            { 
-                lat: 47.644611, 
-                lng: -122.304694, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_3/view_1'
-            },
-            { 
-                lat: 47.645056, 
-                lng: -122.301972, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_1/view_1'
-            },
-            { 
-                lat: 47.644861, 
-                lng: -122.298111, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_2/view_1'
-            },
-            { 
-                lat: 47.644861, 
-                lng: -122.298583, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_4/view_1'
-            }
-        ];
-        
-        // Define the camera icon
-        const cameraIcon = L.icon({
-            iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png',
-            iconSize: [26, 26], // size of the icon
-            popupAnchor: [0, -15] // point from which the popup should open relative to the iconAnchor
-        });
-        
-        // Add each camera to the map
-        cameras.forEach(camera => {
-            const marker = L.marker([camera.lat, camera.lng], { icon: cameraIcon }).addTo(map);
-        
-            // Attach a popup with the iframe to the camera
-        
-        marker.bindPopup(
-            `<div style="width: 100%; padding: 15px;"> 
-                 <p>
-                    <iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe>
-                </p>
-            </div>`,
-            {
-                maxWidth: 480,  // This should align with whatever max width you've set
-                minWidth: 480,  // You can set this to be the minimum size you want the popup to take
-            }
-        );
-        });       
-        
-        // END camera section 
-        
-        
-                            L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
+                      L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
                                 style: function(feature) {
                                     return {
                                         color: feature.properties.color || defaultColor,
@@ -256,33 +185,22 @@
                                         autoPanPaddingBottomRight: L.point(10, 10)
                                     });
                                 }
-                            }).addTo(mapLayerGroup);
+                            }).addTo(map);
                         });
                     }
                 })
                 .catch(error => console.error('Error fetching map data:', error));
-        }
-        
-        // Initial fetch of map data
-        fetchMapData();
-        
+        }     
+            fetchMapData();        
         document.addEventListener("DOMContentLoaded", function() {
-            // Get the current date
+           
             var today = moment().format('YYYY-MM-DD');
         
-            // Calculate the date two weeks from today
-            var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
-        
-            // Set the placeholder value for the start date input
-            document.getElementById('start').setAttribute('value', today);
-        
-            // Set the value value for the end date input
-            document.getElementById('end').setAttribute('value', twoWeeksLater);
+                  var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
+                  document.getElementById('start').setAttribute('value', today);
+                  document.getElementById('end').setAttribute('value', twoWeeksLater);
         });
-        
-        
-            // Get reference to the mapData element from the form
-            const mapDataElement = document.getElementById('mapData');
+                          const mapDataElement = document.getElementById('mapData');
             if (mapDataElement && mapDataElement.value) {
                 try {
                     const geoJSONData = JSON.parse(mapDataElement.value);
@@ -299,40 +217,25 @@
                     console.warn("Failed to parse mapData from form:", error);
                 }
             }
-        
-            let previousView = null;
-        
+                  let previousView = null;       
             map.on('popupopen', function() {
                 previousView = {
                     center: map.getCenter(),
                     zoom: map.getZoom()
                 };
-            });
-        
+            });        
             map.on('popupclose', function() {
                 if (previousView) {
                     map.setView(previousView.center, previousView.zoom);
                 }
-            });
-        
-            // Handle form submission and fetch data based on filters
+            });  
             document.querySelector('form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const startDate = document.getElementById('start').value;
-        const endDate = document.getElementById('end').value;
-
-        const checkboxTypes = ['all', 'fullHighway', 'partialHighway', 'streetLane', 'trail', 'ramp', 'highImpact', 'cameras'];
-        let types = [];
-        checkboxTypes.forEach(type => {
-            if(document.getElementById(type).checked) {
-                types.push(type);
-            }
-        });
-        
-        fetchMapData(startDate, endDate, types);
-    });
-        
+                e.preventDefault();        
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(checkbox => checkbox.value);
+                 fetchMapData(startDate, endDate, types);
+            });        
         </script>
         
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
