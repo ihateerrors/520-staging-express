@@ -6,34 +6,84 @@
 
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
-<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
 type="text/css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> 
+<link rel="stylesheet" media="all" href="/css/styles3.css" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
   </head>
   <body>
+    
+    <header id="header" style="width: 100vw">
+        <div class="container-fluid header-container">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="headerflex">
+                <a
+                  class="logo"
+                  href="https://wsdot.wa.gov/"
+                  title="Home"
+                  rel="home"
+                  rel="noreferrer"
+                >
+                  <img
+                    src="https://sr520construction.blob.core.windows.net/520-uploads/wsdot-logo-white.svg"
+                    alt="Home"
+                    loading="lazy"
+                    style="float: left; position: sticky; text-decoration: none"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="container3">
+                <ul class="topnav2" style="float: right">
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a
+                      class="nodec"
+                      href="https://wsdot.wa.gov/construction-planning/major-projects/sr-520-bridge-replacement-and-hov-program"
+                      >SR 520 Program</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/news/">News</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/goodtogo/"
+                      ><em>Good To Go!</em></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
     <div class="container">
-         <div class="blockhead" style="display: block; margin: 3%;"> 
-            <h1 class="wdot-dkgreen">SR 520 Construction Corner Dashboard</h1>
+         <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
+            <h1 class="wdot-dkgreen" style="font-size: 42px; line-height: 50px; margin-top: 60px;">Welcome to the SR 520 Construction Corner Dashboard</h1>
             <p><strong></strong></p>
-            <a href="/projectForm" style="display: inline-block; padding: 10px 20px; background-color: #004d40; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
             </a><br><br>
         </div>
   
         <section class="past-closures" style="margin: 3%;">
+            <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Past Closures:</h2>
 
             <div class="accordion" id="closureAccordion">
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                            <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= closure.activityName %>
                             </button>
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
-                            <div class="accordion-body">
+                            <div class="accordion-body" style="font-size: 18px;">
                                 <strong>Start Date:</strong> <%= closure.startDate.toDateString() %><br>
                                 <strong>End Date:</strong> <%= closure.endDate ? closure.endDate.toDateString() : 'N/A' %><br>
                                 <strong>Time:</strong> <%= closure.time || 'N/A' %><br>
