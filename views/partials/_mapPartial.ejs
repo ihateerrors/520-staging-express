@@ -45,35 +45,35 @@
                                         </div> </div> </div>                
                                 <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="all">
+                                        <input type="checkbox" class="form-check-input" id="all" name="type" value="all">
                                         <label class="form-check-label" for="all">All</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="fullHighway">
+                                        <input type="checkbox" class="form-check-input" id="fullHighway" name="type" value="Full highway closure">
                                         <label class="form-check-label" for="fullHighway">Full highway closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="partialHighway">
+                                        <input type="checkbox" class="form-check-input" id="partialHighway" name="type" value="Partial highway closure">
                                         <label class="form-check-label" for="partialHighway">Partial highway closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="streetLane">
+                                        <input type="checkbox" class="form-check-input" id="streetLane" name="type" value="Street and lane closure">
                                         <label class="form-check-label" for="streetLane">Street and lane closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="trail">
+                                        <input type="checkbox" class="form-check-input" id="trail" name="type" value="Trail closure">
                                         <label class="form-check-label" for="trail">Trail closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ramp">
+                                        <input type="checkbox" class="form-check-input" id="ramp" name="type" value="Ramp closure">
                                         <label class="form-check-label" for="ramp">Ramp closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="highImpact">
+                                        <input type="checkbox" class="form-check-input" id="highImpact" name="type" value="High-impact construction">
                                         <label class="form-check-label" for="highImpact">High-impact construction</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="cameras">
+                                        <input type="checkbox" class="form-check-input" id="cameras" name="type" value="Cameras">
                                         <label class="form-check-label" for="cameras">Cameras</label>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
             }).addTo(map);
         
             // Define activity icons
-            const activityIcons = {
+            var activityIcons = {
                 "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -177,13 +177,13 @@
                                                                     </div>
                             `;
         
-                            const iconUrl = activityIcons[project.activityType[0]];
+                          var iconUrl = activityIcons[project.activityType[0]];
                             if (!iconUrl) {
                                 console.warn(`No icon URL found for type: ${project.activityType[0]}`);
                                 return;
                             }
         
-                            const customIcon = L.icon({
+                            var customIcon = L.icon({
                                 iconUrl: iconUrl,
                                 iconSize: [26, 26],
                                 popupAnchor: [0, -41]
@@ -242,8 +242,6 @@
         });       
         
         // END camera section 
-        
-        
                             L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
                                 style: function(feature) {
                                     return {
@@ -283,9 +281,7 @@
         
             // Set the value value for the end date input
             document.getElementById('end').setAttribute('value', twoWeeksLater);
-        });
-        
-        
+        });            
             // Get reference to the mapData element from the form
             const mapDataElement = document.getElementById('mapData');
             if (mapDataElement && mapDataElement.value) {
@@ -320,23 +316,27 @@
                 }
             });
         
-            // Handle form submission and fetch data based on filters
-            document.querySelector('form').addEventListener('submit', function (e) {
-        e.preventDefault();
+// Handle form submission and fetch data based on filters
+document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-        const startDate = document.getElementById('start').value;
-        const endDate = document.getElementById('end').value;
+    const startDate = document.getElementById('start').value;
+    const endDate = document.getElementById('end').value;
 
-        const checkboxTypes = ['all', 'fullHighway', 'partialHighway', 'streetLane', 'trail', 'ramp', 'highImpact', 'cameras'];
-        let types = [];
-        checkboxTypes.forEach(type => {
-            if(document.getElementById(type).checked) {
-                types.push(type);
-            }
-        });
-        
-        fetchMapData(startDate, endDate, types);
+    const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+    let types = [];
+    checkboxes.forEach(checkbox => {
+        types.push(checkbox.value);
     });
+
+    // If "All" is checked, clear the types array so that it fetches all data
+    if (document.getElementById('all').checked) {
+        types = [];
+    }
+
+    fetchMapData(startDate, endDate, types);
+});
+
         
         </script>
         
