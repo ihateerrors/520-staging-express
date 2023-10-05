@@ -53,7 +53,7 @@
                                         <label class="form-check-label" for="fullHighway">Full highway closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="partialHighway" name="type" value="Partial highway closure">
+                                        <input type="checkbox" class="form-check-input" id="partialHighway" name="type" value="Partial highway closures">
                                         <label class="form-check-label" for="partialHighway">Partial highway closures</label>
                                     </div>
                                     <div class="form-check">
@@ -61,11 +61,11 @@
                                         <label class="form-check-label" for="streetLane">Street and lane closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="trail" name="type" value="Trail closure">
+                                        <input type="checkbox" class="form-check-input" id="trail" name="type" value="Trail closures">
                                         <label class="form-check-label" for="trail">Trail closures</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ramp" name="type" value="Ramp closure">
+                                        <input type="checkbox" class="form-check-input" id="ramp" name="type" value="Ramp closures">
                                         <label class="form-check-label" for="ramp">Ramp closures</label>
                                     </div>
                                     <div class="form-check">
@@ -105,7 +105,7 @@
             }).addTo(map);
         
             // Define activity icons
-            var activityIcons = {
+            const activityIcons = {
                 "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -177,13 +177,13 @@
                                                                     </div>
                             `;
         
-                          var iconUrl = activityIcons[project.activityType[0]];
+                          const iconUrl = activityIcons[project.activityType[0]];
                             if (!iconUrl) {
                                 console.warn(`No icon URL found for type: ${project.activityType[0]}`);
                                 return;
                             }
         
-                            var customIcon = L.icon({
+                            const customIcon = L.icon({
                                 iconUrl: iconUrl,
                                 iconSize: [26, 26],
                                 popupAnchor: [0, -41]
