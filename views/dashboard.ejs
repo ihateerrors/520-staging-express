@@ -147,12 +147,12 @@ type="text/css" />
                             <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled><br>
           
                             <strong>Updated At:</strong>
-                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br><br>
           
                             <button class="btn btn-primary edit-btn" data-id="<%= closure._id %>">Edit</button>
                             <button class="btn btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
                           </div>
-                      </div
+                        </div>
                     </div>
                 <% }); %>
             </div>
