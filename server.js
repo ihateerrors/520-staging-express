@@ -14,6 +14,8 @@ const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
 const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your directory structure
+const closureRoutes = require('./routes/closureRoutes');
+
 // Routes imports
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
@@ -49,6 +51,8 @@ app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
 app.use(pdfRoutes);
+app.use('/closure', closureRoutes);
+
 
 const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
