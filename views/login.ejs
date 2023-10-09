@@ -16,6 +16,17 @@
 
         <div class="container mt-4">
         <div class="col-md-5 mb-5">
+            <% if (messages.error_msg) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= messages.error_msg %>
+                </div>
+            <% } %>
+            <% if (messages.success_msg) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= messages.success_msg %>
+                </div>
+            <% } %>
+            
             <!-- Login Form -->
             <div class="container"> 
                 <h3>Login</h3>

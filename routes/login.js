@@ -13,7 +13,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.get('/login', (req, res) => {
-    res.render('login'); // Assuming you have a 'login.ejs' view in your views directory
+    res.render('login', { messages: req.flash() });
 });
 
 router.post('/login', (req, res, next) => {
