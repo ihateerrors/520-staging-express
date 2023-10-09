@@ -1805,6 +1805,14 @@ div.flickr-carousel {
   max-width: 420px;
   border-radius: 10px;
 }
+.sub-lead {
+  text-decoration: underline;
+  font-size: 1.8rem;
+}
+
+
+
+
 
 
 
