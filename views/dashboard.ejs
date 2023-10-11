@@ -68,14 +68,14 @@ type="text/css" />
             <p><strong></strong></p>
             <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
-            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload PDFs</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closure Archive</a>
+            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closures</a>
               
             </a>  <br><br>
         </div>
         <!-- <div id="past-closures"></div> -->
 
         <section style="margin: 3%;">
-            <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Past Closures:</h2>
+            <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
             <div id="past-closures"></div>
             <div class="accordion" id="closureAccordion">
                 <% closures.forEach((closure, index) => { %>

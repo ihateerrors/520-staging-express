@@ -10,20 +10,20 @@ const upload = multer({ storage: storage });
 const PDF = require('../models/PDF');  // Adjust path if needed
 
 // Route for Montlake Project
-router.get('/montlake-project', async (req, res) => {
-    const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
-    if (latestPDF) {
-        console.log("Montlake URL:", latestPDF.montlakeNoiseReportUrl);
-        res.render('montlake-project', {
-            montlakeUrl: latestPDF.montlakeNoiseReportUrl
-        });
-    } else {
-        console.log("No Montlake URL found.");
-        res.render('montlake-project', {
-            montlakeUrl: null
-        });
-    }
-});
+// router.get('/montlake-project', async (req, res) => {
+//     const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
+//     if (latestPDF) {
+//         console.log("Montlake URL:", latestPDF.montlakeNoiseReportUrl);
+//         res.render('montlake-project', {
+//             montlakeUrl: latestPDF.montlakeNoiseReportUrl
+//         });
+//     } else {
+//         console.log("No Montlake URL found.");
+//         res.render('montlake-project', {
+//             montlakeUrl: null
+//         });
+//     }
+// });
 
 // Route for I-5 Connection Project
 router.get('/i5-connection-project', async (req, res) => {
@@ -35,6 +35,36 @@ router.get('/i5-connection-project', async (req, res) => {
         res.render('i5-connection-project', { i5Url: latestPDF ? latestPDF.i5NoiseReportUrl : null });
     } catch (err) {
         res.status(500).send("Error fetching I-5 PDF.");
+    }
+});
+
+// Montlake route 
+router.get('/montlake-project', async (req, res) => {
+
+    try {
+         // Fetch the latest PDF entry from the database
+         const latestPDF = await PDF.findOne().sort({ _id: -1 });
+         res.render('montlake-project', { montlakeURL: latestPDF ? latestPDF.montlakeNoiseReportUrl : null });
+        } catch (err) {
+            res.status(500).send("Error fetching Montlake PDF.");
+        }
+    });
+
+
+
+
+
+    const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
+    if (latestPDF) {
+        console.log("Montlake URL:", latestPDF.montlakeNoiseReportUrl);
+        res.render('montlake-project', {
+            montlakeUrl: latestPDF.montlakeNoiseReportUrl
+        });
+    } else {
+        console.log("No Montlake URL found.");
+        res.render('montlake-project', {
+            montlakeUrl: null
+        });
     }
 });
 
