@@ -37,11 +37,12 @@
     <main>
 
         <div id="alert-banner-top" class="container-fluid" style="width: 100vw; padding-top: .8em; padding-bottom: 1.2em; z-index: -1;">
-            <div class="row">
-                <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: center;">    
-                    <div class="mt-4 mb-1" style="margin-left: 7%; margin-right: 4%; width: 100%;"> 
+         
+            <div class="row" style="width: 100vw;">
+                <div class="orange-banner" style="background-color: #ffb500; width: 100vw; min-height: max-content; justify-content: left;">    
+                    <div class="banner-text mt-4 mb-1"> 
                       <% if  (project.bannerContent === 'yes') { %>
-                        <span style="font-size: 1.4em; font-weight: 700;"><%= project.activityName %> </span>
+                        <span class="banner-head"><%= project.activityName %> </span>
                         <p><a href="/projects/<%= project._id %>">View Details</a></p>
                     <% } %>
                     </div> 
@@ -55,18 +56,23 @@
 
        <div class="container-fluid">
           <div class="row"> 
-            <div class="blockhead" style="display: block; margin-left: 3%;"> 
-          <h1 class="wdot-dkgreen">SR 520 Construction Corner</h1>
-          <p><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
-   
-      </div>
+            <div class="blockhead"> 
+                  <h1 class="wdot-dkgreen index-h1">SR 520 Construction Corner</h1>
+                  <p class="index-subhead"><strong>The go-to source for information on SR 520 construction and closures.</strong></p>   
+           </div>
+
+          
           </div>
+          <div class="blockhead2"> 
+            <h1 class="wdot-dkgreen index-h1">SR 520 Construction Corner</h1>
+            <p><strong>The go-to source for information on SR 520 construction and closures.</strong></p>   
+         </div>
         </div>
 
         <div id="construction-map">
           <div class="row">     
             <div class="col-lg-9 col-md-12 col-sm-12" style="display: block;">   
-                  <div class="togglerow" style="justify-content: space-between;"> 
+                  <div class="togglerow" id="map-toggle" style="justify-content: space-between;"> 
                   <button id="map1Button" class="parallelogram-link map-tab" >SR 520 Construction Map</button>
                   <button id="map2Button" class="parallelogram-link map-tab" >WSDOT Travel Map</button>
                 </div>
@@ -74,7 +80,7 @@
               
                   
                         <div class="mapcontainer" style="width: 100%; overflow: hidden;">
-                                  <div id="map1" style="display: block; height: 775px; min-width: 101%; max-width: 106%;">
+                                  <div id="map1" style="display: block; height: 775px; min-width: 10%; max-width: 106%;">
 
                                     <%- include('partials/_mapPartial.ejs') %>               
                       

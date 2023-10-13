@@ -559,6 +559,10 @@ footer {
   border-radius: 15px;
 }
 
+.blockhead {display: block; margin-left: 3%;
+
+}
+
 .btn.search-form__submit {
   background: #97d700;
   border-bottom: 1px solid #6699ee;
@@ -1138,6 +1142,9 @@ li .nav-rhombus:hover {
     position: relative;
     top: 0;
   }
+  h1 {
+    font-size: 18px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1657,13 +1664,13 @@ h3 {
   /* 25px / 22px */
 }
 
-@media (min-width: 43.75em) {
+/* @media (min-width: 43.75em) {
   h3 {
     font-size: 1.25em;
-    /* 1.5x body copy size = 24px */
+
     line-height: 1.25;
   }
-}
+} */
 
 @media (min-width: 56.25em) {
   h3 {
@@ -1811,9 +1818,16 @@ div.flickr-carousel {
 }
 
 
+.banner-text {
+  margin-right: 4%;
+  margin-left: 4%;
+  padding-right: 20px;
+  padding-left: 20px;
+}
 
-
-
+.banner-head {
+  font-size: 1.4em; font-weight: 700;
+}
 
 
 
@@ -1832,3 +1846,41 @@ div.flickr-carousel {
    width: 101.2%
   }
 }
+.blockhead2 {
+  display: none;
+}
+@media (width <= 600px) {
+  .blockhead {
+    display: none;
+    /* margin-left: 1% !important;
+    margin-right: 1%; */
+  }
+
+   h1 {
+    font-size: 2em !important;  
+    text-align: left;
+   }
+   .index-h1 {
+    text-align: center !important;
+ 
+   }
+   p {
+  font-size: 14px;
+   }
+   .index-subhead {
+    text-align: center;
+    
+   }
+   .blockhead2 {
+    display: block;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+  .index-subhead2 {
+    text-align: center !important;
+  }
+  #map {
+    margin-left: 5px;
+  }
+}
+
