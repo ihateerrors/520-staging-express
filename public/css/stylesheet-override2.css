@@ -636,8 +636,12 @@ footer {
   transform: skewX(-10deg);
   transition: all 0.3s;
   border: #33957f 2px solid;
+  font-size: 1.64rem !important;
+  font-weight: 500;
 }
-
+/* .nav-rhombus a {
+  font-size: 1rem !important;
+} */
 .rhombus-2 {
   background-color: #fff;
   text-decoration: none !important;
@@ -1849,11 +1853,18 @@ div.flickr-carousel {
 .blockhead2 {
   display: none;
 }
+
+.vanishing520 {
+  display: none;
+}
 @media (width <= 600px) {
   .blockhead {
     display: none;
     /* margin-left: 1% !important;
     margin-right: 1%; */
+  }
+  .mapcontainer {
+     max-height: 500px;
   }
 
    h1 {
@@ -1876,14 +1887,18 @@ div.flickr-carousel {
     margin-left: 2%;
     margin-right: 2%;
   }
+
   .index-subhead2 {
     text-align: center !important;
   }
   #map {
     margin-left: 5px;
+    max-height: 499px;
   }
 }
 
 .timing-features {
   font-size: 15px;
 }
+
+

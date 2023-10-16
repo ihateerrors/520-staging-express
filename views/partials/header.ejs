@@ -6,14 +6,72 @@
   <link rel="stylesheet" media="all" href="/css/styles3.css" />
   <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 
+<style>
+
+  .vanishing520 {
+    display: none;
+  }
+
+  @media (max-width: 635px) {
+    .container4 {
+        width: 100% !important;
+        overflow: hidden;
+    }
+   .alert-header {
+    font-size: 1.7rem !important;
+    line-height: 2.2rem !important;
+   }
+
+  #wholecontain .container-fluid .mapcontainer {
+    min-width: 95vw;
+    /* max-width: 96vw !important; */
+    width: 100% !important;
+    margin: none !important;
+    padding: none !important;
+    overflow: hidden !important;
+   }
+
+   .parallelogram-link.map-tab {
+        padding: 8px 12px;       /* Reduced padding for smaller size */
+        font-size: 1em;        /* Reduce font size a bit if necessary */
+        margin-top: 8px;
+        margin-left: 12px;        /* Adjust margins as needed */
+    }
+    .navicon {
+        display: flex;
+        min-height: 26% !important;
+        max-height: 25% !important;
+        max-width: 25%;
+        margin-left: 8% !important;
+        /* display: none !important; */
+    }
+ .vanishing520  {
+        display: inline-block;
+  font-size: 1.4em; font-weight: 600; color: #000;
+    }
+
+    #vanishing520 {
+      display: inline-block;
+      font-size: 2.4rem !important;
+      line-height: 2.5rem;
+        min-width: 90vw;
+      margin-left: 8%;
+      /* margin-top: -220px !important; */
+      z-index: 2000;
+    }
+}
+</style>
+
 </head>
 <body>
   
 <header id="header" style="width: 100vw">
     <div class="container-fluid header-container">
       <div class="row">
+   
         <div class="col-md-4">
           <div class="headerflex">
+           
             <a
               class="logo"
               href="https://wsdot.wa.gov/"
@@ -21,17 +79,21 @@
               rel="home"
               rel="noreferrer"
             >
-              <img
+              <img class="img-fluid"               
                 src="https://sr520construction.blob.core.windows.net/520-uploads/wsdot-logo-white.svg"
                 alt="Home"
                 loading="lazy"
-                style="float: left; position: sticky; text-decoration: none"
+               
               />
             </a>
           </div>
+         
         </div>
+
         <div class="col-md-8">
+      
           <div class="container3">
+         
             <ul class="topnav2" style="float: right">
               <li class="nodec" style="font-weight: 600; font-size: 16px">
                 <a
@@ -56,24 +118,28 @@
     </div>
   </header>
   <div class="navwrap">
+ 
     <div
       class="container-fluid nav-container"
       style="z-index: 1100; width: 100%"
     >
+
+
       <a href="/">
         <img
           class="navicon"
           src="https://sr520construction.blob.core.windows.net/520-uploads/sr520.png"
-          style="padding-bottom: 12px; padding-left: 12px"
+          style="padding-bottom: 12px; padding-left: 12px; display: inline-block;"
         />
       </a>
-
+  
       <div
         class="navbar navbar navbar-expand-md navbar-light bg-none"
         style="background-color: transparent; float: center"
         id="navbar"
         role="nav"
       >
+ 
         <button
           class="navbar-toggler"
           type="button"
@@ -86,6 +152,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="menu2 nav" id="nav2">
             <li>
@@ -122,6 +189,9 @@
         </div>
       </div>
     </div>
+
+  
+
   </div>
 
   <!-- #### END NAV section ##### --> 

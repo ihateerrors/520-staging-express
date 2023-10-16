@@ -20,6 +20,36 @@
 <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<style>
+    .toggle-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+/* Hide form and show toggle icon on smaller screen sizes */
+@media (max-width: 600px) {
+    form {
+        display: none;
+    }
+    .toggle-icon {
+        display: block;
+    }
+    .mapcontainer, #map {
+     min-width: 90vw;
+     margin-left: 5px;
+     margin-right: 5px;
+     padding-left: 1px;
+     padding-right: 1px;
+    }
+}
+
+
+
+
+
+</style>
 
 </head>
 <body>
@@ -31,6 +61,9 @@
                          <div class="row">
                         <!-- <div class="col-12 col-sm-12 col-lg-2 col-md-3 order-md-1 order-2"> -->
                             <div class="col-lg-2 col-md-3 col-sm-12">
+                                <div class="toggle-icon">
+                                    <i class="fas fa-bars"></i>
+                                </div>
                             <form class="mt-5">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-12 mt-2">
@@ -376,7 +409,38 @@ document.querySelector('form').addEventListener('submit', function (e) {
     fetchMapData(startDate, endDate, types);
 });
 
+// document.addEventListener("DOMContentLoaded", function() {
+//     const toggleIcon = document.querySelector(".toggle-icon");
+//     const form = document.querySelector("form");
+
+//     toggleIcon.addEventListener("click", function() {
+//         if (form.style.display === "none" || form.style.display === "") {
+//             form.style.display = "block";
+//             toggleIcon.querySelector("i").classList.remove("fa-bars");
+//             toggleIcon.querySelector("i").classList.add("fa-times");
+//         } else {
+//             form.style.display = "none";
+//             toggleIcon.querySelector("i").classList.remove("fa-times");
+//             toggleIcon.querySelector("i").classList.add("fa-bars");
+//         }
+//     });
+// });
         
+        </script>
+
+        <script>
+                 $(document).ready(function() {
+                    $('.toggle-icon').click(function() {
+                        $('form').toggle(); // Toggles visibility of the form
+
+                        // Switches the icon when the form is visible/invisible
+                        if ($('form').is(':visible')) {
+                            $('.toggle-icon i').removeClass('fa-bars').addClass('fa-times');
+                        } else {
+                            $('.toggle-icon i').removeClass('fa-times').addClass('fa-bars');
+                        }
+                    });
+                });
         </script>
         
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
