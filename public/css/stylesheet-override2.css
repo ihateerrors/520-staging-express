@@ -1857,11 +1857,19 @@ div.flickr-carousel {
 .vanishing520 {
   display: none;
 }
+
 @media (width <= 600px) {
   .blockhead {
-    display: none;
-    /* margin-left: 1% !important;
-    margin-right: 1%; */
+    /* display: none; */
+    margin-left: 10px !important;
+    margin-right: 1rem;
+  }
+  .blockhead h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .blockhead p {
+    font-size: 1.6rem !important;
   }
   .mapcontainer {
      max-height: 500px;
