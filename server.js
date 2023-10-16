@@ -92,30 +92,63 @@ passport.deserializeUser(async (id, done) => {
 
 
 
+// app.get('/', async (req, res) => {
+//     try {
+//         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
+//         const allClosures = await Project.find({}).sort({ postDate: -1 });
+
+//         const today = new Date();
+//         today.setHours(0, 0, 0, 0);  // set to start of the day
+
+//         const currentClosures = allClosures.filter(closure => {
+//             const startDate = new Date(closure.startDate);
+//             const endDate = new Date(closure.endDate);
+//             return startDate <= today && today <= endDate;
+//         });
+
+//         const upcomingClosures = allClosures.filter(closure => {
+//             const startDate = new Date(closure.startDate);
+//             return startDate > today;
+//         });
+
+//         res.render('index', {
+//             title: '520 Construction Corner',
+//             header: 'Welcome to the 520 Construction Corner!',
+//             project,
+//             closures: allClosures, 
+//             currentClosures, 
+//             upcomingClosures
+//         });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
 app.get('/', async (req, res) => {
     try {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
-        const allClosures = await Project.find({}).sort({ postDate: -1 });
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);  // set to start of the day
 
-        const currentClosures = allClosures.filter(closure => {
-            const startDate = new Date(closure.startDate);
-            const endDate = new Date(closure.endDate);
-            return startDate <= today && today <= endDate;
-        });
+        // Get current closures
+        const currentClosures = await Project.find({
+            startDate: { $lte: today },
+            endDate: { $gte: today }
+        }).sort({ postDate: -1 });
 
-        const upcomingClosures = allClosures.filter(closure => {
-            const startDate = new Date(closure.startDate);
-            return startDate > today;
-        });
+        // Get upcoming closures
+        const upcomingClosures = await Project.find({
+            startDate: { $gt: today }
+        }).sort({ postDate: -1 });
 
         res.render('index', {
             title: '520 Construction Corner',
             header: 'Welcome to the 520 Construction Corner!',
             project,
-            closures: allClosures, 
+            closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
             currentClosures, 
             upcomingClosures
         });
@@ -125,7 +158,6 @@ app.get('/', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 
 //map Routes
