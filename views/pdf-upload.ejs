@@ -68,20 +68,21 @@ type="text/css" />
           </div>
         </div>
       </header>
+      <div class="confirmation-box">
+        <% if (locals.success_msg) { %>
+            <div class="alert alert-success">
+                <%= locals.success_msg %>
+            </div>
+        <% } %>
+    
+        <% if (locals.error_msg) { %>
+            <div class="alert alert-danger">
+                <%= locals.error_msg %>
+            </div>
+        <% } %>
+    </div>
       <div class="container">
-        <div class="confirmation-box">
-          <% if (locals.success_msg) { %>
-              <div class="alert alert-success">
-                  <%= locals.success_msg %>
-              </div>
-          <% } %>
-      
-          <% if (locals.error_msg) { %>
-              <div class="alert alert-danger">
-                  <%= locals.error_msg %>
-              </div>
-          <% } %>
-      </div>
+
         <section class="form-area mt-5 ml-5 mr-5">
             <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
                
