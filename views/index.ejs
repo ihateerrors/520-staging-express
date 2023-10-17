@@ -199,16 +199,16 @@
       <div id="alert-banner-top" class="container-fluid">
           <div class="row">
               <div class="orange-banner" aria-live="polite">
-                  <!-- <% if (project.bannerContent==='yes'){ %>
-                      <h2 class="mt-2"><%= project.activityName %></h2>
+                  <% if (project.bannerContent==='yes'){ %>
+                      <h2 class="mt-2">ALERT: <%= project.activityName %></h2>
                       <p><a href="/projects/<%=project._id %>" aria-label="View details for <%= project.activityName %>">View Details</a></p>
-                  <% } %> -->
-                  <% if (project) { %>
+                  <% } %>
+                  <!-- <% if (project) { %>
                   
                         <h2 class="mt-3 alert-header">ALERT: <%= project.activityName %></h2>
                         <p style="font-size: 1.8rem"><a href="/projects/<%= project._id %>" aria-label="View details for <%= project.activityName %>">View details</a></p>
                     </div>
-                <% } %>
+                <% } %> -->
               </div>
           </div>
       </div>
