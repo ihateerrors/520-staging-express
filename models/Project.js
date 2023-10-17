@@ -69,7 +69,7 @@ const projectSchema = new mongoose.Schema({
     
     bannerContent: {
         type: String,
-        required: false,
+        required: true,
         enum: ['yes', 'no']  // It ensures only 'yes' or 'no' values are stored for this field
     },
     postDate: {
