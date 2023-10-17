@@ -298,7 +298,7 @@ type="text/css" />
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary ml-5 mb-5 mt-4">Submit</button><br><br><p></p>
 </form>
         <p></p>
         <p></p>
@@ -309,6 +309,29 @@ type="text/css" />
 </section>
 <!-- END Form's HTML -->
 <script>
+
+function displayFormMessage(message, type) {
+    const errorMessageBox = document.getElementById('errorMessage');
+    const successMessageBox = document.querySelector('.success-message');
+
+    // Reset previous messages
+    errorMessageBox.innerHTML = '';
+    successMessageBox.innerHTML = '';
+
+    const alertBox = document.createElement('div');
+
+    if (type === 'error') {
+        alertBox.className = 'alert alert-danger';
+        errorMessageBox.appendChild(alertBox);
+    } else if (type === 'success') {
+        alertBox.className = 'alert alert-success';
+        successMessageBox.appendChild(alertBox);
+    }
+
+    alertBox.textContent = message;
+}
+
+
     const map = L.map('map').setView([47.6407, -122.2971], 15);
     
     // Add Google Mutant layer
@@ -356,17 +379,32 @@ type="text/css" />
                 body: formData
             });
     
-            if (response.ok) {
-                // Handle success, maybe redirect or show a message
-                window.location.href = "/projectForm"; // Redirect to the same form, for example
-            } else {
-                // Handle any server errors, show the user an error message
-                const data = await response.json();
-                console.error("Error saving project:", data.error);
-            }
+
+
+
+// Handle success
+if (response.ok) {
+    displayFormMessage("Construction event created successfully.", 'success');
+} else {
+    const data = await response.json();
+    console.error("Error saving project:", data.error);
+    displayFormMessage(data.error, 'error');
+}
+
+
+
+            // if (response.ok) {
+            //                 window.location.href = "/projectForm"; 
+            // } else {
+            //                  const data = await response.json();
+            //     console.error("Error saving project:", data.error);
+            // }
         } catch (error) {
-            console.error("Failed to submit form:", error);
-        }
+                console.error("Failed to submit form:", error);
+                displayFormMessage("Error: Failed to submit form. Please try again.", 'error');
+            }
+
+
     });
 
 
