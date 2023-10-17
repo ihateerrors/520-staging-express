@@ -148,10 +148,14 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
                 console.log("Raw mapData:", req.body.mapData);
                 req.body.mapData = JSON.parse(req.body.mapData);
             } catch (error) {
-                console.error('Failed to parse mapData:', error);
-                req.flash('error_msg', 'Failed to parse mapData.');
-                return res.redirect('/projectForm');
+                console.error("Error saving project:", error);
+                if ("ValidationError" === error.name) {
+                    let messages = Object.values(error.errors).map(e => e.message);
+                    return res.status(400).json({ error: "Error in creating the event: " + messages.join(", ") });
+                }
+                return res.status(500).json({ error: "Internal server error." });
             }
+            
         }
 
         // Creating and saving the project

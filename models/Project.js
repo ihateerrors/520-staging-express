@@ -82,7 +82,7 @@ const projectSchema = new mongoose.Schema({
     },
     contact: {
         type: String,
-        enum: ['address1', 'address2', 'address3'],  // Placeholder enum values - replace these with actual values
+        enum: ['206-777-8885', '206-316-2559', '206-200-9484'],  
         required: false
     }
 }, { timestamps: true });

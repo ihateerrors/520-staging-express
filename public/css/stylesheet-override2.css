@@ -1910,3 +1910,11 @@ div.flickr-carousel {
 }
 
 
+
+#error {
+  color: red;
+
+}
+#success {
+  color: green;
+}
