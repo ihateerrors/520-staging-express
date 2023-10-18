@@ -1,0 +1,59 @@
+<h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
+<div id="past-closures"></div>
+<div class="accordion" id="closureAccordion">
+    <% closures.forEach((closure, index) => { %>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading<%= index %>">
+                <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                    <%= closure.activityName %>
+                </button>
+            </h2>
+            <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
+                <div class="accordion-body" style="font-size: 18px;">
+                    <strong>Activity Name:</strong> <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
+
+                    <div class="date-container">
+                        <div class="date-item">
+                            <strong>Start Date:</strong> <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
+                        </div>
+                        <div class="date-item">
+                            <strong>End Date:</strong> <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
+                        </div>
+                    </div>
+
+                    <strong>Time:</strong> <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
+
+                    <strong>Timing Features:</strong> 
+                    <ul>
+                        <% closure.timingFeatures.forEach(feature => { %>
+                            <li><%= feature %></li>
+                        <% }); %>
+                    </ul>
+
+                    <!-- Add similar lists for other fields if needed -->
+
+                    <strong>Description:</strong> <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
+                    <strong>Traffic Description:</strong> <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                    <strong>Activity Type:</strong> 
+                    <ul>
+                        <% closure.activityType.forEach(type => { %>
+                            <li><%= type %></li>
+                        <% }); %>
+                    </ul>
+
+                    <strong>Impact Type:</strong> 
+                    <ul>
+                        <% closure.impactType.forEach(impact => { %>
+                            <li><%= impact %></li>
+                        <% }); %>
+                    </ul>
+
+                    <!-- ... Continue your code similarly ... -->
+
+                    <button class="btn btn-md btn-secondary edit-btn" data-id="<%= closure._id %>">Edit</button>
+                    <button class="btn btn-md btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</div>

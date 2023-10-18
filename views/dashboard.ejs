@@ -181,20 +181,34 @@ strong {
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
           
-                            <strong>Timing Features:</strong>
-                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled>
-          
+                            <!-- <strong>Timing Features:</strong>
+                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled> -->
+                            <strong>Timing Features:</strong> 
+                            <ul>
+                                <% closure.timingFeatures.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                <% }); %>
+                            </ul>
+        
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
-          
-                            <strong>Activity Type:</strong>
-                            <input type="text" name="activityType" value="<%= closure.activityType.join(', ') %>" disabled>
-          
-                            <strong>Impact Type:</strong>
-                            <input type="text" name="impactType" value="<%= closure.impactType.join(', ') %>" disabled><br>
+                            <strong>Activity Type:</strong> 
+                            <ul>
+                                <% closure.activityType.forEach(type => { %>
+                                    <li><%= type %></li>
+                                <% }); %>
+                            </ul>
+        
+                            <strong>Impact Type:</strong> 
+                            <ul>
+                                <% closure.impactType.forEach(impact => { %>
+                                    <li><%= impact %></li>
+                                <% }); %>
+                            </ul>
+        
           
                             <strong>Image URL:</strong>
                             <input type="text" name="imageUrl" value="<%= closure.imageUrl || '' %>" disabled onchange="updateImage(this.value, 'img<%= index %>')"><br>
@@ -247,8 +261,9 @@ strong {
 <!-- END Form's HTML -->
 
 
-
 <script>
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
 // Handle the edit button click
@@ -317,7 +332,6 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
 });
 
 });
-
 
 
 </script>
