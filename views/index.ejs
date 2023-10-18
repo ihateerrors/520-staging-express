@@ -135,7 +135,7 @@
 
 }
 
-@media (max-width: 655px) {
+@media (max-width: 635px) {
   #indexh2 {
     display:block
   }
@@ -225,7 +225,9 @@
                   <% if (project.bannerContent==='yes'){ %>
                       <h2 class="mt-4">ALERT: <%= project.activityName %></h2>
                       <p><a href="/projects/<%=project._id %>" aria-label="View details for <%= project.activityName %>">View Details</a></p>
-                  <% } %>
+                  <% } else {
+                      console.log("No banner item")
+                  } %>
                   <!-- <% if (project) { %>
                   
                         <h2 class="mt-3 alert-header">ALERT: <%= project.activityName %></h2>
@@ -249,7 +251,7 @@
                         <h2 id="indexh2" class="wdot-dkgreen">SR 520 Construction Map</h2>
                           <div class="togglerow">
                               <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
-                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" role="link" target="_blank">WSDOT Travel Map</a>
+                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; border-bottom-left-radius: none; border-bottom-right-radius: none;"] role="link" target="_blank">WSDOT Travel Map</a>
                           </div>
                           <div class="mapcontainer">
                               <div id="map1">
@@ -303,7 +305,22 @@
   </main>
   <%- include('partials/horizontal-cards') %>
   <%- include('partials/footer') %>
-</body>
+
+  <!-- <script>
+    $(document).ready(function() {
+       $('.toggle-icon').click(function() {
+           $('form').toggle(); // Toggles visibility of the form
+
+           // Switches the icon when the form is visible/invisible
+           if ($('form').is(':visible')) {
+               $('.toggle-icon i').removeClass('fa-filter').addClass('fa-times');
+           } else {
+               $('.toggle-icon i').removeClass('fa-times').addClass('fa-filter');
+           }
+       });
+   });
+</script> -->
+
 
 
 
@@ -314,7 +331,7 @@
 
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
    <!-- ### Map toggle scripts -->
-   <script> 
+   <!-- <script> 
     const map1Button = document.getElementById('map1Button');
     const map2Button = document.getElementById('map2Button');
     const map1 = document.getElementById('map1');
@@ -334,7 +351,7 @@
         map2.classList.add('d-block');
       });
 
-        </script>
+        </script> -->
 
 </body>
 
