@@ -125,7 +125,26 @@
     display: none;
 }
 
-@media (max-width: 635px) {
+#indexh2 {
+  display: none;
+}
+
+.sidebar-wrapper {
+  margin-top: 4.5em;
+  margin-left: 1.5em;
+
+}
+
+@media (max-width: 655px) {
+  #indexh2 {
+    display:block
+  }
+  .sidebar-wrapper {
+    margin: 1.5em;
+  }
+  .blockhead {
+    display: none !important;
+  }
     .container4 {
         width: 100% !important;
         overflow: hidden;
@@ -134,14 +153,18 @@
     font-size: 1.7rem !important;
     line-height: 2.2rem !important;
    }
+   
+   .togglerow {
+    display: none;
+   }
 
   #wholecontain .container-fluid .mapcontainer {
     min-width: 95vw;
-    /* max-width: 96vw !important; */
+    max-width: 96vw !important;
     width: 100% !important;
-    margin: none !important;
+    /* margin: none !important;
     padding: none !important;
-    overflow: hidden !important;
+    overflow: hidden !important; */
    }
 
    .parallelogram-link.map-tab {
@@ -179,6 +202,8 @@
     #map-shrink {
         margin-left: 1px !important;
         margin-right: 1px !important;
+        padding-left: 2px !important;
+        padding-left: 2px !important;
     }
 }
 
@@ -191,9 +216,7 @@
 
   <a href="#main-content" class="sr-only">Skip to main content</a>
   <%- include('partials/header') %>
-  <!-- <div class="vanishing520">
-    <h1 id="vanishing520">520 Construction Corner</h1>
-  </div> -->
+
   <main id="main-content">
   
       <div id="alert-banner-top" class="container-fluid">
@@ -222,7 +245,8 @@
               </div>
               <div id="construction-map">
                   <div class="row">
-                      <div class="col-lg-9 col-md-12 col-sm-12 col-xsm-12">
+                      <div class="col-lg-9 col-md-8 col-sm-12 col-xsm-12">
+                        <h2 id="indexh2" class="wdot-dkgreen">SR 520 Construction Map</h2>
                           <div class="togglerow">
                               <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
                               <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" role="link" target="_blank">WSDOT Travel Map</a>
@@ -238,8 +262,8 @@
                                                      </div>
                           <p><em>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </em></p>
                       </div>
-                      <aside class="col-lg-3 vanishing pt-5 mt-5">
-                          <div>
+                      <aside class="col-lg-3 col-md-4 col-sm-12">
+                          <div class="sidebar-wrapper">
                              
                                   <% if (typeof currentClosures !=='undefined' && currentClosures){ %>
                                     <h2 class="text-left wdot-dkgreen">Closures today</h2>
