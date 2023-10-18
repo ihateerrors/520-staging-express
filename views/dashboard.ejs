@@ -181,20 +181,34 @@ strong {
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
           
-                            <strong>Timing Features:</strong>
-                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled>
-          
+                            <!-- <strong>Timing Features:</strong>
+                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled> -->
+                            <strong>Timing Features:</strong> 
+                            <ul>
+                                <% closure.timingFeatures.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                <% }); %>
+                            </ul>
+        
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
-          
-                            <strong>Activity Type:</strong>
-                            <input type="text" name="activityType" value="<%= closure.activityType.join(', ') %>" disabled>
-          
-                            <strong>Impact Type:</strong>
-                            <input type="text" name="impactType" value="<%= closure.impactType.join(', ') %>" disabled><br>
+                            <strong>Activity Type:</strong> 
+                            <ul>
+                                <% closure.activityType.forEach(type => { %>
+                                    <li><%= type %></li>
+                                <% }); %>
+                            </ul>
+        
+                            <strong>Impact Type:</strong> 
+                            <ul>
+                                <% closure.impactType.forEach(impact => { %>
+                                    <li><%= impact %></li>
+                                <% }); %>
+                            </ul>
+        
           
                             <strong>Image URL:</strong>
                             <input type="text" name="imageUrl" value="<%= closure.imageUrl || '' %>" disabled onchange="updateImage(this.value, 'img<%= index %>')"><br>
@@ -249,56 +263,133 @@ strong {
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
 
-// Handle the edit button click
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const parentContainer = this.closest('.accordion-item');
-        const inputs = parentContainer.querySelectorAll('input');
+// document.querySelectorAll('.edit-btn').forEach(btn => {
+//     btn.addEventListener('click', function() {
+//         const id = this.getAttribute('data-id');
+//         const parentContainer = this.closest('.accordion-item');
+//         const inputs = parentContainer.querySelectorAll('input');
 
-        inputs.forEach(input => {
-            input.disabled = !input.disabled;
-        });
+//         inputs.forEach(input => {
+//             input.disabled = !input.disabled;
+//         });
         
-        // Toggle button text between 'Edit' and 'Submit'
-        if (this.innerText === 'Edit') {
-            this.innerText = 'Save';
-        } else {
-            // Collecting the data to send it back to the server
+//         if (this.innerText === 'Edit') {
+//             this.innerText = 'Save';
+//         } else {
+    
+//             const updatedData = {};
+
+//             inputs.forEach(input => {
+//                 updatedData[input.name] = input.value;
+//             });
+            
+//             fetch(`/closure/${id}`, {
+//                 method: 'PUT',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify(updatedData)
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+             
+//                 this.innerText = 'Edit';
+//             })
+//             .catch(err => {
+//                               console.error(err);
+//             });
+//         }
+//     });
+// });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const closureForms = document.querySelectorAll('.closure-form');
+
+    closureForms.forEach(form => {
+        const editBtn = form.querySelector('.edit-btn');
+        const saveBtn = form.querySelector('.save-btn');
+        const deleteBtn = form.querySelector('.delete-btn');
+        const inputs = form.querySelectorAll('input');
+
+        editBtn.addEventListener('click', function() {
+            // Toggle the input fields' disabled state
+            inputs.forEach(input => input.disabled = !input.disabled);
+
+            // Toggle button visibility
+            saveBtn.style.display = 'block';
+            editBtn.style.display = 'none';
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const id = form.getAttribute('data-id');
             const updatedData = {};
 
             inputs.forEach(input => {
                 updatedData[input.name] = input.value;
             });
-            
-            fetch(`/closure/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Provide feedback to the user indicating success
-                this.innerText = 'Edit';
-            })
-            .catch(err => {
-                // Handle any errors by informing the user something went wrong
-                console.error(err);
-            });
-        }
+
+            try {
+                const response = await fetch(`/closure/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Closure updated successfully');
+                } else {
+                    alert('Error updating closure: ' + data.error);
+                }
+
+            } catch (err) {
+                console.error('Error updating closure:', err);
+                alert('There was an error updating the closure. Please try again.');
+            }
+
+            // Toggle input fields and buttons back to original state
+            inputs.forEach(input => input.disabled = true);
+            saveBtn.style.display = 'none';
+            editBtn.style.display = 'block';
+        });
+
+        deleteBtn.addEventListener('click', async function() {
+            const id = form.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this closure?')) {
+                try {
+                    const response = await fetch(`/closure/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        // Remove the closure's DOM element
+                        form.closest('.accordion-item').remove();
+                    } else {
+                        const data = await response.json();
+                        alert('Error deleting closure: ' + data.error);
+                    }
+                } catch (err) {
+                    console.error('Error deleting closure:', err);
+                    alert('There was an error deleting the closure. Please try again.');
+                }
+            }
+        });
     });
 });
 
-// Handle the delete button click
+
 document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', async function() {
         const id = this.getAttribute('data-id');
         
-        // Ask for confirmation before deletion
+
         if (confirm('Are you sure you want to delete this closure?')) {
             try {
                 const response = await fetch(`/closure/${id}`, {
@@ -307,8 +398,7 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
                 
                 const data = await response.json();
                 
-                // On successful deletion, you can either remove the specific closure from the list or simply reload the page.
-                location.reload();
+                    location.reload();
             } catch (e) {
                 console.error('Error deleting closure:', e);
             }
@@ -316,7 +406,7 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
     });
 });
 
-});
+
 
 
 

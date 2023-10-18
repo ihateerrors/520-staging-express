@@ -53,10 +53,7 @@ const projectSchema = new mongoose.Schema({
             "Vibration"
         ]
     }],
-    // imageAlt: {
-    //     type: String,  
-    //     required: false
-    // },
+
     imageUrl: {
         type: String,  // saves to Azure database which generates the URL stored in MongoDB
         required: false
