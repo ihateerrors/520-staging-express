@@ -26,6 +26,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <!-- <link rel="stylesheet" media="all" href="/css/styles2.css" /> -->
     <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+    <!-- <script>
+        $(document).ready(function() {
+           $('.toggle-icon').click(function() {
+               $('form').toggle(); // Toggles visibility of the form
+
+               // Switches the icon when the form is visible/invisible
+               if ($('form').is(':visible')) {
+                   $('.toggle-icon i').removeClass('fa-filter').addClass('fa-times');
+               } else {
+                   $('.toggle-icon i').removeClass('fa-times').addClass('fa-filter');
+               }
+           });
+       });
+</script> -->
+
 <style>
   /* For alert banner */
   #alert-banner-top .container-fluid {
@@ -131,7 +146,7 @@
 
 .sidebar-wrapper {
   margin-top: 4.5em;
-  margin-left: 1.5em;
+  margin-left: .8em;
 
 }
 
@@ -251,7 +266,7 @@
                         <h2 id="indexh2" class="wdot-dkgreen">SR 520 Construction Map</h2>
                           <div class="togglerow">
                               <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
-                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; border-bottom-left-radius: none; border-bottom-right-radius: none;"] role="link" target="_blank">WSDOT Travel Map</a>
+                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; font-size: 18px; border-bottom-left-radius: none; border-bottom-right-radius: none;"] role="link" target="_blank">WSDOT Travel Map</a>
                           </div>
                           <div class="mapcontainer">
                               <div id="map1">
