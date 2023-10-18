@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
   
-  <title>SR 520 Construction Dashboard </title>
+  <title>SR 520 Construction Corner | Home</title>
 
   <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
     integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
@@ -225,15 +225,15 @@
                       <div class="col-lg-9 col-md-12 col-sm-12 col-xsm-12">
                           <div class="togglerow">
                               <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
-                              <button id="map2Button" class="parallelogram-link map-tab" role="tab">WSDOT Travel Map</button>
+                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button" class="parallelogram-link map-tab" role="link" target="_blank">WSDOT Travel Map</a>
                           </div>
                           <div class="mapcontainer">
                               <div id="map1">
                                   <%- include('partials/_mapPartial.ejs') %>
                               </div>
-                              <div id="map2" class="d-none">
+                              <!-- <div id="map2" class="d-none">
                                   <iframe title="WSDOT Travel Map" src="https://wsdot.com/Travel/Real-time/Map/?featuretype=camera&featureid=9648"  width="100%"  height="775px"></iframe>
-                              </div>
+                              </div> -->
 
                                                      </div>
                           <p><em>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </em></p>
