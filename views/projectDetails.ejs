@@ -76,17 +76,25 @@
                                 <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
                                 <p><strong>Time:</strong> <%= project.time %></p>    
                                 
-                                <p> <strong>Activity Details:</strong>
-                                  <% project.timingFeatures.forEach(function(type) { %>
-                                    <ul style="list-style-type: none; font-size: 18px;"> <li><img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> <%= project.timingFeatures %></li>
-                                  <% }); %>
-                                  </ul>
-
-                                <% project.activityType.forEach(function(type) { %>
-                                  <ul style="list-style-type: none; font-size: 18px;"> 
-                                    <li><img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> <%= project.activityType %></li>
-                                <% }); %>
-                                </ul></p>
+                                <p><strong>Activity Details:</strong></p>
+                                <ul style="list-style-type: none; font-size: 18px;">
+                                    <% project.timingFeatures.forEach(function(feature) { %>
+                                        <li>
+                                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                            <%= feature %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                                
+                                <ul style="list-style-type: none; font-size: 18px;">
+                                    <% project.activityType.forEach(function(type) { %>
+                                        <li>
+                                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                            <%= type %> <!-- Use 'type' here instead of 'project.activityType' -->
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                                
                               </div>
                               
                               <div class="content-right col-lg-6">
@@ -108,7 +116,7 @@
                                 <!-- ### Photo Lightbox ###  -->
                                 <dialog id="light-box">
                                   <figure>
-                                    <img class="lightbox-img" src=<%= project.imageUrl %> alt=<%= project.imageAlt %>>
+                                    <img class="lightbox-img" src=<%= project.imageUrl %> >
                                 
                                    </figure>
                                     <button id="close-btn">Close</button>                                
@@ -136,7 +144,7 @@
                            <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
                            <div class="mt-2">
                               <p class="pt-2"><strong>Contact Info:</strong></p>
-                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong> 206-775-8885</p>
+                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong>  ${project.contact}</p>
                                                             
                           </div>
                           </div>
