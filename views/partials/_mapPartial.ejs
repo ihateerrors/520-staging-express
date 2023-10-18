@@ -47,9 +47,6 @@
 }
 
 
-
-
-
 </style>
 
 </head>
@@ -130,7 +127,7 @@
 
         <script>
             // Create the Leaflet map
-            const map = L.map('map').setView([47.6407, -122.2971], 13);
+            const map = L.map('map').setView([47.6407, -122.2971], 14);
             
             // Add Google Map layer to Leaflet map
             L.gridLayer.googleMutant({
@@ -207,7 +204,7 @@
                                     <p>
                                         <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
                                         Email: sr520bridge@wsdot.wa.gov<br/>
-                                        24-hour construction hotline: ${project._contact}
+                                        24-hour construction hotline: ${project.contact}
                                     </p>
                                                                     </div>
                             `;
