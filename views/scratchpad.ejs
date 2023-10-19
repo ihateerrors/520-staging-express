@@ -1,0 +1,22 @@
+<!-- // Inside your success handling code: THIS SHOULD SUPPOSEDLY LET IT DISPLAY RIGHT AWAY???-->
+if(data.imageUrl) {
+    const imgElement = accordionItem.querySelector(`#img${index}`);
+    imgElement.src = data.imageUrl;
+    imgElement.style.display = 'block';  // If it was hidden
+}
+
+
+
+<!-- 
+Save button togglin:
+
+The "Save" button not toggling back to "Edit":
+
+After your save logic, you didn't toggle the button's inner text back to "Edit". You should include this step in both the success and error cases, like so: -->
+
+
+this.innerText = 'Edit';
+
+document.querySelector('input[type=file]').disabled = false;
+
+

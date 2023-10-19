@@ -9,7 +9,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
-
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Use memory storage to handle the file in a buffer
+const upload = multer({ storage: storage });
 const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");

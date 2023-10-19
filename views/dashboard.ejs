@@ -16,6 +16,10 @@ type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <style>
+
+.alert {
+    transition: opacity 1s;
+}
 /* Spacing between entries */
 .accordion-item {
     margin-bottom: 20px;
@@ -147,6 +151,18 @@ strong {
         <section style="margin: 3%;">
             <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
             <div id="past-closures"></div>
+            <!-- Place this where we want the alerts to show -->
+                    <div id="alertPlaceholder">
+
+                      <!-- <div class="alert alert-success" role="alert">
+                       Closure edited successfully.
+                      </div>
+                      <div class="alert alert-danger" role="alert">
+                     D'oh! Your closure edit didn't work--please try again. 
+                      </div>
+                       -->
+                    </div>
+
             <div class="accordion" id="closureAccordion">
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
@@ -160,14 +176,7 @@ strong {
                             <strong>Activity Name:</strong>
                             <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
           
-                            <!-- <strong>Start Date:</strong>
-                            <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled><br>
-          
-                            <strong>End Date:</strong>
-                            <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled><br>
-           -->
-
-                        <div class="date-container">
+                         <div class="date-container">
                           <div class="date-item">
                               <strong>Start Date:</strong>
                               <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
@@ -181,8 +190,7 @@ strong {
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
           
-                            <!-- <strong>Timing Features:</strong>
-                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled> -->
+                  
                             <strong>Timing Features:</strong> 
                             <ul>
                                 <% closure.timingFeatures.forEach(feature => { %>
@@ -209,19 +217,25 @@ strong {
                                 <% }); %>
                             </ul>
         
-          
+              
+                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
+                            imgElement.src = data.imageUrl;
+                            imgElement.style.display = 'block';   -->
+
                             <strong>Image URL:</strong>
-                            <input type="text" name="imageUrl" value="<%= closure.imageUrl || '' %>" disabled onchange="updateImage(this.value, 'img<%= index %>')"><br>
-                          
-                            <% if (closure.imageUrl) { %>
-                                <a href="<%= closure.imageUrl %>" target="_blank">
-                                    <img id="img<%= index %>" class="img-fluid" src="<%= closure.imageUrl %>" alt="Closure Image" style="max-width: 600px;">
-                                </a>
-                            <% } else { %>
-                                <img id="img<%= index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 600px;">
-                            <% } %>    <p style="font-size: small;"><em>Click on image to view the sharable permalink to the image in a new</em></p><br>
+                                    <% if (closure.imageUrl){
                             
-                            <strong>Location:</strong>
+                                      %>                                 
+                                    <a href="<%=closure.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
+                                    <% } else { %>
+                                    <span class="edit-image">Replace image</span>
+                                    <img id="img<%=index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
+                                    <% } %><br><br>
+
+
+                                    <input type="file" name="image" id="image" disabled><br> 
+
+                                                      <strong>Location:</strong>
                             <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
           
                             <strong>Map Data:</strong>
@@ -260,82 +274,102 @@ strong {
 
 <!-- END Form's HTML -->
 
-
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log("Script started"); // Log when script starts
+  
+      const editButtons = document.querySelectorAll('.edit-btn');
+      const deleteButtons = document.querySelectorAll('.delete-btn');
+  
+      editButtons.forEach(editBtn => {
+    editBtn.addEventListener('click', function() {
+        console.log('Edit button clicked');
 
+        const accordionItem = this.closest('.accordion-item');
+        console.log("Accordion item:", accordionItem);
 
-document.addEventListener('DOMContentLoaded', function() {
+        const inputs = accordionItem.querySelectorAll('input');
+        const fileInput = accordionItem.querySelector('input[type=file]');
+        console.log("Located file input:", fileInput);
 
-// Handle the edit button click
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
-        const parentContainer = this.closest('.accordion-item');
-        const inputs = parentContainer.querySelectorAll('input');
 
-        inputs.forEach(input => {
-            input.disabled = !input.disabled;
-        });
-        
-        // Toggle button text between 'Edit' and 'Submit'
+        // Toggle the input fields' disabled state
+        inputs.forEach(input => input.disabled = !input.disabled);
+        console.log("After toggle: File input disabled state:", fileInput.disabled); 
+
+        // Toggle button text between 'Edit' and 'Save'
         if (this.innerText === 'Edit') {
             this.innerText = 'Save';
         } else {
-            // Collecting the data to send it back to the server
-            const updatedData = {};
+                  // Save logic with FormData
+                  const formData = new FormData();
+                  inputs.forEach(input => {
+                      if (input.type !== 'file') {
+                          formData.append(input.name, input.value);
+                      }
+                  });
+  
+                  if (fileInput.files[0]) {
+                      formData.append('image', fileInput.files[0]);
+                  }
+  
+                  fetch(`/closure/${id}`, {
+                      method: 'PUT',
+                      body: formData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      
+                      if (data.error) {
+                          console.error('Error:', data.error);
+                          // Display error alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      } else {
+                          // Display success alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      }
+                  })
+                  .catch(err => {
+                      console.error('Fetch error:', err);
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
+                      setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                  });
+              }
+          });
+      });
+  
+      // delete button start
+  
+      deleteButtons.forEach(deleteBtn => {
+          deleteBtn.addEventListener('click', async function() {
+              const accordionItem = this.closest('.accordion-item');
+              const id = this.getAttribute('data-id');
+              if (confirm('Are you sure you want to delete this closure?')) {
+                  try {
+                      const response = await fetch(`/closure/${id}`, { method: 'DELETE' });
+                      if (response.ok) {
+                          accordionItem.remove();
+                          alert('Closure deleted successfully!');
+                      } else {
+                          const data = await response.json();
+                          alert('Error deleting closure: ' + data.error);
+                      }
+                  } catch (err) {
+                      console.error('Error deleting closure:', err);
+                      alert('There was an error deleting the closure.');
+                  }
+              }
+          });
+      });
+  });
+  </script>
+  
+    </body>
+    </html>
 
-            inputs.forEach(input => {
-                updatedData[input.name] = input.value;
-            });
-            
-            fetch(`/closure/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Provide feedback to the user indicating success
-                this.innerText = 'Edit';
-            })
-            .catch(err => {
-                // Handle any errors by informing the user something went wrong
-                console.error(err);
-            });
-        }
-    });
-});
-
-// Handle the delete button click
-document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        
-        // Ask for confirmation before deletion
-        if (confirm('Are you sure you want to delete this closure?')) {
-            try {
-                const response = await fetch(`/closure/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                const data = await response.json();
-                
-                // On successful deletion, you can either remove the specific closure from the list or simply reload the page.
-                location.reload();
-            } catch (e) {
-                console.error('Error deleting closure:', e);
-            }
-        }
-    });
-});
-
-});
-
-
-</script>
-    
-  </body>
-</html>
-
+<!-- END Form's HTML -->
