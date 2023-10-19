@@ -71,286 +71,23 @@
         </div>
 
 
-
-        <script>
-            // Create the Leaflet map
-            const map = L.map('map').setView([47.6407, -122.2971], 14);
-            
-            // Add Google Map layer to Leaflet map
-            L.gridLayer.googleMutant({
-                type: 'roadmap',
-                maxZoom: 20,
-                apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
-            }).addTo(map);
-        
-            // Define activity icons
-            const activityIcons = {
-                "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-                "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-                "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-                "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-                "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
-                "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
-                "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
-            };
-
-            const mapLayerGroup = L.layerGroup().addTo(map);
-
-                        // Define default styling values
-            const defaultColor = '#f4661a';
-            const defaultWidth = 8;      
-
-            function fetchMapData(startDate = '', endDate = '', types = []) { 
-                   // Clear previous map layers
-            mapLayerGroup.clearLayers();
-            const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
-            console.log('Fetching data from:', apiUrl);
-        
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Data received:', data);
-                    if (data && data.length > 0) {
-                        data.forEach(project => {
-                            if (!project.mapData || !Array.isArray(project.mapData)) {
-                                console.warn(`Invalid mapData for project with ID ${project._id}`);
-                                return;
-                            }                            
-                            let geoJSONData = null;
-                            if (typeof project.mapData[1] === 'string') {
-                                try {
-                                    geoJSONData = JSON.parse(project.mapData[1]);
-                                } catch (e) {
-                                    console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
-                                    return;
-                                }
-                            }        
-                            if (!geoJSONData) {
-                                console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
-                                return;
-                            }        
-                            const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
-                            const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
-                            const timingFeaturesHTML = project.timingFeatures.map(feature => `
-                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
-                                ${feature}
-                            `).join(' ');        
-                            const activityTypeHTML = project.activityType.map(type => `
-                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
-                                ${type}
-                            `).join(' ');      
-                            const popupContent = `
-                                <div class="popup-content">
-                                    <h3>${project.activityName}</h3>
-                                    <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
-                                    <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
-                                    <span style="font-weight: 600">Time:</span> ${project.time}</p>
-                                    <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>                         
-                                    <p>${project.description || "Not specified"}</p>
-                                    <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
-                                    <p>
-                                        <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
-                                        Email: sr520bridge@wsdot.wa.gov<br/>
-                                        24-hour construction hotline: ${project.contact}
-                                    </p>
-                                                                    </div>
-                            `;
-        
-                          const iconUrl = activityIcons[project.activityType[0]];
-                            if (!iconUrl) {
-                                console.warn(`No icon URL found for type: ${project.activityType[0]}`);
-                                return;
-                            }
-        
-                            const customIcon = L.icon({
-                                iconUrl: iconUrl,
-                                iconSize: [26, 26],
-                                popupAnchor: [0, -41]
-                            });
-        
-                 // all button checked 
-                      document.addEventListener('DOMContentLoaded', function() {
-    
-                        const allCheckbox = document.getElementById('all');
-                        const otherCheckboxes = document.querySelectorAll("input[name='type']:not(#all)");
-
-                        // Add event listener for every checkbox except "All"
-                        otherCheckboxes.forEach(function(checkbox) {
-                            checkbox.addEventListener('change', function() {
-                                if (this.checked) {
-                                    // Uncheck the "All" checkbox
-                                    allCheckbox.checked = false;
-                                } else {
-                                    // If no other checkboxes are checked, check the "All" checkbox
-                                    const anyChecked = Array.from(otherCheckboxes).some(chk => chk.checked);
-                                    if (!anyChecked) {
-                                        allCheckbox.checked = true;
-                                    }
-                                }
-                            });
-                        });
-
-                        // Add event listener for "All" checkbox
-                        allCheckbox.addEventListener('change', function() {
-                            if (this.checked) {
-                                // Uncheck all other checkboxes
-                                otherCheckboxes.forEach(chk => chk.checked = false);
-                            }
-                        });
-
-                    });
+ <script>// Create the Leaflet map
+const map=L.map('map').setView([47.6407, -122.2971], 14); // Add Google Map layer to Leaflet map
+L.gridLayer.googleMutant({ type: 'roadmap', maxZoom: 20, apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'}).addTo(map); // Define activity icons
+const activityIcons={ "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png", "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png", "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png", "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png", "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png", "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png", "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"}; const mapLayerGroup=L.layerGroup().addTo(map); // Define default styling values
+const defaultColor='#f4661a';
+const defaultWidth=8; async function fetchMapData(startDate='', endDate='', types=[]){ // Clear previous map layers mapLayerGroup.clearLayers(); const apiUrl=`/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`; console.log('Fetching data from:', apiUrl); try{ let response=await fetch(apiUrl); if (!response.ok){ throw new Error(`HTTP error! Status: ${response.status}`);} let data=await response.json(); console.log('Data received:', data); if (data && data.length >0){ data.forEach(project=>{ if (!project.mapData || !Array.isArray(project.mapData)){ console.warn(`Invalid mapData for project with ID ${project._id}`); return;} let geoJSONData=null; if (typeof project.mapData[1]==='string'){ try{ geoJSONData=JSON.parse(project.mapData[1]);} catch (e){ console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e); return;}} if (!geoJSONData){ console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`); return;} const formattedStartDate=moment(project.startDate).format('MM/DD/YYYY'); const formattedEndDate=moment(project.endDate).format('MM/DD/YYYY'); const timingFeaturesHTML=project.timingFeatures.map(feature=>` <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature} `).join(' '); const activityTypeHTML=project.activityType.map(type=>` <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${type} `).join(' '); const popupContent=` <div class="popup-content"><h3>${project.activityName}</h3><p><span style="font-weight: 600">Start:</span>${formattedStartDate}<br><span style="font-weight: 600">End:</span>${formattedEndDate}<br><span style="font-weight: 600">Time:</span>${project.time}</p><div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML}</div><p>${project.description || "Not specified"}</p><a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br><p><span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>Email: sr520bridge@wsdot.wa.gov<br/>24-hour construction hotline: ${project.contact}</p></div>`; const iconUrl=activityIcons[project.activityType[0]]; if (!iconUrl){ console.warn(`No icon URL found for type: ${project.activityType[0]}`); return;} const customIcon=L.icon({ iconUrl: iconUrl, iconSize: [26, 26], popupAnchor: [0, -41]}); L.geoJSON(geoJSONData,{ // Note the use of geoJSONData here style: function (feature){ return{ color: feature.properties.color || defaultColor, weight: feature.properties.width || defaultWidth};}, pointToLayer: function (feature, latlng){ return L.marker(latlng,{ icon: customIcon});}, onEachFeature: function (feature, layer){ layer.bindPopup(popupContent,{ autoPan: true, autoPanPaddingTopLeft: L.point(10, 50), autoPanPaddingBottomRight: L.point(10, 10)});}}).addTo(mapLayerGroup);});}} catch (error){ console.error('Error fetching map data:', error);}} // Initial fetch of map data
+fetchMapData(); // Handle form submission and fetch data based on filters
+document.querySelector('form').addEventListener('submit', function (e){ e.preventDefault(); const startDate=document.getElementById('start').value; const endDate=document.getElementById('end').value; const checkboxes=document.querySelectorAll('input[name="type"]:checked'); let types=[]; checkboxes.forEach(checkbox=>{ types.push(checkbox.value);}); // If "All" is checked, clear the types array so that it fetches all data if (document.getElementById('all').checked){ types=[];} // Fetch map data with the selected filters fetchMapData(startDate, endDate, types);}); // Clear map function to remove all layers
+function clearMapFunction(){ mapLayerGroup.clearLayers();} // Handle the addition of camera markers on the map
+function addCamerasToMap(cameras){ const cameraIcon=L.icon({ iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png', iconSize: [26, 26], popupAnchor: [0, -15]}); cameras.forEach(camera=>{ const marker=L.marker([camera.lat, camera.lng],{ icon: cameraIcon}).addTo(mapLayerGroup); // Add to the mapLayerGroup for easy clearing later marker.bindPopup( `<div style="width: 100%; padding: 15px;"><p><iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe></p></div>`, { maxWidth: 480, minWidth: 480} );});} // Handle checkbox behaviors to allow for selecting all or individual types
+function handleCheckboxBehaviors(){ const allCheckbox=document.getElementById('all'); const otherCheckboxes=document.querySelectorAll("input[name='type']:not(#all)"); otherCheckboxes.forEach(function(checkbox){ checkbox.addEventListener('change', function(){ if (this.checked){ allCheckbox.checked=false;} else{ const anyChecked=Array.from(otherCheckboxes).some(chk=>chk.checked); if (!anyChecked){ allCheckbox.checked=true;}}});}); allCheckbox.addEventListener('change', function(){ if (this.checked){ otherCheckboxes.forEach(chk=>chk.checked=false);}});} document.addEventListener("DOMContentLoaded", function(){ // Initialize date values const today=moment().format('YYYY-MM-DD'); const twoWeeksLater=moment().add(14, 'days').format('YYYY-MM-DD'); document.getElementById('start').setAttribute('value', today); document.getElementById('end').setAttribute('value', twoWeeksLater); // Initialize checkbox behaviors handleCheckboxBehaviors();}); // Initial fetching of map data and addition of cameras
+fetchMapData();
+addCamerasToMap(cameras); // Remaining event listeners and other parts of your code would follow... document.addEventListener("DOMContentLoaded", function(){ // Get the current date var today=moment().format('YYYY-MM-DD'); // Calculate the date two weeks from today var twoWeeksLater=moment().add(14, 'days').format('YYYY-MM-DD'); // Set the placeholder value for the start date input document.getElementById('start').setAttribute('value', today); // Set the value value for the end date input document.getElementById('end').setAttribute('value', twoWeeksLater);}); // Get reference to the mapData element from the form const mapDataElement=document.getElementById('mapData'); if (mapDataElement && mapDataElement.value){ try{ const geoJSONData=JSON.parse(mapDataElement.value); L.geoJSON(geoJSONData,{ style: function(feature){ return{ color: feature.properties.color || defaultColor, weight: feature.properties.width || defaultWidth};}}).addTo(map);} catch (error){ console.warn("Failed to parse mapData from form:", error);}} let previousView=null; map.on('popupopen', function(){ previousView={ center: map.getCenter(), zoom: map.getZoom()};}); map.on('popupclose', function(){ if (previousView){ map.setView(previousView.center, previousView.zoom);}}); // Create a debounced version of the fetchMapData function outside the event listener
+const debouncedFetchMapData=_.debounce(fetchMapData, 300); // Handle form submission and fetch data based on filters
+document.querySelector('form').addEventListener('submit', function (e){ e.preventDefault(); const startDate=document.getElementById('start').value; const endDate=document.getElementById('end').value; const checkboxes=document.querySelectorAll('input[name="type"]:checked'); let types=[]; checkboxes.forEach(checkbox=>{ types.push(checkbox.value);}); // If "All" is checked, clear the types array so that it fetches all data if (document.getElementById('all').checked){ types=[];} // If no types are selected, clear the map (you can decide what action to take here) if (types.length===0){ // For example, you can clear the map here: clearMapFunction(); // You would need to define or replace this with your function that clears the map return; // No need to proceed further} debouncedFetchMapData(startDate, endDate, types);}); 
 
 
-                //   END all button checked code
-                            // start cameras
-                 const cameras = [
-            { 
-                lat: 47.644611, 
-                lng: -122.304694, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_3/view_1'
-            },
-            { 
-                lat: 47.645056, 
-                lng: -122.301972, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_1/view_1'
-            },
-            { 
-                lat: 47.644861, 
-                lng: -122.298111, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_2/view_1'
-            },
-            { 
-                lat: 47.644861, 
-                lng: -122.298583, 
-                iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_4/view_1'
-            }
-        ];
-        
-        // Define the camera icon
-        const cameraIcon = L.icon({
-            iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png',
-            iconSize: [26, 26], // size of the icon
-            popupAnchor: [0, -15] // point from which the popup should open relative to the iconAnchor
-        });
-        
-        // Add each camera to the map
-        cameras.forEach(camera => {
-            const marker = L.marker([camera.lat, camera.lng], { icon: cameraIcon }).addTo(map);
-        
-            // Attach a popup with the iframe to the camera
-        
-        marker.bindPopup(
-            `<div style="width: 100%; padding: 15px;"> 
-                 <p>
-                    <iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe>
-                </p>
-            </div>`,
-            {
-                maxWidth: 480,  // This should align with whatever max width you've set
-                minWidth: 480,  // You can set this to be the minimum size you want the popup to take
-            }
-        );
-        });       
-        
-        // END camera section 
-                            L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
-                                style: function(feature) {
-                                    return {
-                                        color: feature.properties.color || defaultColor,
-                                        weight: feature.properties.width || defaultWidth
-                                    };
-                                },
-                                pointToLayer: function (feature, latlng) {
-                                    return L.marker(latlng, { icon: customIcon });
-                                },
-                                onEachFeature: function (feature, layer) {
-                                    layer.bindPopup(popupContent, {
-                                        autoPan: true,
-                                        autoPanPaddingTopLeft: L.point(10, 50),
-                                        autoPanPaddingBottomRight: L.point(10, 10)
-                                    });
-                                }
-                            }).addTo(mapLayerGroup);
-                        });
-                    }
-                })
-                .catch(error => console.error('Error fetching map data:', error));
-        }
-      
-
-        
-        // Initial fetch of map data
-        fetchMapData();
-        
-        document.addEventListener("DOMContentLoaded", function() {
-            // Get the current date
-            var today = moment().format('YYYY-MM-DD');
-        
-            // Calculate the date two weeks from today
-            var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
-        
-            // Set the placeholder value for the start date input
-            document.getElementById('start').setAttribute('value', today);
-        
-            // Set the value value for the end date input
-            document.getElementById('end').setAttribute('value', twoWeeksLater);
-            
-
-        });            
-            // Get reference to the mapData element from the form
-            const mapDataElement = document.getElementById('mapData');
-            if (mapDataElement && mapDataElement.value) {
-                try {
-                    const geoJSONData = JSON.parse(mapDataElement.value);
-                              L.geoJSON(geoJSONData, {
-                        style: function(feature) {
-                            return {
-                                color: feature.properties.color || defaultColor,
-                                weight: feature.properties.width || defaultWidth
-                            };
-                        }
-                    }).addTo(map);
-        
-                } catch (error) {
-                    console.warn("Failed to parse mapData from form:", error);
-                }
-            }
-        
-            let previousView = null;
-        
-            map.on('popupopen', function() {
-                previousView = {
-                    center: map.getCenter(),
-                    zoom: map.getZoom()
-                };
-            });
-        
-            map.on('popupclose', function() {
-                if (previousView) {
-                    map.setView(previousView.center, previousView.zoom);
-                }
-            });
-        
-// Handle form submission and fetch data based on filters
-document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const debouncedFetchMapData = _.debounce(fetchMapData, 300); // 300ms debounce time
-    const startDate = document.getElementById('start').value;
-    const endDate = document.getElementById('end').value;
-
-    const checkboxes = document.querySelectorAll('input[name="type"]:checked');
-    let types = [];
-    checkboxes.forEach(checkbox => {
-        types.push(checkbox.value);
-    });
-
-    // If "All" is checked, clear the types array so that it fetches all data
-    if (document.getElementById('all').checked) {
-        types = [];
-    }
-
-    debouncedFetchMapData(startDate, endDate, types);
-});
 
 // document.addEventListener("DOMContentLoaded", function() {
 //     const toggleIcon = document.querySelector(".toggle-icon");
@@ -369,7 +106,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
 //     });
 // });
         
-        </script>
+        // </script>
 
         <!-- <script>
                  $(document).ready(function() {
