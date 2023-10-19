@@ -19,6 +19,7 @@
     "express-session": "^1.17.3",
     "leaflet-plugins": "^3.4.0",
     "leaflet.gridlayer.googlemutant": "^0.14.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.3",

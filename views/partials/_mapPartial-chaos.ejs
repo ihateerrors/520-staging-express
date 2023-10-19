@@ -1,191 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map</title>
-
-    <!-- Bootstrap 5 CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-
- 
 
 
-<!-- Leaflet CSS -->
 
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
-
-<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
-
-<!-- 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script> -->
-
-<!-- Google Maps JavaScript API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
-<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-</head>
-<body>
-
-
-<!-- <div class="exp-map" style="width: 100%"> -->
-
-    <div class="exp-map">
-    <div class="container">
-                         <div class="row">
-                        <!-- <div class="col-12 col-sm-12 col-lg-2 col-md-3 order-md-1 order-2"> -->
-                            <div class="col-sm-12 col-lg-2 col-md-3">
-                            <form class="mt-5">
-                                <div class="row">
-                                    <div class="col-sm-6 col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>Start Date</label>
-                                            <input type="date" class="form-control" style="font-size: 1em" id="start" />
-                                        </div>
-                                    </div>
-                
-                                    <div class="col-sm-6 col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>End Date</label>
-                                            <input type="date" class="form-control" style="font-size: 1em" id="end" />
-                                        </div>
-                                    </div>
-                                </div>
-                
-                                <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="all">
-                                        <label class="form-check-label" for="all">All</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="fullHighway">
-                                        <label class="form-check-label" for="fullHighway">Full highway closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="partialHighway">
-                                        <label class="form-check-label" for="partialHighway">Partial highway closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="streetLane">
-                                        <label class="form-check-label" for="streetLane">Street and lane closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="trail">
-                                        <label class="form-check-label" for="trail">Trail closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ramp">
-                                        <label class="form-check-label" for="ramp">Ramp closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="highImpact">
-                                        <label class="form-check-label" for="highImpact">High-impact construction</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="cameras">
-                                        <label class="form-check-label" for="cameras">Cameras</label>
-                                    </div>
-                                </div>
-                                        
-                                <button type="submit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63);
-                                margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button>
-                            </form>
-                        </div>
-                
-                        <div class="col-lg-10 col-sm-12 col-md-9 pl-2">
-                            <div id="map" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                  
-        </div>
-
-
- 
-<!-- Leaflet JS -->
-<!-- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> -->
 <script>
 
-document.addEventListener("DOMContentLoaded", function() {
 
-const map = L.map('map').setView([47.6407, -122.2971], 15);
 
+Of course. Below is the complete, unabbreviated version of your JavaScript code, integrating all the improvements and suggestions provided earlier:
+
+javascript
+Copy code
+// Create the Leaflet map
+const map = L.map('map').setView([47.6407, -122.2971], 14);
+
+// Add Google Map layer to Leaflet map
 L.gridLayer.googleMutant({
-    type: 'roadmap',  // Choose from 'roadmap', 'satellite', 'terrain', or 'hybrid'
+    type: 'roadmap',
     maxZoom: 20,
-    apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+    apiKey: 'YOUR_API_KEY'
 }).addTo(map);
 
-const drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
-
-const defaultColor = '#3388ff';  // A default color to start with
-const defaultWidth = 3;         // A default width
-
-const drawControl = new L.Control.Draw({
-    draw: {
-        polygon: {
-            shapeOptions: {
-                color: defaultColor
-            }
-        },
-        polyline: {
-            shapeOptions: {
-                color: defaultColor,
-                weight: defaultWidth
-            }
-        },
-        rectangle: {
-            shapeOptions: {
-                color: defaultColor
-            }
-        },
-        circle: {
-            shapeOptions: {
-                color: defaultColor
-            }
-        },
-        marker: true
-    },
-    edit: {
-        featureGroup: drawnItems,
-        edit: false
-    }
-});
-map.addControl(drawControl);
-
-map.on('draw:created', function(event) {
-    const layer = event.layer;
-    drawnItems.addLayer(layer);
-    // Save the drawn shape data for form submission
-    const shapes = drawnItems.toGeoJSON();
-    document.getElementById('mapData').value = JSON.stringify(shapes);
-});
-
-// Interface for user customization
-document.getElementById('colorPicker').addEventListener('input', (event) => {
-    const selectedColor = event.target.value;
-    drawControl.setDrawingOptions({
-        polygon: { shapeOptions: { color: selectedColor } },
-        polyline: { shapeOptions: { color: selectedColor, weight: parseInt(document.getElementById('widthPicker').value) } },
-        rectangle: { shapeOptions: { color: selectedColor } },
-        circle: { shapeOptions: { color: selectedColor } }
-    });
-});
-
-document.getElementById('widthPicker').addEventListener('input', (event) => {
-    const selectedWidth = parseInt(event.target.value);
-    drawControl.setDrawingOptions({
-        polyline: { shapeOptions: { weight: selectedWidth, color: document.getElementById('colorPicker').value } }
-    });
-});
-
-
+// Define activity icons
 const activityIcons = {
     "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
     "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -196,47 +30,79 @@ const activityIcons = {
     "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
 };
 
+const mapLayerGroup = L.layerGroup().addTo(map);
+
+// Define default styling values
+const defaultColor = '#f4661a';
+const defaultWidth = 8;
+
 function fetchMapData(startDate = '', endDate = '', types = []) {
-    let apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+    // Clear previous map layers
+    mapLayerGroup.clearLayers();
+
+    const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
     console.log('Fetching data from:', apiUrl);
 
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
             console.log('Data received:', data);
+
             if (data && data.length > 0) {
                 data.forEach(project => {
-                    if (typeof project.mapData !== 'string') {
+                    if (!project.mapData || !Array.isArray(project.mapData)) {
                         console.warn(`Invalid mapData for project with ID ${project._id}`);
                         return;
                     }
 
-                    const geoJSONData = JSON.parse(project.mapData);
+                    let geoJSONData = null;
+                    if (typeof project.mapData[1] === 'string') {
+                        try {
+                            geoJSONData = JSON.parse(project.mapData[1]);
+                        } catch (e) {
+                            console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                            return;
+                        }
+                    }
+
+                    if (!geoJSONData) {
+                        console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                        return;
+                    }
+
                     const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
                     const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+
                     const timingFeaturesHTML = project.timingFeatures.map(feature => `
-                        <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
-                        ${feature}
+                        <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature}
+                    `).join(' ');
+
+                    const activityTypeHTML = project.activityType.map(type => `
+                        <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${type}
                     `).join(' ');
 
                     const popupContent = `
-                      <div class="popup-content">
+                        <div class="popup-content">
                             <h3>${project.activityName}</h3>
-                            <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
-                            <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
-                            <span style="font-weight: 600">Time:</span> ${project.time}</p>
-                            <div class="timing-features">${timingFeaturesHTML}</div>                         
+                            <p>
+                                <span style="font-weight: 600">Start:</span>${formattedStartDate}<br>
+                                <span style="font-weight: 600">End:</span>${formattedEndDate}<br>
+                                <span style="font-weight: 600">Time:</span>${project.time}
+                            </p>
+                            <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>
                             <p>${project.description || "Not specified"}</p>
-
-                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-2" style="background-color: #cbdcb2; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br>
-
-                            <div class="popup-image mt-2">                            
-                            ${project.imageUrl ? `<img src="${project.imageUrl}" alt="Image for ${project.activityName}" class="img-fluid">` : ''}
-                            </div>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
+                            <br><br>
+                            <p>
+                                <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
+                                Email: sr520bridge@wsdot.wa.gov<br/>
+                                24-hour construction hotline: ${project.contact} 
+                            </p>
                         </div>
                     `;
 
                     const iconUrl = activityIcons[project.activityType[0]];
+
                     if (!iconUrl) {
                         console.warn(`No icon URL found for type: ${project.activityType[0]}`);
                         return;
@@ -244,51 +110,109 @@ function fetchMapData(startDate = '', endDate = '', types = []) {
 
                     const customIcon = L.icon({
                         iconUrl: iconUrl,
-                        iconSize: [25, 25],
-                        // iconAnchor: [12, 41],
+                        iconSize: [26, 26],
                         popupAnchor: [0, -41]
                     });
-                    const geoJSONLayer = L.geoJSON(geoJSONData, {
-                            style: function(feature) {
-                                return {
-                                    color: feature.properties.color || defaultColor,  // Use default color if not present
-                                    weight: feature.properties.width || defaultWidth  // Use default width if not present
-                                };
-                            },
-                            pointToLayer: function (feature, latlng) {
-                                return L.marker(latlng, { icon: customIcon });
-                            },
-                            onEachFeature: function (feature, layer) {
-                                layer.bindPopup(popupContent, {
-                                    autoPan: true,
-                                    autoPanPaddingTopLeft: L.point(10, 50),
-                                    autoPanPaddingBottomRight: L.point(10, 10)
-                                });
-                            }
-                        }).addTo(map);
-                        map.fitBounds(geoJSONLayer.getBounds());
 
-                      });
+                    L.geoJSON(geoJSONData, {
+                        style: function (feature) {
+                            return {
+                                color: feature.properties.color || defaultColor,
+                                weight: feature.properties.width || defaultWidth
+                            };
+                        },
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, {
+                                icon: customIcon
+                            });
+                        },
+                        onEachFeature: function (feature, layer) {
+                            layer.bindPopup(popupContent, {
+                                autoPan: true,
+                                autoPanPaddingTopLeft: L.point(10, 50),
+                                autoPanPaddingBottomRight: L.point(10, 10)
+                            });
+                        }
+                    }).addTo(mapLayerGroup);
+                });
             }
         })
         .catch(error => console.error('Error fetching map data:', error));
 }
 
+// Initial fetch of map data
 fetchMapData();
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the current date
+    var today = moment().format('YYYY-MM-DD');
+
+    // Calculate the date two weeks from today
+    var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
+
+    // Set the placeholder value for the start date input
+    document.getElementById('start').setAttribute('value', today);
+
+    // Set the value value for the end date input
+    document.getElementById('end').setAttribute('value', twoWeeksLater);
+});
+
+// Get reference to the mapData element from the form
+const mapDataElement = document.getElementById('mapData');
+
+if (mapDataElement && mapDataElement.value) {
+    try {
+        const geoJSONData = JSON.parse(mapDataElement.value);
+        L.geoJSON(geoJSONData, {
+            style: function (feature) {
+                return {
+                    color: feature.properties.color || defaultColor,
+                    weight: feature.properties.width || defaultWidth
+                };
+            }
+        }).addTo(map);
+    } catch (error) {
+        console.warn("Failed to parse mapData from form:", error);
+    }
+}
 
 let previousView = null;
 
-map.on('popupopen', function() {
+map.on('popupopen', function () {
     previousView = {
         center: map.getCenter(),
         zoom: map.getZoom()
     };
 });
 
-map.on('popupclose', function() {
+map.on('popupclose', function () {
     if (previousView) {
         map.setView(previousView.center, previousView.zoom);
     }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const allCheckbox = document.getElementById('all');
+    const otherCheckboxes = document.querySelectorAll("input[name='type']:not(#all)");
+
+    otherCheckboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                allCheckbox.checked = false;
+            } else {
+                const anyChecked = Array.from(otherCheckboxes).some(chk => chk.checked);
+                if (!anyChecked) {
+                    allCheckbox.checked = true;
+                }
+            }
+        });
+    });
+
+    allCheckbox.addEventListener('change', function () {
+        if (this.checked) {
+            otherCheckboxes.forEach(chk => chk.checked = false);
+        }
+    });
 });
 
 document.querySelector('form').addEventListener('submit', function (e) {
@@ -296,24 +220,55 @@ document.querySelector('form').addEventListener('submit', function (e) {
 
     const startDate = document.getElementById('start').value;
     const endDate = document.getElementById('end').value;
-    const types = [];
-    if (document.getElementById('fullHighway').checked) types.push('Full highway closure');
-    if (document.getElementById('partialHighway').checked) types.push('Partial highway closure');
-    if (document.getElementById('streetLane').checked) types.push('Street and lane closure');
-    if (document.getElementById('trail').checked) types.push('Trail closure');
-    if (document.getElementById('ramp').checked) types.push('Ramp closure');
-    if (document.getElementById('highImpact').checked) types.push('High-impact construction');
-    if (document.getElementById('Cameras').checked) types.push('Cameras');
+    const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+    let types = [];
 
-    map.eachLayer(function (layer) {
-        if (layer instanceof L.TileLayer) return;
-        map.removeLayer(layer);
+    checkboxes.forEach(checkbox => {
+        types.push(checkbox.value);
     });
+
+    if (document.getElementById('all').checked) {
+        types = [];
+    }
 
     fetchMapData(startDate, endDate, types);
 });
 
+const mapCameras = {
+    "Montlake Freeway Station": [47.6427395, -122.3039562],
+    "Montlake Blvd": [47.6406178, -122.3058297],
+    "Evergreen Point Lid": [47.6423737, -122.2412252],
+    "84th Ave NE Lid": [47.6335835, -122.2102367],
+    "92nd Ave NE Lid": [47.6298285, -122.2057622],
+    "Bellevue Way Lid": [47.6182216, -122.2054495],
+    "Yarrow Point Lid": [47.6475817, -122.2196779],
+    "Hunts Point": [47.6450325, -122.2258702],
+    "Medina Lid": [47.6270626, -122.2389892],
+    "I-5/NE 45th St": [47.661095, -122.313153],
+    "Montlake/520 Interchange": [47.6406806, -122.3037303],
+    "SR 520/NE 148th St": [47.731715, -122.144903],
+    "SR 520/Redmond Way": [47.673978, -122.121263],
+};
+
+const cameras = L.layerGroup();
+
+Object.entries(mapCameras).forEach(([name, coordinates]) => {
+    const cameraIcon = L.icon({
+        iconUrl: "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png",
+        iconSize: [26, 26],
+        popupAnchor: [0, -41]
+    });
+
+    const marker = L.marker(coordinates, {
+        icon: cameraIcon
+    }).addTo(cameras);
+
+    marker.bindPopup(`<strong>${name}</strong><br>Click <a href="#">here</a> to view camera feed.`);
 });
+
+cameras.addTo(map);
+
+
 
 </script>
 
