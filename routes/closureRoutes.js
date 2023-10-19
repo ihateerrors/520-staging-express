@@ -5,15 +5,6 @@ const path = require("path");
 const Project = require('../models/Project');
 const { uploadToAzure } = require("../utils/azureUpload");
 
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, "uploads/");
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + "-" + file.originalname);
-//     }
-// });
-
 const storage = multer.memoryStorage();
 
 function fileFilter(req, file, cb) {
@@ -28,7 +19,7 @@ function fileFilter(req, file, cb) {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.put("/:id", upload.single("image"), async (req, res) => {
+router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     try {
         const project = await ProjectPr.findById(req.params.id);
         if (!project) {

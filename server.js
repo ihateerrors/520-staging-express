@@ -16,14 +16,14 @@ const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
 const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your directory structure
-const closureRoutes = require('./routes/closureRoutes');
+
 
 // Routes imports
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
 const projectRoutes = require('./routes/projects');
-
+const closureRoutes = require('./routes/closureRoutes');
 
 // Middleware setup
 

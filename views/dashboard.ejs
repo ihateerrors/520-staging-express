@@ -314,7 +314,7 @@ strong {
                       formData.append('image', fileInput.files[0]);
                   }
   
-                  fetch(`/closure/${id}`, {
+                  fetch(`/api/projects/${id}`, {
                       method: 'PUT',
                       body: formData
                   })
