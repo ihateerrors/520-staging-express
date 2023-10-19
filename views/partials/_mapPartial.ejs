@@ -65,60 +65,7 @@
                             <form class="mt-5">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>Start Date</label>
-                                            <input type="date" class="form-control" style="font-size: 1em" id="start" />
-                                        </div>                                    </div>                
-                                    <div class="col-sm-6 col-md-12 mt-2">
-                                        <div class="form-group">
-                                            <label>End Date</label>
-                                            <input type="date" class="form-control" style="font-size: 1em" id="end" />
-                                        </div> </div> </div>                
-                                <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="all" name="type" value="all" checked>
-                                        <label class="form-check-label" for="all">All</label>
-                                    </div>
-                        
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="fullHighway" name="type" value="Full highway closure">
-                                        <label class="form-check-label" for="fullHighway">Full highway closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="partialHighway" name="type" value="Partial highway closures">
-                                        <label class="form-check-label" for="partialHighway">Partial highway closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="streetLane" name="type" value="Street and lane closure">
-                                        <label class="form-check-label" for="streetLane">Street and lane closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="trail" name="type" value="Trail closures">
-                                        <label class="form-check-label" for="trail">Trail closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="ramp" name="type" value="Ramp closures">
-                                        <label class="form-check-label" for="ramp">Ramp closures</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="highImpact" name="type" value="High-impact construction">
-                                        <label class="form-check-label" for="highImpact">High-impact construction</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="cameras" name="type" value="Cameras">
-                                        <label class="form-check-label" for="cameras">Cameras</label>
-                                    </div>
-                                </div>
-                                        
-                                <button type="submit" id="filterSubmit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63);
-                                margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button>
-                            </form>
-                        </div>
-                
-                        <div class="col-lg-10 col-sm-12 col-md-9">
-                            <div id="map"></div>
-                        </div>
-                    </div>
+                                        <div class="form-group"><label>Start Date</label><input type="date" class="form-control" style="font-size: 1em" id="start" /></div></div><div class="col-sm-6 col-md-12 mt-2"><div class="form-group"><label>End Date</label><input type="date" class="form-control" style="font-size: 1em" id="end" /></div></div></div><div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType"><div class="form-check"><input type="checkbox" class="form-check-input" id="all" name="type" value="all" checked><label class="form-check-label" for="all">All</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="fullHighway" name="type" value="Full highway closure"><label class="form-check-label" for="fullHighway">Full highway closures</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="partialHighway" name="type" value="Partial highway closures"><label class="form-check-label" for="partialHighway">Partial highway closures</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="streetLane" name="type" value="Street and lane closure"><label class="form-check-label" for="streetLane">Street and lane closures</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="trail" name="type" value="Trail closures"><label class="form-check-label" for="trail">Trail closures</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="ramp" name="type" value="Ramp closures"><label class="form-check-label" for="ramp">Ramp closures</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="highImpact" name="type" value="High-impact construction"><label class="form-check-label" for="highImpact">High-impact construction</label></div><div class="form-check"><input type="checkbox" class="form-check-input" id="cameras" name="type" value="Cameras"><label class="form-check-label" for="cameras">Cameras</label></div></div><button type="submit" id="filterSubmit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63); margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button></form></div><div class="col-lg-10 col-sm-12 col-md-9"><div id="map"></div></div></div>
                 </div>
                   
         </div>
@@ -221,11 +168,7 @@
                                 popupAnchor: [0, -41]
                             });
         
-
-
                  // all button checked 
-
-
                       document.addEventListener('DOMContentLoaded', function() {
     
                         const allCheckbox = document.getElementById('all');
@@ -333,6 +276,8 @@
                 })
                 .catch(error => console.error('Error fetching map data:', error));
         }
+      
+
         
         // Initial fetch of map data
         fetchMapData();
@@ -389,7 +334,7 @@
 // Handle form submission and fetch data based on filters
 document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault();
-
+    const debouncedFetchMapData = _.debounce(fetchMapData, 300); // 300ms debounce time
     const startDate = document.getElementById('start').value;
     const endDate = document.getElementById('end').value;
 
@@ -404,7 +349,7 @@ document.querySelector('form').addEventListener('submit', function (e) {
         types = [];
     }
 
-    fetchMapData(startDate, endDate, types);
+    debouncedFetchMapData(startDate, endDate, types);
 });
 
 // document.addEventListener("DOMContentLoaded", function() {
