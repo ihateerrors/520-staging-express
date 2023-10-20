@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+<!-- 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}; gtag("js", new Date()); gtag("set", "developer_id.dMDhkMT", true); gtag("config", "UA-970887-21", {"groups": "default", "anonymize_ip": true, "page_placeholder": "PLACEHOLDER_page_path"});</script> -->
+  <link rel="canonical" href="#" />
+  <meta name="description"
+    content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
+  
+  <title>SR 520 Construction | WSDOT</title>
+
+  <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+    integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    
+    <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
+    <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
+    
+    <script src="https://kit.fontawesome.com/da8d22a218.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" media="all" href="/css/styles2.css" /> -->
+    <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+
+</head>
+
+  <body>
+
+    <%- include('partials/header') %>
+
+<p></p>
+    <main>
+
+
+
+<!-- ###  Main container  ### -->
+     <div class="container4" style="padding-left: 5%; padding-right: 3%; margin-top: 20px; margin-bottom: 20px;"> 
+        <!-- #########   start maps  ######## -->
+
+       <div class="container-fluid">
+          <div class="row"> 
+            <div class="blockhead" style="display: block; margin-left: 3%;"> 
+          <h1 class="wdot-dkgreen">SR 520 Construction Corner</h1>
+          <p><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
+   
+      </div>
+          </div>
+        </div>
+
+        <div id="construction-map">
+          <div class="row">     
+            <div class="col-lg-9 col-md-12 col-sm-12" style="display: block;">   
+                  <div class="togglerow" style="justify-content: space-between;"> 
+                  <button id="map1Button" class="parallelogram-link map-tab" >SR 520 Construction Map</button>
+                  <button id="map2Button" class="parallelogram-link map-tab" >WSDOT Travel Map</button>
+                </div>
+                  <!-- Map Column -->
+              
+                  
+                        <div class="mapcontainer" style="max-width: 100%;">
+                                  <div id="map1" style="display: block;">
+
+                                    <%- include('partials/_mapPartial.ejs') %>               
+                      
+                                      </div>
+
+                                      <!-- iframe Map -->
+                        
+                                  <div id="map2" class="d-none"><p></p> 
+                                    <iframe src="https://wsdot.com/Travel/Real-time/Map/?featuretype=camera&featureid=9648" width="100%"  height="775px"></iframe>                
+                                  
+                                  </div>   
+                             
+                                </div >
+                                <p style="font-size: 18px; font-weight: 400;"><i>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </i></p>  
+                      </div>
+             
+             
+               
+              <!-- Right Sidebar -->
+              <div class="col-lg-3 vanishing pt-5 mt-5">
+                <!-- Card 1 -->
+                <div style="margin-left: 25px;">
+        
+                  <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures </strong></p>
+
+                  <!-- <div id="sidebarList">  -->
+                             <% closures.forEach(closure => { %>
+                              <li class="closure-item">
+                                  <span class="icon-box"><img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img"></span>&nbsp;&nbsp;
+                                  <a href="/projects/<%= closure._id %>" ><%= closure.activityName %></a>
+                              </li>
+                              <% }); %>
+                     <!-- </div> -->
+
+
+                    <br>
+                  </div>                              
+                </div>
+                 
+             <!-- END Right Sidebar col -->
+                </div>
+             </div>
+         
+        </div>   
+      </div>
+    </div>
+   </div>
+
+ </div>
+
+      </main>
+  
+  
+<!-- NEW container for cards start  -->
+<%- include('partials/horizontal-cards') %>
+
+ <!-- ## Start footer ###  -->
+ <%- include('partials/footer') %>
+
+<!-- ### End footer ### -->
+
+<script>
+    // Create the Leaflet map
+    const map = L.map('map').setView([47.6407, -122.2971], 13);
+    
+    // Add Google Map layer to Leaflet map
+    L.gridLayer.googleMutant({
+        type: 'roadmap',
+        maxZoom: 20,
+        apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+    }).addTo(map);
+
+    // Define activity icons
+    const activityIcons = {
+        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
+        "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
+    };
+    // Define default styling values
+    const defaultColor = '#f4661a';
+    const defaultWidth = 8;
+
+    function fetchMapData(startDate = '', endDate = '', types = []) {
+        const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    data.forEach(project => {
+                        project.lines.forEach(line => {
+                            let polyline = L.polyline(line.coordinates, {
+                                color: activityIcons[project.type] ? activityIcons[project.type] : defaultColor,
+                                weight: defaultWidth
+                            }).addTo(map);
+                        });
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching map data:', error));
+    }
+
+    // Initial fetch of map data
+    fetchMapData();
+
+    // Camera section - Adding camera markers on the map
+    const cameras = [
+    { 
+        lat: 47.644611, 
+        lng: -122.304694, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_3/view_1'
+    },
+    { 
+        lat: 47.645056, 
+        lng: -122.301972, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_1/view_1'
+    },
+    { 
+        lat: 47.644861, 
+        lng: -122.298111, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_2/view_1'
+    },
+    { 
+        lat: 47.644861, 
+        lng: -122.298583, 
+        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_4/view_1'
+    }
+];
+
+    const cameraIcon = L.icon({
+        iconUrl: 'https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png',
+        iconSize: [26, 26],
+        popupAnchor: [0, -15]
+    });
+
+    cameras.forEach(camera => {
+        const marker = L.marker([camera.lat, camera.lng], { icon: cameraIcon }).addTo(map);
+        marker.bindPopup(
+            `<div style="width: 100%; padding: 15px;"> 
+                <p>
+                    <iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe>
+                </p>
+            </div>`,
+            {
+                maxWidth: 480,
+                minWidth: 480,
+            }
+        );
+    });
+
+    let previousView = null;
+
+    map.on('popupopen', function() {
+        previousView = {
+            center: map.getCenter(),
+            zoom: map.getZoom()
+        };
+    });
+
+    map.on('popupclose', function() {
+        if (previousView) {
+            map.setView(previousView.center, previousView.zoom);
+        }
+    });
+
+    // Handle form submission and fetch data based on filters
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const startDate = document.getElementById('start').value;
+        const endDate = document.getElementById('end').value;
+        const types = [];
+        if (document.getElementById('fullHighway').checked) types.push('Full highway closure');
+        if (document.getElementById('partialHighway').checked) types.push('Partial highway closure');
+        if (document.getElementById('streetLane').checked) types.push('Street and lane closure');
+        if (document.getElementById('trail').checked) types.push('Trail closure');
+        if (document.getElementById('ramp').checked) types.push('Ramp closure');
+        if (document.getElementById('highImpact').checked) types.push('High-impact construction');
+        if (document.getElementById('Cameras').checked) types.push('Cameras');
+
+        map.eachLayer(function (layer) {
+            if (layer instanceof L.TileLayer) return;
+            map.removeLayer(layer);
+        });
+
+        fetchMapData(startDate, endDate, types);
+    });
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script> -->
+
+
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+   <!-- ### Map toggle scripts -->
+   <script> 
+    const map1Button = document.getElementById('map1Button');
+    const map2Button = document.getElementById('map2Button');
+    const map1 = document.getElementById('map1');
+    const map2 = document.getElementById('map2');
+    
+    map1Button.addEventListener('click', function() {
+        map1.classList.remove('d-none');
+        map1.classList.add('d-block');
+        map2.classList.remove('d-block');
+        map2.classList.add('d-none');
+    });
+    
+    map2Button.addEventListener('click', function() {
+        map1.classList.remove('d-block');
+        map1.classList.add('d-none');
+        map2.classList.remove('d-none');
+        map2.classList.add('d-block');
+      });
+
+        </script>
+
+</body>
+
+</html>

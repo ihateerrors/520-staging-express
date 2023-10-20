@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description"
+    content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
+
+  <meta name="MobileOptimized" content="width" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="favicon.ico" /> 
+  <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
+  <title>SR 520 Construction | WSDOT</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+    type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <!-- Leaflet and Leaflet.draw CDN -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+
+
+
+  </head>
+
+
+
+
+  <body>
+    <div class="container">
+
+        <section class="form-area mt-5 ml-5 mr-5">
+
+           
+<form action="/api/projects" method="post" enctype="multipart/form-data">
+
+    <!-- Construction Activity Name -->
+    <div class="mb-3">
+        <label for="activityName" class="form-label">Construction Title</label>
+        <input type="text" class="form-control" id="activityName" name="activityName">
+    </div>
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="location" placeholder="Address, cross streets, etc.">
+    </div>
+
+    <!-- Start Date -->
+    <div class="mb-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" class="form-control" id="startDate" name="startDate">
+    </div>
+
+    <!-- End Date -->
+    <div class="mb-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" class="form-control" id="endDate" name="endDate">
+    </div>
+
+    <!-- Time -->
+    <div class="mb-3">
+        <label for="time" class="form-label">Time</label>
+        <input type="text" class="form-control" id="time" name="time" placeholder="10:00 AM - 5:00 PM">
+    </div>
+
+    <!-- Timing Features -->
+    <div class="mb-3">
+        <p>Timing Features</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Around-the-clock" id="aroundTheClock" name="timingFeatures[]">
+            <label class="form-check-label" for="aroundTheClock">Around-the-clock</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Nighttime" id="nighttime" name="timingFeatures[]">
+            <label class="form-check-label" for="nighttime">Nighttime</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Daytime" id="daytime" name="timingFeatures[]">
+            <label class="form-check-label" for="daytime">Daytime</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Overnight" id="overnight" name="timingFeatures[]">
+            <label class="form-check-label" for="overnight">Overnight</label>
+        </div>
+    </div>
+
+    <!-- Activity Description -->
+    <div class="mb-3">
+        <label for="description" class="form-label">Activity Description</label>
+        <textarea class="form-control" id="description" rows="4" name="description"></textarea>
+    </div>
+
+     <!-- Activity Description -->
+
+    <!-- Activity Type -->    <div class="mb-3">
+        <label for="trafficDescription" class="form-label">Traffic Description</label>
+        <textarea class="form-control" id="trafficDescription" rows="4" name="trafficDescription"></textarea>
+    </div>
+    <div class="mb-3">
+        <p>Activity Type</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Full highway closure" id="fullHighway" name="activityType[]">
+            <label class="form-check-label" for="fullHighway">Full highway closure</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Partial highway closure" id="partialHighway" name="activityType[]">
+            <label class="form-check-label" for="partialHighway">Partial highway closure</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Street or lane closure" id="streetClosure" name="activityType[]">
+            <label class="form-check-label" for="streetClosure">Street or lane closure</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Trail closure" id="trailClosure" name="activityType[]">
+            <label class="form-check-label" for="trailClosure">Trail closure</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Ramp closure" id="rampClosure" name="activityType[]">
+            <label class="form-check-label" for="rampClosure">Ramp closure</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="High-impact construction" id="highImpact" name="activityType[]">
+            <label class="form-check-label" for="highImpact">High-impact construction</label>
+        </div>
+    </div>
+
+    <!-- Impact Type -->
+    <div class="mb-3">
+        <p>Impact Type</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Bike/pedestrian" id="bikePedestrian" name="impactType[]">
+            <label class="form-check-label" for="bikePedestrian">Bike/pedestrian</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Light" id="light" name="impactType[]">
+            <label class="form-check-label" for="light">Light</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Traffic" id="traffic" name="impactType[]">
+            <label class="form-check-label" for="traffic">Traffic</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Dust" id="dust" name="impactType[]">
+            <label class="form-check-label" for="dust">Dust</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Noise" id="noise" name="impactType[]">
+            <label class="form-check-label" for="noise">Noise</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Vibration" id="vibration" name="impactType[]">
+            <label class="form-check-label" for="vibration">Vibration</label>
+        </div>
+    </div>
+
+    <!-- Graphic/Photo Upload -->
+    <div class="mb-3">
+        <label for="file" class="form-label">Upload a Graphic/Photo</label>
+        <input type="file" class="form-control" id="file" name="file">
+    </div>
+
+
+    <div class="mb-3">
+        <label class="form-label">Map</label>
+    
+        <!-- Color and width pickers added above the map -->
+        <div class="map-controls">
+            <label for="colorPicker">Choose a color:</label>
+            <input type="color" id="colorPicker" name="color" value="#3388ff">
+    
+            <label for="widthPicker" style="margin-left: 20px;">Choose line width:</label>
+            <input type="number" id="widthPicker" name="width" min="1" max="10" value="3">
+        </div>
+        
+        <!-- Your existing map container -->
+        <div id="map" style="width: 1200px; height: 600px;">    
+        </div>
+    
+        <input type="hidden" id="mapData" name="mapData">
+    </div>
+    
+ 
+<!-- Banner content? -->
+<div class="mb-3">
+    <label for="bannerContent" class="form-label">Banner content?</label>
+    <select class="form-control" id="bannerContent" name="bannerContent">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
+</div>
+
+<!-- Start Date -->
+<div class="mb-3">
+    <label for="postDate" class="form-label">Post online on:</label>
+    <input type="date" class="form-control" id="postDate" name="postDate" required>
+</div>
+
+<!-- End Date -->
+<div class="mb-3">
+    <label for="removeDate" class="form-label">Remove post on:</label>
+    <input type="date" class="form-control" id="removeDate" name="removeDate">
+</div>
+
+    <!-- Contact Block -->
+    <div class="mb-3">
+        <label for="contact" class="form-label">Contact Block</label>
+        <select class="form-select" id="contact" name="contact">
+            <option value="address1">Address 1</option>
+            <option value="address2">Address 2</option>
+            <option value="address3">Address 3</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+        </section>
+
+    </div>
+
+    <% if(success_msg) { %>
+        <div class="alert alert-success">
+            <%= success_msg %>
+        </div>
+    <% } %>
+    
+    <% if(error_msg) { %>
+        <div class="alert alert-danger">
+            <%= error_msg %>
+        </div>
+    <% } %>
+
+
+
+<!-- Your Form's HTML -->
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+
+<script>
+const map = L.map('map').setView([47.6407, -122.2971], 15);  // SR 520 area
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+const drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+
+const defaultColor = '#c10a0a;';  // A default color to start with
+const defaultWidth = 8;         // A default width
+
+const drawControl = new L.Control.Draw({
+    draw: {
+        polygon: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        polyline: {
+            shapeOptions: {
+                color: defaultColor,
+                weight: defaultWidth
+            }
+        },
+        rectangle: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        circle: {
+            shapeOptions: {
+                color: defaultColor
+            }
+        },
+        marker: true
+    },
+    edit: {
+        featureGroup: drawnItems,
+        edit: false
+    }
+});
+map.addControl(drawControl);
+
+
+map.on('draw:created', function(event) {
+    const layer = event.layer;
+
+    // Adding style data directly to the layer so it gets included in the GeoJSON
+    if (layer instanceof L.Polyline) {
+        layer.setStyle({
+            color: document.getElementById('colorPicker').value,
+            weight: parseInt(document.getElementById('widthPicker').value)
+        });
+    } else if (layer instanceof L.Polygon || layer instanceof L.Rectangle || layer instanceof L.Circle) {
+        layer.setStyle({
+            color: document.getElementById('colorPicker').value
+        });
+    }
+
+    drawnItems.addLayer(layer);
+
+    // Save the drawn shape data for form submission
+    const shapes = drawnItems.toGeoJSON();
+    document.getElementById('mapData').value = JSON.stringify(shapes);
+});
+
+
+// Interface for user customization
+document.getElementById('colorPicker').addEventListener('input', (event) => {
+    const selectedColor = event.target.value;
+    drawControl.setDrawingOptions({
+        polygon: { shapeOptions: { color: selectedColor } },
+        polyline: { shapeOptions: { color: selectedColor, weight: parseInt(document.getElementById('widthPicker').value) } },
+        rectangle: { shapeOptions: { color: selectedColor } },
+        circle: { shapeOptions: { color: selectedColor } }
+    });
+});
+
+document.getElementById('widthPicker').addEventListener('input', (event) => {
+    const selectedWidth = parseInt(event.target.value);
+    drawControl.setDrawingOptions({
+        polyline: { shapeOptions: { weight: selectedWidth, color: document.getElementById('colorPicker').value } }
+    });
+});
+
+</script>
+
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6g9Kv4dkd6" crossorigin="anonymous"></script>  -->
+    
+  </body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
