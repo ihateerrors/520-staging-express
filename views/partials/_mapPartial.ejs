@@ -236,14 +236,23 @@ document.addEventListener("DOMContentLoaded", function(){
 
             const popupContent = `
             <div class="popup-content">
-               <h3>${project.activityName}</h3>
-               <p><span style="font-weight: 600">Start:</span>${formattedStartDate}<br>
-               <span style="font-weight: 600">End:</span>${formattedEndDate}<br>
-               <span style="font-weight: 600">Time:</span>${project.time}</p>
-               <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML}</div>
-               <p>${project.description || "Not specified"}</p>
-               <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
-            </div>`;
+                            <h3>${project.activityName}</h3>
+                            <p>
+                                <span style="font-weight: 600">Start:</span>${formattedStartDate}<br>
+                                <span style="font-weight: 600">End:</span>${formattedEndDate}<br>
+                                <span style="font-weight: 600">Time:</span>${project.time}
+                            </p>
+                            <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;<br>${activityTypeHTML} </div>
+                            <p>${project.description || "Not specified"}</p>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
+                            <br><br>
+                            <p>
+                                <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
+                                Email: sr520bridge@wsdot.wa.gov<br/>
+                                24-hour construction hotline: ${project.contact} 
+                            </p>
+                        </div>
+            `;
 
             const iconUrl = activityIcons[project.activityType[0]];
             if (!iconUrl) {
