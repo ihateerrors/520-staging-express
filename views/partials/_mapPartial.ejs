@@ -30,6 +30,17 @@
     cursor: pointer;
     margin: 10px;
 }
+ /* .timing-features {
+    display: inline-flex;
+    flex-wrap: wrap;
+    max-width: 300px;
+    margin-top: .6em;
+    margin-bottom: .6em;
+    
+ } */
+.popup-content{
+    font-size: 1em;
+}
 
 /* Hide form and show toggle icon on smaller screen sizes */
 @media (max-width: 600px) {
@@ -227,22 +238,23 @@ document.addEventListener("DOMContentLoaded", function(){
             const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
 
             const timingFeaturesHTML = project.timingFeatures.map(feature =>
-                `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature}`
+                `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">&nbsp;&nbsp;${feature}`
             ).join(' ');
 
             const activityTypeHTML = project.activityType.map(type =>
-                `<img src="${activityIcons[type] || "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png"}" alt="Checked Mark" width="25" height="25">${type}`
+                `<img src="${activityIcons[type] || "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png"}" alt="Checked Mark" width="25" height="25">&nbsp;&nbsp;${type}`
             ).join(' ');
 
             const popupContent = `
-            <div class="popup-content">
+                       <div class="popup-content">
                             <h3>${project.activityName}</h3>
-                            <p>
-                                <span style="font-weight: 600">Start:</span>${formattedStartDate}<br>
-                                <span style="font-weight: 600">End:</span>${formattedEndDate}<br>
-                                <span style="font-weight: 600">Time:</span>${project.time}
-                            </p>
-                            <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>
+                            <div style="margin-top: 20px;">
+                                <span class=mt-3 mb-2" style="font-weight: 600">Start:</span>${formattedStartDate}<br>
+                                <span class="mb-3" style="font-weight: 600">End:</span>${formattedEndDate}<br>
+                                <span class="mb-4" style="margin-bottom: 2.5em;>Time:</span>${project.time}<br>
+                                <div class="timing-features mt-3">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;<br><span style="margin-top: 2.1em"> ${activityTypeHTML}<span></div>
+                            </div>
+                     
                             <p>${project.description || "Not specified"}</p>
                             <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
                             <br><br>
