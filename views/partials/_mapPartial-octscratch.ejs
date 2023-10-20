@@ -1,3 +1,136 @@
+
+
+
+
+
+
+
+
+
+<script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // ... [Other code remains unchanged]
+
+    function handleFetchedData(data) {
+        if (data && data.length > 0) {
+            data.forEach(project => {
+                if (!project.mapData || !Array.isArray(project.mapData)) {
+                    console.warn(`Invalid mapData for project with ID ${project._id}`);
+                    return;
+                }
+                
+                let geoJSONData = null;
+                if (typeof project.mapData[1] === 'string') {
+                    try {
+                        geoJSONData = JSON.parse(project.mapData[1]);
+                    } catch (e) {
+                        console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                        return;
+                    }
+                }
+                if (!geoJSONData) {
+                    console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                    return;
+                }
+
+                const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+                const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+
+                const timingFeaturesHTML = project.timingFeatures.map(feature =>
+                    `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature}`
+                ).join(' ');
+
+                const activityTypeHTML = project.activityType.map(type =>
+                    `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${type}`
+                ).join(' ');
+
+                let iconURL = null;
+                for (let i = 0; i < project.activityType.length; i++) {
+                    iconURL = activityIcons[project.activityType[i]];
+                    if (iconURL) break;
+                }
+
+                if (!iconURL) {
+                    console.warn(`No icon found for activity types: ${project.activityType.join(', ')}`);
+                    iconURL = "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png";
+                }
+
+                const geoJSONLayer = L.geoJSON(geoJSONData, {
+                                }).bindPopup(
+                    `<strong>${project.title}</strong><br>Start: ${formattedStartDate}<br>End: ${formattedEndDate}<br>Timing Features: ${timingFeaturesHTML}<br>Activity Type: ${activityTypeHTML}`
+                ).addTo(mapLayerGroup);
+            });
+        }
+    }
+
+    // ... [Other code remains unchanged]
+
+    function setupFormSubmission() {
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const startDate = document.getElementById('start').value;
+            const endDate = document.getElementById('end').value;
+            const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+
+            let types = [];
+            checkboxes.forEach(checkbox => {
+                types.push(checkbox.value);
+            });
+
+            if (document.getElementById('all').checked) {
+                types = [];
+            }
+
+            fetchMapData(startDate, endDate, types);
+        });
+    }
+});
+
+</script>
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

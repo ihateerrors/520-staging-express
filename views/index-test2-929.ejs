@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+<!-- 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}; gtag("js", new Date()); gtag("set", "developer_id.dMDhkMT", true); gtag("config", "UA-970887-21", {"groups": "default", "anonymize_ip": true, "page_placeholder": "PLACEHOLDER_page_path"});</script> -->
+  <link rel="canonical" href="#" />
+  <meta name="description"
+    content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
+  
+  <title>SR 520 Construction | WSDOT</title>
+
+  <link rel="stylesheet" media="all" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+    integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
+    
+    
+    <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
+    <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
+    <script src="https://kit.fontawesome.com/da8d22a218.js" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+
+<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+<!-- Google Maps JavaScript API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+</head>
+
+  <body>
+
+    <%- include('partials/header') %>
+
+<p></p>
+    <main>
+
+
+
+<!-- ###  Main container  ### -->
+     <div class="container4" style="padding-left: 5%; padding-right: 3%; margin-top: 20px; margin-bottom: 20px;"> 
+        <!-- #########   start maps  ######## -->
+
+       <div class="container-fluid">
+          <div class="row"> 
+            <div class="blockhead" style="display: block; margin-left: 3%;"> 
+          <h1 class="wdot-dkgreen">SR 520 Construction Corner</h1>
+          <p><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
+   
+      </div>
+          </div>
+        </div>
+
+        <div id="construction-map">
+          <div class="row">     
+            <div class="col-lg-9 col-md-12 col-sm-12" style="display: block;">   
+                  <div class="togglerow" style="justify-content: space-between;"> 
+                  <button id="map1Button" class="parallelogram-link map-tab" >SR 520 Construction Map</button>
+                  <button id="map2Button" class="parallelogram-link map-tab" >WSDOT Travel Map</button>
+                </div>
+                  <!-- Map Column -->
+              
+                  
+                        <div class="mapcontainer" style="max-width: 100%;">
+                                  <div id="map1" style="display: block;">
+
+                        <!-- ### START MAP AND FILTER FORM  ###         -->
+
+                        <div class="exp-map" style="width: 100%">
+                            <div class="container-fluid" style="display: block;">
+                                                 <div class="row">
+                                                    <div class="col-lg-2 col-md-3 col-sm-12">
+                                                    <form class="mt-5">
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-md-12 mt-2">
+                                                                <div class="form-group">
+                                                                    <label>Start Date</label>
+                                                                    <input type="date" class="form-control" style="font-size: 1em" id="start" />
+                                                                </div>
+                                                            </div>
+                                        
+                                                            <div class="col-sm-6 col-md-12 mt-2">
+                                                                <div class="form-group">
+                                                                    <label>End Date</label>
+                                                                    <input type="date" class="form-control" style="font-size: 1em" id="end" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                        
+                                                        <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="all">
+                                                                <label class="form-check-label" for="all">All</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="fullHighway">
+                                                                <label class="form-check-label" for="fullHighway">Full highway closures</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="partialHighway">
+                                                                <label class="form-check-label" for="partialHighway">Partial highway closures</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="streetLane">
+                                                                <label class="form-check-label" for="streetLane">Street and lane closures</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="trail">
+                                                                <label class="form-check-label" for="trail">Trail closures</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="ramp">
+                                                                <label class="form-check-label" for="ramp">Ramp closures</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="highImpact">
+                                                                <label class="form-check-label" for="highImpact">High-impact construction</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="cameras">
+                                                                <label class="form-check-label" for="cameras">Cameras</label>
+                                                            </div>
+                                                        </div>
+                                                                
+                                                        <button type="submit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63);
+                                                        margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button>
+                                                    </form>
+                                                </div>
+                                        
+                                                <div class="col-lg-10 col-sm-12 col-md-9">
+                                                    <div id="map"></div>
+                                                </div>
+                                            </div>
+                                        </div>                  
+                                </div>
+
+
+
+
+                           <!-- ### END MAP AND FILTER FORM  ###         -->
+                      
+                                      </div>
+
+                                      <!-- iframe Map -->
+                        
+                                  <div id="map2" class="d-none"><p></p> 
+                                    <iframe src="https://wsdot.com/Travel/Real-time/Map/?featuretype=camera&featureid=9648" width="100%"  height="775px"></iframe>                
+                                  
+                                  </div>   
+                             
+                                </div >
+                                <p style="font-size: 18px; font-weight: 400;"><i>Note: This tool is presented for planning purposes only. Construction work is dependent on weather and other factors, and activities are subject to change. </i></p>  
+                      </div>
+             
+             
+               
+              <!-- Right Sidebar -->
+              <div class="col-lg-3 vanishing pt-5 mt-5">
+                <!-- Card 1 -->
+                <div style="margin-left: 25px;">
+        
+                  <p class="text-center wdot-dkgreen"><strong>Current and upcoming closures </strong></p>
+
+                  <!-- <div id="sidebarList">  -->
+                             <% closures.forEach(closure => { %>
+                              <li class="closure-item">
+                                  <span class="icon-box"><img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img"></span>&nbsp;&nbsp;
+                                  <a href="/projects/<%= closure._id %>" ><%= closure.activityName %></a>
+                              </li>
+                              <% }); %>
+                     <!-- </div> -->
+
+
+                    <br>
+                  </div>                              
+                </div>
+                 
+             <!-- END Right Sidebar col -->
+                </div>
+             </div>
+         
+        </div>   
+      </div>
+    </div>
+   </div>
+
+ </div>
+
+      </main>
+  
+  
+<!-- NEW container for cards start  -->
+<%- include('partials/horizontal-cards') %>
+
+ <!-- ## Start footer ###  -->
+ <%- include('partials/footer') %>
+
+<!-- ### End footer ### -->
+
+<script>
+    // Create the Leaflet map
+    const map = L.map('map').setView([47.6407, -122.2971], 13);
+    
+    // Add Google Map layer to Leaflet map
+    L.gridLayer.googleMutant({
+        type: 'roadmap',
+        maxZoom: 20,
+        apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+    }).addTo(map);
+
+    // Define activity icons
+    const activityIcons = {
+        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
+        "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
+    };
+    
+    const defaultColor = '#f4661a';
+    const defaultWidth = 8;
+
+    let currentLayer = null;
+
+    function fetchMapData() {
+    // Get the selected date ranges from the date input fields
+    const startDate = document.querySelector('#start').value;
+    const endDate = document.querySelector('#end').value;
+
+    // Get the selected construction types from the checkboxes
+    let selectedTypes = [];
+    const constructionTypeDiv = document.querySelector('#constructionType');
+    const checkboxes = constructionTypeDiv.querySelectorAll('input[type="checkbox"]:checked');
+
+    checkboxes.forEach(checkbox => {
+        // This checks for the 'all' checkbox and if it's checked, the loop breaks early
+        if (checkbox.id === 'all') return;
+        
+        selectedTypes.push(checkbox.id);
+    });
+
+    // Modify the apiUrl to incorporate the selected filters
+    const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${selectedTypes.join(",")}`;
+
+    fetch(apiUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // clear previous data
+        if (currentLayer) {
+            map.removeLayer(currentLayer);
+        }
+        if (data && data.length > 0) {
+            let geoJSONData = [];
+            data.forEach(project => {
+                if (project.mapData && Array.isArray(project.mapData)) {
+                    let parsedGeoJSONData = typeof project.mapData[1] === 'string' ? JSON.parse(project.mapData[1]) : project.mapData[1];
+                    geoJSONData.push(parsedGeoJSONData);
+                }
+            });
+            
+            currentLayer = L.geoJSON(geoJSONData, {
+                style: function(feature) {
+                    return {
+                        color: feature.properties.color || defaultColor,
+                        weight: feature.properties.width || defaultWidth
+                    };
+                },
+                pointToLayer: function (feature, latlng) {
+                    console.log("Icon URL for", feature.properties.activityType, "is", iconUrl);
+
+                    let iconUrl = activityIcons[feature.properties.activityType];
+                    if (!iconUrl) {
+                        return L.marker(latlng);
+                    }
+                    const customIcon = L.icon({
+                        iconUrl: iconUrl,
+                        iconSize: [26, 26],
+                        popupAnchor: [0, -41]
+                    });
+                    return L.marker(latlng, { icon: customIcon });
+                },
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties.description) {
+                        layer.bindPopup(feature.properties.description);
+                    }
+                }
+            }).addTo(map);
+        }
+    })
+    .catch(error => console.error('Error fetching map data:', error));
+}
+
+    // Initial fetch of map data
+    fetchMapData();
+
+    // On form submission, update the map data based on the filter inputs
+    document.querySelector('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const startDate = document.getElementById('start').value;
+        const endDate = document.getElementById('end').value;
+        const types = [];
+        
+        ['fullHighway', 'partialHighway', 'streetLane', 'trail', 'ramp', 'highImpact', 'Cameras'].forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem && elem.checked) {
+                types.push(elem.value);
+            }
+        });
+
+        fetchMapData(startDate, endDate, types);
+    });
+
+    
+
+    // Code for handling mapData from the form, if it exists
+    const mapDataElement = document.getElementById('mapData');
+    if (mapDataElement && mapDataElement.value) {
+        const geoJSONDataFromForm = JSON.parse(mapDataElement.value);
+        L.geoJSON(geoJSONDataFromForm, {
+            style: function(feature) {
+                return {
+                    color: feature.properties.color || defaultColor,
+                    weight: feature.properties.width || defaultWidth
+                };
+            }
+        }).addTo(map);
+    }
+
+    // Handlers for popups to manage view
+    let previousView = null;
+
+    map.on('popupopen', function() {
+        previousView = {
+            center: map.getCenter(),
+            zoom: map.getZoom()
+        };
+    });
+
+    map.on('popupclose', function() {
+        if (previousView) {
+            map.setView(previousView.center, previousView.zoom);
+        }
+    });
+</script>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script> -->
+
+
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+   <!-- ### Map toggle scripts -->
+   <script> 
+    const map1Button = document.getElementById('map1Button');
+    const map2Button = document.getElementById('map2Button');
+    const map1 = document.getElementById('map1');
+    const map2 = document.getElementById('map2');
+    
+    map1Button.addEventListener('click', function() {
+        map1.classList.remove('d-none');
+        map1.classList.add('d-block');
+        map2.classList.remove('d-block');
+        map2.classList.add('d-none');
+    });
+    
+    map2Button.addEventListener('click', function() {
+        map1.classList.remove('d-block');
+        map1.classList.add('d-none');
+        map2.classList.remove('d-none');
+        map2.classList.add('d-block');
+      });
+
+        </script>
+
+</body>
+
+</html>

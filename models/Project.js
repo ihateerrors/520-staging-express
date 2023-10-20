@@ -34,7 +34,7 @@ const projectSchema = new mongoose.Schema({
         enum: [
             "Full highway closure",
             "Partial highway closure",
-            "Street or lane closure",
+            "Street and lane closures",
             "Trail closure",
             "Ramp closure",
             "High-impact construction",
