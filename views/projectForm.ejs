@@ -140,15 +140,26 @@ type="text/css" />
         <input type="text" class="form-control" id="time" name="time" placeholder="10:00 AM - 5:00 PM">
     </div>
 
-    <div class="mb-3">
-        <p style="font-size: 18px;">Timing Features</p>
-        <!-- Checkboxes for Timing Features -->
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Around-the-clock" id="aroundTheClock" name="timingFeatures[]">
-            <label class="form-check-label" for="aroundTheClock">Around-the-clock</label>
-        </div>
-        <!-- ... Other timing feature checkboxes ... -->
-    </div>
+            <div class="mb-3">
+                <p style="font-size: 18px;">Timing Features</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Around-the-clock" id="aroundTheClock" name="timingFeatures[]">
+                    <label class="form-check-label" for="aroundTheClock">Around-the-clock</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Nighttime" id="nighttime" name="timingFeatures[]">
+                    <label class="form-check-label" for="nighttime">Nighttime</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Daytime" id="daytime" name="timingFeatures[]">
+                    <label class="form-check-label" for="daytime">Daytime</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="Overnight" id="overnight" name="timingFeatures[]">
+                    <label class="form-check-label" for="overnight">Overnight</label>
+                </div>
+            </div>
+        
 
     <div class="mb-3" style="font-size: 18px;">
         <label for="description" class="form-label">Activity Description</label>
