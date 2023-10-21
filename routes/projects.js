@@ -29,6 +29,39 @@ router.post('/upload-pdf', upload.fields([{ name: 'montlakeNoiseReport' }, { nam
 });
 
 
+
+router.get("/dashboard", ensureAuthenticated, async (req, res) => {
+    try {
+        const projects = await Project.find({});
+
+        // Fetching the enum values from the Project model
+        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
+        const timingFeaturesEnums = Project.schema.path('timingFeatures').caster.enumValues;
+        const impactTypeEnums = Project.schema.path('impactType').caster.enumValues;
+
+        // Rendering logic remains the same, but we'll add the enum arrays to the rendered view
+        if (projects.length === 0) {
+            res.render("dashboard", {
+                projects: [],
+                allActivityTypes: activityTypeEnums,
+                allTimingFeatures: timingFeaturesEnums,
+                allImpactTypes: impactTypeEnums,
+                message: "No projects available."
+            });
+        } else {
+            res.render("dashboard", {
+                projects: projects,
+                allActivityTypes: activityTypeEnums,
+                allTimingFeatures: timingFeaturesEnums,
+                allImpactTypes: impactTypeEnums
+            });
+        }
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 router.get('/api/test', (req, res) => res.send('Test successful!'));
 
 router.get('/api/projects/mapData', async (req, res) => {

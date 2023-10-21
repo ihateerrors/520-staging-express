@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -91,7 +90,6 @@ strong {
   </head>
   <body>
     
-    
     <header id="header" style="width: 100vw">
         <div class="container-fluid header-container">
           <div class="row">
@@ -166,69 +164,61 @@ strong {
                     </div>
 
             <div class="accordion" id="closureAccordion">
-                <% projects.forEach((project, index) => { %>
+                <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
-                                <%= project.activityName %>
+                                <%= closure.activityName %>
                             </button>
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
                             <strong>Activity Name:</strong>
-                            <input type="text" name="activityName" value="<%= project.activityName %>" disabled><br>
+                            <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
           
                          <div class="date-container">
                           <div class="date-item">
                               <strong>Start Date:</strong>
-                              <input type="date" name="startDate" value="<%= project.startDate.toISOString().split('T')[0] %>" disabled>
+                              <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
                           </div>
                       
                           <div class="date-item">
                               <strong>End Date:</strong>
-                              <input type="date" name="endDate" value="<%= project.endDate ? project.endDate.toISOString().split('T')[0] : '' %>" disabled>
+                              <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
                           </div>
                       </div>
                                           <strong>Time:</strong>
-                            <input type="text" name="time" value="<%= project.time || '' %>" disabled>
+                            <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
                             <strong>Location:</strong>
-                            <input type="text" class="mb-3" name="location" value="<%= project.location || '' %>" disabled>
+                            <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
 
                             
                             <strong>Description:</strong>
-                            <input type="text" name="description" value="<%= project.description || '' %>" disabled>
+                            <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
-                            <input type="text" name="trafficDescription" value="<%= project.trafficDescription || '' %>" disabled>
+                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
                                                      
-            <strong>Activity Type:</strong>
-            <div>
-                <% allActivityTypes.forEach(type=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=type %>" <% if(projects.activityType.includes(type)){ %>checked <%} %>id="activity_
-                            <%=type.replace( / /g, '_' ) %>" name="activityType[]"><label class="form-check-label"
-                                    for="activity_<%=type.replace(/ /g, '_') %>">
-                                    <%=type %>
-                                </label></div>
-                    <%}); %>
-            </div><strong>Timing Features:</strong>
-            <div>
-                <% allTimingFeatures.forEach(feature=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=feature %>" <% if(projects.timingFeatures && projects.timingFeatures.includes(feature)){
-                            %>checked <%} %>id="timing_<%=feature.replace( / /g, '_' ) %>" name="timingFeatures[]"><label
-                                    class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>">
-                                    <%=feature %>
-                                </label></div>
-                    <%}); %>
-            </div><strong>Impact Type:</strong>
-            <div>
-                <% allImpactTypes.forEach(impact=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=impact %>" <% if(projects.impactType && projects.impactType.includes(impact)){ %>checked <%}
-                            %>id="impact_<%=impact.replace( / /g, '_' ) %>" name="impactType[]"><label class="form-check-label"
-                                    for="impact_<%=impact.replace(/ /g, '_') %>">
-                                    <%=impact %>
-                                </label></div>
-                    <%}); %>
-            </div>
+                          <strong>Activity Type:</strong> 
+                            <ul> 
+                                <% closure.activityType.forEach(type => { %>
+                                    <li><%= type %></li>
+                                <% }); %>
+                            </ul>
+
+                            <strong>Timing Features:</strong> 
+                            <ul>
+                                <% closure.timingFeatures.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                <% }); %>
+                            </ul>
+        
+                            <strong>Impact Type:</strong> 
+                            <ul>
+                                <% closure.impactType.forEach(impact => { %>
+                                    <li><%= impact %></li>
+                                <% }); %>
+                            </ul>
         
               
                             <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
@@ -236,10 +226,10 @@ strong {
                             imgElement.style.display = 'block';   -->
 
                             <strong>Image URL:</strong>
-                                    <% if (project.imageUrl){
+                                    <% if (closure.imageUrl){
                             
                                       %>                                 
-                                    <a href="<%=project.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=.iproject.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
+                                    <a href="<%=closure.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
                                     <% } else { %>
                                     <span class="edit-image">Replace image</span>
                                     <img id="img<%=index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
@@ -278,104 +268,105 @@ strong {
                                         </div>
                                     <% }); %>
                                 </div>
-                            </section>
+                                </section>
 
-                        </div>
+                            </div>
 
 <!-- END Form's HTML -->
 
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-    
-    console.log("Script started");
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log("Script started"); // Log when script starts
+  
+      const editButtons = document.querySelectorAll('.edit-btn');
+      const deleteButtons = document.querySelectorAll('.delete-btn');
+  
+      editButtons.forEach(editBtn => {
+    editBtn.addEventListener('click', function() {
+        console.log('Edit button clicked');
 
-    const editButtons = document.querySelectorAll('.edit-btn');
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+        const accordionItem = this.closest('.accordion-item');
+        console.log("Accordion item:", accordionItem);
 
-    editButtons.forEach(editBtn => {
-        editBtn.addEventListener('click', function() {
+        const inputs = accordionItem.querySelectorAll('input');
+        const fileInput = accordionItem.querySelector('input[type=file]');
+        console.log("Located file input:", fileInput);
 
-            const accordionItem = this.closest('.accordion-item');
-            const inputs = accordionItem.querySelectorAll('input');
-            const fileInput = accordionItem.querySelector('input[type=file]');
-            const id = this.getAttribute('data-id');
+        const id = this.getAttribute('data-id');
 
-            // Toggle the input fields' disabled state
-            inputs.forEach(input => input.disabled = !input.disabled);
+        // Toggle the input fields' disabled state
+        inputs.forEach(input => input.disabled = !input.disabled);
+        console.log("After toggle: File input disabled state:", fileInput.disabled); 
 
-            // Toggle button text between 'Edit' and 'Save'
-            if (this.innerText === 'Edit') {
-                this.innerText = 'Save';
-            } else {
-                // Save logic with FormData
-                const formData = new FormData();
-
-                inputs.forEach(input => {
-                    if (input.type !== 'file' && input.type !== 'checkbox') {
-                        formData.append(input.name, input.value);
-                    }
-                });
-
-                // Handle checkbox arrays
-                ['activityType', 'timingFeatures', 'impactType'].forEach(name => {
-                    const checkedValues = Array.from(accordionItem.querySelectorAll(`input[name="${name}[]"]:checked`)).map(input => input.value);
-                    formData.append(name, JSON.stringify(checkedValues));
-                });
-
-                if (fileInput.files[0]) {
-                    formData.append('image', fileInput.files[0]);
-                }
-
-                fetch(`/api/projects/${id}`, {
-                    method: 'PUT',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const alertPlaceholder = document.getElementById('alertPlaceholder');
-                    if (data.error) {
-                        console.error('Error:', data.error);
-                        alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                    } else {
-                        alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                    }
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    const alertPlaceholder = document.getElementById('alertPlaceholder');
-                    alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
-                    setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                });
-            }
-        });
-    });
-
-    // delete button logic
-    deleteButtons.forEach(deleteBtn => {
-        deleteBtn.addEventListener('click', async function() {
-            const accordionItem = this.closest('.accordion-item');
-            const id = this.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this closure?')) {
-                try {
-                    const response = await fetch(`/${id}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        accordionItem.remove();
-                        alert('Closure deleted successfully!');
-                    } else {
-                        const data = await response.json();
-                        alert('Error deleting closure: ' + data.error);
-                    }
-                } catch (err) {
-                    console.error('Error deleting closure:', err);
-                    alert('There was an error deleting the closure.');
-                }
-            }
-        });
-    });
-});
-
+        // Toggle button text between 'Edit' and 'Save'
+        if (this.innerText === 'Edit') {
+            this.innerText = 'Save';
+        } else {
+                  // Save logic with FormData
+                  const formData = new FormData();
+                  inputs.forEach(input => {
+                      if (input.type !== 'file') {
+                          formData.append(input.name, input.value);
+                      }
+                  });
+  
+                  if (fileInput.files[0]) {
+                      formData.append('image', fileInput.files[0]);
+                  }
+  
+                  fetch(`/api/projects/${id}`, {
+                      method: 'PUT',
+                      body: formData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      
+                      if (data.error) {
+                          console.error('Error:', data.error);
+                          // Display error alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      } else {
+                          // Display success alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      }
+                  })
+                  .catch(err => {
+                      console.error('Fetch error:', err);
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
+                      setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                  });
+              }
+          });
+      });
+  
+      // delete button start
+  
+      deleteButtons.forEach(deleteBtn => {
+          deleteBtn.addEventListener('click', async function() {
+              const accordionItem = this.closest('.accordion-item');
+              const id = this.getAttribute('data-id');
+              if (confirm('Are you sure you want to delete this closure?')) {
+                  try {
+                      const response = await fetch(`/closure/${id}`, { method: 'DELETE' });
+                      if (response.ok) {
+                          accordionItem.remove();
+                          alert('Closure deleted successfully!');
+                      } else {
+                          const data = await response.json();
+                          alert('Error deleting closure: ' + data.error);
+                      }
+                  } catch (err) {
+                      console.error('Error deleting closure:', err);
+                      alert('There was an error deleting the closure.');
+                  }
+              }
+          });
+      });
+  });
   </script>
   
     </body>
