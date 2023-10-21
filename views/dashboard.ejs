@@ -276,8 +276,8 @@ strong {
                             <strong>Updated At:</strong>
                             <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
           
-                            <button class="btn btn-md btn-secondary edit-btn" data-id="<%= closure._id %>">Edit</button>
-                            <button class="btn btn-md btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
+                            <button class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button class="btn btn-md btn-danger delete-btn">Delete</button>
                           </div>
                         </div>
                     </div>
@@ -367,13 +367,13 @@ strong {
                 const layer = event.layer;
                 drawnItems.addLayer(layer);
                 const geoJSON = drawnItems.toGeoJSON();
-                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                // dataInput.setAttribute('data-json', JSON.stringify(geoJSON)); TODO: Confirm this is correct
                 console.log('Created new layer:', geoJSON);
             });
             map.on(L.Draw.Event.EDITED, (event) => {
                 const layers = event.layers;
                 const geoJSON = layers.toGeoJSON();
-                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                // dataInput.setAttribute('data-json', JSON.stringify(geoJSON)); TODO: Confrim this is correct
                 console.log('Edited layer:', geoJSON);
             });
             console.log('Setup map data for project:', id);
