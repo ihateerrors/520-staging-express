@@ -176,7 +176,7 @@ strong {
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
-                            <input type="hidden" name="mapData" data-id="<%= closure._id %>" data-json="<%= closure.mapData[1] || '' %>" disabled>
+                            <input type="hidden" name="mapData" data-id="<%= closure._id %>" data-json="<%= closure.mapData || '' %>" disabled>
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= closure.activityName %>
                             </button>
@@ -313,10 +313,24 @@ strong {
     // Define default styling values
     const defaultColor = '#f4661a';
     const defaultWidth = 8;
+    const fallbackFeature = { type: "FeatureCollection", features: [] }; // TODO: Make sure this doesn't cause data loss
 
-    const addGeoJSON = (geoJSON, map) => {
+    const maybeSanitizeJSON = (json) => { // TODO: Kill this after refactor
+        let jsonString = json;
+        if (json.startsWith(',')) {
+            jsonString = json.slice(1);
+        } 
         try {
-            const geoJSONData = JSON.parse(geoJSON);
+            const parsedData = JSON.parse(jsonString);
+            return parsedData;
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+        }
+    }
+
+    const createInitialGeoLayer = (geoJSON) => {
+        try {
+            const geoJSONData = geoJSON ? maybeSanitizeJSON(geoJSON) : fallbackFeature;
             const geoLayer = L.geoJSON(geoJSONData, {
                 style: function (feature) {
                     return {
@@ -335,7 +349,7 @@ strong {
                     });
                     return L.marker(latlng, { icon: customIcon });
                 }
-            }).addTo(map);
+            });
             return geoLayer;
         } catch (e) {
             console.warn('Failed to setup GeoJSON layer:', e);
@@ -344,15 +358,15 @@ strong {
 
     const setUpMap = (geoJSON, id) => {
         const mapContainer = document.getElementById(`map-${id}`);
+        const dataInput = document.querySelector(`input[data-id="${id}"]`);
         const map = L.map(mapContainer).setView([47.6407, -122.2971], 8);
         L.gridLayer.googleMutant({
             type: 'roadmap',
             maxZoom: 17,
             apiKey: 'AIzaSyC-0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
         }).addTo(map);
-        let geoLayer = null;
-        if (geoJSON) {
-            geoLayer = addGeoJSON(geoJSON, map);
+        try {
+            const geoLayer = createInitialGeoLayer(geoJSON);
             const drawnItems = new L.featureGroup();
             geoLayer.eachLayer((layer) => {
                 drawnItems.addLayer(layer);
@@ -367,20 +381,23 @@ strong {
                 const layer = event.layer;
                 drawnItems.addLayer(layer);
                 const geoJSON = drawnItems.toGeoJSON();
-                // dataInput.setAttribute('data-json', JSON.stringify(geoJSON)); TODO: Confirm this is correct
-                console.log('Created new layer:', geoJSON);
+                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                console.log('Created new layer:', geoJSON); // TODO: Remove this
             });
             map.on(L.Draw.Event.EDITED, (event) => {
                 const layers = event.layers;
-                const geoJSON = layers.toGeoJSON();
-                // dataInput.setAttribute('data-json', JSON.stringify(geoJSON)); TODO: Confrim this is correct
-                console.log('Edited layer:', geoJSON);
+                const editedLayers = L.featureGroup();
+                layers.eachLayer((layer) => {
+                    editedLayers.addLayer(layer);
+                });
+                const geoJSON = editedLayers.toGeoJSON();
+                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                console.log('Edited layer:', geoJSON); // TODO: Remove this
             });
-            console.log('Setup map data for project:', id);
-        } else {
-            console.error('Could not add layer for:', id);
+            return { map, geoLayer };
+        } catch (e) {
+            console.error('Could not add layer to map:', e);
         }
-        return { map, geoLayer };
     };
 
     ready(() => {
@@ -417,13 +434,16 @@ strong {
                 inputs.forEach(input => input.disabled = !input.disabled);
                 console.log("After toggle: File input disabled state:", fileInput.disabled); 
                 // Toggle button text between 'Edit' and 'Save'
-                if (this.innerText === 'Edit') {
-                    this.innerText = 'Save';
+                if (editButton.innerText === 'Edit') {
+                    editButton.innerText = 'Save';
                 } else {
                     // Save logic with FormData
                     const formData = new FormData();
                     inputs.forEach(input => {
-                        if (input.type !== 'file') {
+                        if (input.type === 'file') return;
+                        if (input.name === 'mapData') {
+                            formData.append('mapData', input.getAttribute('data-json'));
+                        } else {
                             formData.append(input.name, input.value);
                         }
                     });
@@ -460,7 +480,7 @@ strong {
             deleteButton.addEventListener('click', async () => {
                 if (confirm('Are you sure you want to delete this closure?')) {
                     try {
-                        const response = await fetch(`/closure/${id}`, { method: 'DELETE' });
+                        const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
                         if (response.ok) {
                             accordionItem.remove();
                             alert('Closure deleted successfully!');
