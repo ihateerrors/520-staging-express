@@ -20,6 +20,7 @@ function fileFilter(e, r, t) {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.put("/api/projects/:id", upload.single("image"), async (e, r) => {
+        console.log("PUT request received for:", e.params.id);
     try {
         const t = await Project.findById(e.params.id);
         if (!t) return r.status(404).json({ error: "Closure not found" });

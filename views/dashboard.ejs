@@ -137,7 +137,7 @@ strong {
             </div>
           </div>
         </div>
-      </header>
+    </header>
     <div class="container">
          <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
             <h1 class="wdot-dkgreen" style="font-size: 42px; line-height: 50px; margin-top: 60px;">Welcome to the SR 520 Construction Corner Dashboard</h1>
@@ -153,7 +153,7 @@ strong {
         <section style="margin: 3%;">
             <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
             <div id="past-closures"></div>
-            <!-- Place this where we want the alerts to show -->
+            <!-- This is where we want the alerts to show -->
                     <div id="alertPlaceholder">
 
                       <!-- <div class="alert alert-success" role="alert">
@@ -200,36 +200,43 @@ strong {
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= project.trafficDescription || '' %>" disabled>
-                                                     
-            <strong>Activity Type:</strong>
-            <div>
-                <% allActivityTypes.forEach(type=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=type %>" <% if(projects.activityType.includes(type)){ %>checked <%} %>id="activity_
-                            <%=type.replace( / /g, '_' ) %>" name="activityType[]"><label class="form-check-label"
-                                    for="activity_<%=type.replace(/ /g, '_') %>">
-                                    <%=type %>
-                                </label></div>
-                    <%}); %>
-            </div><strong>Timing Features:</strong>
-            <div>
-                <% allTimingFeatures.forEach(feature=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=feature %>" <% if(projects.timingFeatures && projects.timingFeatures.includes(feature)){
-                            %>checked <%} %>id="timing_<%=feature.replace( / /g, '_' ) %>" name="timingFeatures[]"><label
-                                    class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>">
-                                    <%=feature %>
-                                </label></div>
-                    <%}); %>
-            </div><strong>Impact Type:</strong>
-            <div>
-                <% allImpactTypes.forEach(impact=>{ %><div class="form-check"><input class="form-check-input" type="checkbox"
-                            value="<%=impact %>" <% if(projects.impactType && projects.impactType.includes(impact)){ %>checked <%}
-                            %>id="impact_<%=impact.replace( / /g, '_' ) %>" name="impactType[]"><label class="form-check-label"
-                                    for="impact_<%=impact.replace(/ /g, '_') %>">
-                                    <%=impact %>
-                                </label></div>
-                    <%}); %>
-            </div>
-        
+                                                        
+                            <strong>Activity Type:</strong>
+                            <div>
+                              <% allActivityTypes.forEach(type => { %>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="<%=type %>" disabled
+                                  <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> 
+                                  id="activity_<%= type.replace(/ /g, '_') %>" name="activityType[]">
+                                  <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%= type %></label>
+                                </div>
+                              <% }); %>
+                            </div>
+                            
+                            <strong>Timing Features:</strong>
+                            <div>
+                              <% allTimingFeatures.forEach(feature => { %>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled
+                                  <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> 
+                                  id="timing_<%= feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                  <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%= feature %></label>
+                                </div>
+                              <% }); %>
+                            </div>
+                            
+                            <strong>Impact Type:</strong>
+                            <div>
+                              <% allImpactTypes.forEach(impact => { %>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled
+                                  <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> 
+                                  id="impact_<%= impact.replace(/ /g, '_') %>" name="impactType[]">
+                                  <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%= impact %></label>
+                                </div>
+                              <% }); %>
+                            </div>
+                            
               
                             <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
                             imgElement.src = data.imageUrl;
@@ -239,7 +246,7 @@ strong {
                                     <% if (project.imageUrl){
                             
                                       %>                                 
-                                    <a href="<%=project.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=.iproject.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
+                                    <a href="<%=project.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%= project.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
                                     <% } else { %>
                                     <span class="edit-image">Replace image</span>
                                     <img id="img<%=index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
@@ -247,32 +254,32 @@ strong {
 
                                     <input type="file" name="image" id="image" disabled><br> 
 
-                                                      <strong>Location:</strong>
-                                                <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+                                               <strong>Location:</strong>
+                                                <input type="text" class="mb-3" name="location" value="<%= project.location || '' %>" disabled>
                             
                                                 <strong>Map Data:</strong>
-                                                <input type="text" name="mapData" value="<%= JSON.stringify(closure.mapData) || '' %>" disabled>
+                                                <input type="text" name="mapData" value="<%= JSON.stringify(project.mapData) || '' %>" disabled>
                             
                                                 <strong>Banner Content:</strong>
-                                                <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+                                                <input type="text" name="bannerContent" value="<%= project.bannerContent || '' %>" disabled>
                             
                                                 <strong>Post Date:</strong>
-                                                <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
+                                                <input type="date" name="postDate" value="<%= project.postDate.toISOString().split('T')[0] %>" disabled>
                             
                                                 <strong>Remove Date:</strong>
-                                                <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
+                                                <input type="date" name="removeDate" value="<%= project.removeDate ? project.removeDate.toISOString().split('T')[0] : '' %>" disabled>
                             
                                                 <strong>Contact:</strong>
-                                                <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+                                                <input type="text" name="contact" value="<%= project.contact || '' %>" disabled>
                             
                                                 <strong>Created At:</strong>
-                                                <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+                                                <input type="date" name="createdAt" value="<%= project.createdAt.toISOString().split('T')[0] %>" disabled>
                             
                                                 <strong>Updated At:</strong>
-                                                <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+                                                <input type="date" name="updatedAt" value="<%= project.updatedAt.toISOString().split('T')[0] %>" disabled><br>
                             
-                                                <button class="btn btn-md btn-secondary edit-btn" data-id="<%= closure._id %>">Edit</button>
-                                                <button class="btn btn-md btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
+                                                <button class="btn btn-md btn-secondary edit-btn" data-id="<%= project._id %>">Edit</button>
+                                                <button class="btn btn-md btn-danger delete-btn" data-id="<%= project._id %>">Delete</button>
                                             </div>
                                             </div>
                                         </div>
@@ -380,5 +387,3 @@ document.addEventListener('DOMContentLoaded', function(){
   
     </body>
     </html>
-
-<!-- END Form's HTML -->

@@ -25,7 +25,7 @@ router.post('/upload-pdf', upload.fields([{ name: 'montlakeNoiseReport' }, { nam
         await uploadToAzure(file.buffer, file.originalname);
     }
 
-    res.redirect('/dashboard'); // Or wherever you'd like to redirect after a successful upload
+    res.redirect('/dashboard'); // this could go wherever, if in the futrue you wanted to redirect to another page
 });
 
 
@@ -34,12 +34,12 @@ router.get("/dashboard", ensureAuthenticated, async (req, res) => {
     try {
         const projects = await Project.find({});
 
-        // Fetching the enum values from the Project model
+        // Fetching the enum values from the Project model-- the caster method below is baked into the library functions
         const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
         const timingFeaturesEnums = Project.schema.path('timingFeatures').caster.enumValues;
         const impactTypeEnums = Project.schema.path('impactType').caster.enumValues;
 
-        // Rendering logic remains the same, but we'll add the enum arrays to the rendered view
+        // Rendering enum arrays to the Dashboard 
         if (projects.length === 0) {
             res.render("dashboard", {
                 projects: [],
@@ -187,8 +187,7 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
                     return res.status(400).json({ error: "Error in creating the event: " + messages.join(", ") });
                 }
                 return res.status(500).json({ error: "Internal server error." });
-            }
-            
+            }            
         }
 
         // Creating and saving the project
