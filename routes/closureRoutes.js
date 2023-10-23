@@ -7,70 +7,88 @@ const { uploadToAzure } = require("../utils/azureUpload");
 
 const storage = multer.memoryStorage();
 
-function fileFilter(e, r, t) {
-    const o = /jpeg|jpg|png|gif/;
-    const a = o.test(r.mimetype);
-    const s = o.test(path.extname(r.originalname).toLowerCase());
-
-    if (a && s) return t(null, true);
-
-    t(new Error("Error: File upload only supports the following filetypes - " + o));
+function fileFilter(req, file, cb){
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if(mimetype && extname){
+        return cb(null, true);
+    } else {
+        cb(new Error("Error: File upload only supports the following filetypes - " + filetypes));
+    }
 }
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.put("/api/projects/:id", upload.single("image"), async (e, r) => {
-        console.log("PUT request received for:", e.params.id);
+// router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
+//     console.log('Trying to edit project with ID:', req.params.id);
+//     try {
+//         const project = await Project.findById(req.params.id);
+//         if (!project) {
+//             return res.status(404).json({ error: "Project not found" });
+//         }
+   
+//         Object.keys(req.body).forEach(key => {
+//             if (req.body[key]) {
+//                 project[key] = req.body[key];
+//             }
+//         }); 
+//         if (req.file) {
+//             const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
+//             project.imageUrl = imageUrl;
+//         }   
+//         await project.save();
+     
+//         res.json(project);
+//     } catch (error) {
+//         res.status(500).json({ error: "Internal server error while updating project.", detailedError: error.message });
+//     }
+// });
+
+router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     try {
-        const t = await Project.findById(e.params.id);
-        if (!t) return r.status(404).json({ error: "Closure not found" });
-
-        // Update regular properties
-        Object.keys(e.body).forEach(r => {
-            if (e.body[r] && t[r] !== undefined) {
-                t[r] = e.body[r];
-            }
-        });
-
-        // Handle dates
-        ["startDate", "endDate", "postDate", "removeDate", "createdAt", "updatedAt"].forEach(r => {
-            if (e.body[r]) {
-                t[r] = new Date(e.body[r]);
-            }
-        });
-
-        // Handle uploaded image
-        if (e.file) {
-            const imageUrl = await uploadToAzure(e.file.buffer, e.file.originalname);
-            t.imageUrl = imageUrl;
+      console.log('PUT request received for ID:', req.params.id);  // Log when the request is received
+      const project = await Project.findById(req.params.id);
+      
+      if (!project) {
+        console.log('Project not found:', req.params.id);
+        return res.status(404).json({ error: "Project not found" });
+      }
+  
+      Object.keys(req.body).forEach(key => {
+        if (req.body[key]) {
+          project[key] = req.body[key];
         }
-
-        // Handle checkbox arrays
-        ["timingFeatures", "activityType", "impactType"].forEach(r => {
-            if (e.body[r]) {
-                t[r] = JSON.parse(e.body[r]);
-            }
-        });
-
-        // Handle mapData
-        if (e.body.mapData) {
-            t.mapData = JSON.parse(e.body.mapData);
-        }
-
-        await t.save();
-        r.json(t);
-    } catch (e) {
-        r.status(500).json({ error: "Internal server error while updating closure.", detailedError: e.message });
+      });
+  
+      if (req.file) {
+        console.log('Uploading file to Azure...');  // Log when starting to upload the file
+        const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
+        console.log('File uploaded, URL:', imageUrl);  // Log the URL after the file is uploaded
+        project.imageUrl = imageUrl;
+      }
+  
+      await project.save();
+      console.log('Project saved successfully:', project);  // Log the saved project
+      res.json(project);
+    } catch (error) {
+      console.error('Error in PUT route:', error);  // Log any error that occurs
+      res.status(500).json({ error: "Internal server error while updating project.", detailedError: error.message });
     }
-});
+  });
+  
 
-router.delete("/:id", async (e, r) => {
+
+router.delete("/:id", async (req, res) => {
     try {
-        const t = await Project.findByIdAndDelete(e.params.id);
-        if (!t) return r.status(404).json({ error: "Closure not found" });
-        r.json(t);
-    } catch (e) {
-        r.status(500).json({ error: "Internal server error while deleting closure." });
+        const project = await Project.findByIdAndDelete(req.params.id);
+        if (!project) {
+            return res.status(404).json({ error: "Project not found" });
+        }
+        res.json(project);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error while deleting project." });
     }
 });
 

@@ -144,7 +144,7 @@ strong {
             <p><strong></strong></p>
             <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
-            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closures</a>
+            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View and Edit Closures</a>
               
             </a>  <br><br>
         </div>
@@ -155,8 +155,8 @@ strong {
             <div id="past-closures"></div>
             <!-- This is where we want the alerts to show -->
                     <div id="alertPlaceholder">
-
-                      <!-- <div class="alert alert-success" role="alert">
+<!-- 
+                      <div class="alert alert-success" role="alert">
                        Closure edited successfully.
                       </div>
                       <div class="alert alert-danger" role="alert">
@@ -175,6 +175,7 @@ strong {
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
+                            <form action="/updateProject" method="post">
                             <strong>Activity Name:</strong>
                             <input type="text" name="activityName" value="<%= project.activityName %>" disabled><br>
           
@@ -200,8 +201,36 @@ strong {
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= project.trafficDescription || '' %>" disabled>
-                                                        
+
                             <strong>Activity Type:</strong>
+                        <div>
+                            <% allActivityTypes.forEach(type => { %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="<%=type %>" <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
+                                    <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
+                                </div>
+                            <% }); %>
+                        </div>
+                        <strong>Timing Features:</strong>
+                        <div>
+                            <% allTimingFeatures.forEach(feature => { %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="<%=feature %>" <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                    <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
+                                </div>
+                            <% }); %>
+                        </div>
+                        <strong>Impact Type:</strong>
+                        <div>
+                            <% allImpactTypes.forEach(impact => { %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="<%=impact %>" <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
+                                    <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
+                                </div>
+                            <% }); %>
+                        </div>
+                                                        
+                            <!-- <strong>Activity Type:</strong>
                             <div>
                               <% allActivityTypes.forEach(type => { %>
                                 <div class="form-check">
@@ -235,13 +264,8 @@ strong {
                                   <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%= impact %></label>
                                 </div>
                               <% }); %>
-                            </div>
+                            </div> -->
                             
-              
-                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
-                            imgElement.src = data.imageUrl;
-                            imgElement.style.display = 'block';   -->
-
                             <strong>Image URL:</strong>
                                     <% if (project.imageUrl){
                             
@@ -254,9 +278,7 @@ strong {
 
                                     <input type="file" name="image" id="image" disabled><br> 
 
-                                               <strong>Location:</strong>
-                                                <input type="text" class="mb-3" name="location" value="<%= project.location || '' %>" disabled>
-                            
+                                                                      
                                                 <strong>Map Data:</strong>
                                                 <input type="text" name="mapData" value="<%= JSON.stringify(project.mapData) || '' %>" disabled>
                             
@@ -280,6 +302,7 @@ strong {
                             
                                                 <button class="btn btn-md btn-secondary edit-btn" data-id="<%= project._id %>">Edit</button>
                                                 <button class="btn btn-md btn-danger delete-btn" data-id="<%= project._id %>">Delete</button>
+                                              </form>
                                             </div>
                                             </div>
                                         </div>
@@ -337,10 +360,13 @@ strong {
                   }
 
                   try {
-                      const response = await fetch(`/api/projects/${id}`, {
-                          method: 'PUT',
-                          body: formData
-                      });
+                    const putUrl = `/api/projects/${id}`;
+    console.log("PUT request URL:", putUrl);  // Log the URL
+    const response = await fetch(putUrl, { method: 'PUT', body: formData });
+                      // const response = await fetch(`/api/projects/${id}`, {
+                      //     method: 'PUT',
+                      //     body: formData
+                      // });
 
                       if (!response.ok) {
                           throw new Error('Network response was not ok');
@@ -397,3 +423,4 @@ strong {
   
     </body>
     </html>
+

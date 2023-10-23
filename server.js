@@ -22,7 +22,7 @@ const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your 
 const loginRoutes = require('./routes/login');
 const registerRoutes = require('./routes/register');
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
-const projectRoutes = require('./routes/projects');
+const projects = require('./routes/projects');
 const closureRoutes = require('./routes/closureRoutes');
 
 // Middleware setup
@@ -48,12 +48,12 @@ app.use(passport.session());
 app.use(flash());
 
 
-app.use(projectRoutes.router);
+app.use(projects.router);
 app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
 app.use(pdfRoutes);
-app.use('/project', closureRoutes);
+app.use(closureRoutes);
 
 
 const accountName = 'sr520construction';
@@ -150,8 +150,7 @@ app.get('/', async (req, res) => {
             title: '520 Construction Corner',
             header: 'Welcome to the 520 Construction Corner!',
             project,
-            closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
-            currentClosures, 
+                      currentClosures, 
             upcomingClosures
         });
 
@@ -164,16 +163,16 @@ app.get('/', async (req, res) => {
 
 //map Routes
 app.get('/program', (req, res) => {
-    res.render('program'); // assuming 'program' is the name of your view file
+    res.render('program'); 
 });
 
-// app.get('/montlake-project', (req, res) => {
-//     res.render('montlake-project');
-// });
+app.get('/montlake-project', (req, res) => {
+    res.render('montlake-project');
+});
 
-// app.get('/i5-connection-project', (req, res) => {
-//     res.render('i5-connection-project');
-// });
+app.get('/i5-connection-project', (req, res) => {
+    res.render('i5-connection-project');
+});
 
 app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');
@@ -222,3 +221,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
