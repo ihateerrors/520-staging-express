@@ -49,10 +49,6 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
             }
         });
 
-        if (req.body.mapData) {
-            project.mapData = JSON.parse(req.body.mapData);
-        }
-
         await project.save();
         res.json(project);
     }  catch (error) {
@@ -61,7 +57,7 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/api/projects/:id", async (req, res) => {
     try {
         const project = await Project.findByIdAndDelete(req.params.id);
         if (!project) {

@@ -141,23 +141,6 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
-
-        // Conditional parsing of mapData
-        if (typeof req.body.mapData === 'string') {
-            try {
-                console.log("Raw mapData:", req.body.mapData);
-                req.body.mapData = JSON.parse(req.body.mapData);
-            } catch (error) {
-                console.error("Error saving project:", error);
-                if ("ValidationError" === error.name) {
-                    let messages = Object.values(error.errors).map(e => e.message);
-                    return res.status(400).json({ error: "Error in creating the event: " + messages.join(", ") });
-                }
-                return res.status(500).json({ error: "Internal server error." });
-            }
-            
-        }
-
         // Creating and saving the project
         const project = new Project(req.body);
         await project.save();
