@@ -290,100 +290,110 @@ strong {
                         </div>
 
 <!-- END Form's HTML -->
-
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-    
-    console.log("Script started");
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log("Script started");
 
-    const editButtons = document.querySelectorAll('.edit-btn');
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+      const alertPlaceholder = document.getElementById('alertPlaceholder');
 
-    editButtons.forEach(editBtn => {
-        editBtn.addEventListener('click', function() {
+      function showAlert(type, message) {
+          alertPlaceholder.innerHTML = `<div class="alert alert-${type}" role="alert">${message}</div>`;
+          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);
+      }
 
-            const accordionItem = this.closest('.accordion-item');
-            const inputs = accordionItem.querySelectorAll('input');
-            const fileInput = accordionItem.querySelector('input[type=file]');
-            const id = this.getAttribute('data-id');
+      document.addEventListener('click', async function(e) {
+          const editBtn = e.target.closest('.edit-btn');
+          const deleteBtn = e.target.closest('.delete-btn');
+          const accordionItem = e.target.closest('.accordion-item');
 
-            // Toggle the input fields' disabled state
-            inputs.forEach(input => input.disabled = !input.disabled);
+          if (editBtn) {
+              const inputs = accordionItem.querySelectorAll('input');
+              const fileInput = accordionItem.querySelector('input[type=file]');
+              const id = editBtn.getAttribute('data-id');
 
-            // Toggle button text between 'Edit' and 'Save'
-            if (this.innerText === 'Edit') {
-                this.innerText = 'Save';
-            } else {
-                // Save logic with FormData
-                const formData = new FormData();
+              // Toggle the input fields' disabled state
+              inputs.forEach(input => input.disabled = !input.disabled);
 
-                inputs.forEach(input => {
-                    if (input.type !== 'file' && input.type !== 'checkbox') {
-                        formData.append(input.name, input.value);
-                    }
-                });
+              // Toggle button text between 'Edit' and 'Save'
+              if (editBtn.innerText === 'Edit') {
+                  editBtn.innerText = 'Save';
+              } else {
+                  const formData = new FormData();
 
-                // Handle checkbox arrays
-                ['activityType', 'timingFeatures', 'impactType'].forEach(name => {
-                    const checkedValues = Array.from(accordionItem.querySelectorAll(`input[name="${name}[]"]:checked`)).map(input => input.value);
-                    formData.append(name, JSON.stringify(checkedValues));
-                });
+                  inputs.forEach(input => {
+                      if (input.type !== 'file' && input.type !== 'checkbox') {
+                          formData.append(input.name, input.value);
+                      }
+                  });
 
-                if (fileInput.files[0]) {
-                    formData.append('image', fileInput.files[0]);
-                }
+                  // Handle checkbox arrays
+                  ['activityType', 'timingFeatures', 'impactType'].forEach(name => {
+                      const checkedValues = Array.from(accordionItem.querySelectorAll(`input[name="${name}[]"]:checked`)).map(input => input.value);
+                      formData.append(name, JSON.stringify(checkedValues));
+                  });
 
-                fetch(`/api/projects/${id}`, {
-                    method: 'PUT',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const alertPlaceholder = document.getElementById('alertPlaceholder');
-                    if (data.error) {
-                        console.error('Error:', data.error);
-                        alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                    } else {
-                        alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                    }
-                })
-                .catch(err => {
-                    console.error('Fetch error:', err);
-                    const alertPlaceholder = document.getElementById('alertPlaceholder');
-                    alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
-                    setTimeout(() => alertPlaceholder.innerHTML='', 5000);
-                });
-            }
-        });
-    });
+                  if (fileInput.files[0]) {
+                      formData.append('image', fileInput.files[0]);
+                  }
 
-    // delete button logic
-    deleteButtons.forEach(deleteBtn => {
-        deleteBtn.addEventListener('click', async function() {
-            const accordionItem = this.closest('.accordion-item');
-            const id = this.getAttribute('data-id');
-            if (confirm('Are you sure you want to delete this closure?')) {
-                try {
-                    const response = await fetch(`/${id}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        accordionItem.remove();
-                        alert('Closure deleted successfully!');
-                    } else {
-                        const data = await response.json();
-                        alert('Error deleting closure: ' + data.error);
-                    }
-                } catch (err) {
-                    console.error('Error deleting closure:', err);
-                    alert('There was an error deleting the closure.');
-                }
-            }
-        });
-    });
-});
+                  try {
+                      const response = await fetch(`/api/projects/${id}`, {
+                          method: 'PUT',
+                          body: formData
+                      });
 
-  </script>
+                      if (!response.ok) {
+                          throw new Error('Network response was not ok');
+                      }
+
+                      const data = await response.json();
+
+                      if (data.error) {
+                          console.error('Error:', data.error);
+                          showAlert('danger', 'Failed to update closure. Please try again.');
+                      } else {
+                          showAlert('success', 'Closure updated successfully!');
+                      }
+
+                  } catch (err) {
+                      console.error('Fetch error:', err);
+                      showAlert('danger', 'An error occurred. Please try again.');
+                  }
+              }
+          }
+
+          if (deleteBtn) {
+              const id = deleteBtn.getAttribute('data-id');
+
+              if (confirm('Are you sure you want to delete this closure?')) {
+                  try {
+                      const response = await fetch(`/${id}`, {
+                          method: 'DELETE'
+                      });
+
+                      if (!response.ok) {
+                          throw new Error('Network response was not ok');
+                      }
+
+                      const data = await response.json();
+
+                      if (data.error) {
+                          throw new Error(data.error);
+                      }
+
+                      accordionItem.remove();
+                      alert('Closure deleted successfully!');
+
+                  } catch (err) {
+                      console.error('Error deleting closure:', err);
+                      alert('There was an error deleting the closure.');
+                  }
+              }
+          }
+      });
+  });
+</script>
+
   
     </body>
     </html>

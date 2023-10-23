@@ -53,7 +53,7 @@ app.use(registerRoutes);
 app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
 app.use(pdfRoutes);
-app.use('/closure', closureRoutes);
+app.use('/project', closureRoutes);
 
 
 const accountName = 'sr520construction';
