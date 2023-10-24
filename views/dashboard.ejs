@@ -175,7 +175,7 @@ strong {
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
-                            <form action="/updateProject" method="post">
+                            <!-- <form action="/updateProject" method="post"> -->
                             <strong>Activity Name:</strong>
                             <input type="text" name="activityName" value="<%= project.activityName %>" disabled><br>
           
@@ -206,7 +206,7 @@ strong {
                         <div>
                             <% allActivityTypes.forEach(type => { %>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<%=type %>" <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
+                                    <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
                                     <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
                                 </div>
                             <% }); %>
@@ -215,7 +215,7 @@ strong {
                         <div>
                             <% allTimingFeatures.forEach(feature => { %>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<%=feature %>" <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                    <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
                                     <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
                                 </div>
                             <% }); %>
@@ -224,7 +224,7 @@ strong {
                         <div>
                             <% allImpactTypes.forEach(impact => { %>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="<%=impact %>" <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
+                                    <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
                                     <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
                                 </div>
                             <% }); %>
@@ -302,7 +302,7 @@ strong {
                             
                                                 <button class="btn btn-md btn-secondary edit-btn" data-id="<%= project._id %>">Edit</button>
                                                 <button class="btn btn-md btn-danger delete-btn" data-id="<%= project._id %>">Delete</button>
-                                              </form>
+                                              <!-- </form> -->
                                             </div>
                                             </div>
                                         </div>
