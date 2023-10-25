@@ -299,7 +299,7 @@ function displayFormMessage(message, type) {
     
         // Convert drawn items to geoJSON and add to the form data
         const drawnData = drawnItems.toGeoJSON();
-        formData.append('mapData', JSON.stringify(drawnData));
+        formData.set('mapData', JSON.stringify(drawnData));
     
         // POST request to send form data and drawn items to the server
         try {
