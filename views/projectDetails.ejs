@@ -62,7 +62,7 @@
                   <div class="row"> 
                     <div class="blockhead col-lg-9 col-md-12 col-sm-12" style="display: block;">
                         <div class="pl-sm-4 pl-lg-3">                            
-                            <h1 class="wdot-dkgreen" style="font-size: 40px"><%= project.activityName %></h1>                          
+                            <h1 class="wdot-dkgreen" style="font-size: 40px"><%= closure.activityName %></h1>                          
                             <div class="border-bottom border-success"></div>
                         </div>
                      </div>
@@ -73,24 +73,24 @@
                             <div class="col-lg-9 col-sm-12">
                               <div class="project-content ">
                                 <div class="content-left col-lg-6">
-                                <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
-                                <p><strong>Time:</strong> <%= project.time %></p>    
+                                <p><strong>Date:</strong> <%= formatDate(closure.startDate) %> to <%= formatDate(closure.endDate) %> </p>
+                                <p><strong>Time:</strong> <%= closure.time %></p>    
                                 
                                 <p><strong>Activity Details:</strong></p>
                                 <ul style="list-style-type: none; font-size: 18px;">
-                                    <% project.timingFeatures.forEach(function(feature) { %>
+                                    <% closure.timingFeatures.forEach(function(feature) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= feature %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
+                                            <%= feature %> <!-- Use 'feature' here instead of 'closure.timingFeatures' -->
                                         </li>
                                     <% }); %>
                                 </ul>
                                 
                                 <ul style="list-style-type: none; font-size: 18px;">
-                                    <% project.activityType.forEach(function(type) { %>
+                                    <% closure.activityType.forEach(function(type) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= type %> <!-- Use 'type' here instead of 'project.activityType' -->
+                                            <%= type %> <!-- Use 'type' here instead of 'closure.activityType' -->
                                         </li>
                                     <% }); %>
                                 </ul>                                
@@ -98,24 +98,24 @@
                               
                               <div class="content-right col-lg-6">
                                 
-                                  <% if (project.imageUrl && project.imageUrl.trim() !== '') { %>
+                                  <% if (closure.imageUrl && closure.imageUrl.trim() !== '') { %>
                                     <figure>
-                                    <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>">
+                                    <img id="showDialog" class="img-fluid w-100" src="<%= closure.imageUrl %>">
                                     <figcaption><em>Click on image to expand</em></figcaption>
                                   </figure>
                                 <% } %>
                                                               
                               </div>
                               <div class="ml-4 mr-3 pt-3 ">
-                                <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
-                                <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
+                                <p><strong>Description: </strong><%= closure.description ? closure.description : 'Description not available' %></p>
+                                <p><strong>Traffic impact:</strong> <%= closure.trafficDescription %></p>
                               </div>
                             </div> 
 
                                 <!-- ### Photo Lightbox ###  -->
                                 <dialog id="light-box">
                                   <figure>
-                                    <img class="lightbox-img" src=<%= project.imageUrl %> >
+                                    <img class="lightbox-img" src=<%= closure.imageUrl %> >
                                 
                                    </figure>
                                     <button id="close-btn">Close</button>                                
@@ -143,7 +143,7 @@
                            <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
                            <div class="mt-2">
                               <p class="pt-2"><strong>Contact Info:</strong></p>
-                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong>  <%= project.contact %></p>
+                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong>  <%= closure.contact %></p>
                                                             
                           </div>
                           </div>
