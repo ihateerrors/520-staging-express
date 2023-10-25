@@ -2,81 +2,25 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
-const Project = require("../models/Project");
+const Project = require('../models/Project');
 const { uploadToAzure } = require("../utils/azureUpload");
 
 const storage = multer.memoryStorage();
 
-function fileFilter(req, file, cb){
-    const filetypes = /jpeg|jpg|png|gif/;
-    const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    
-    if(mimetype && extname){
+function fileFilter(req, file, cb) {
+    const allowedExtensions = /jpeg|jpg|png|gif/;
+    const mimetypeCheck = allowedExtensions.test(file.mimetype);
+    const extnameCheck = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    if (mimetypeCheck && extnameCheck) {
         return cb(null, true);
-    } else {
-        cb(new Error("Error: File upload only supports the following filetypes - " + filetypes));
     }
+    cb(new Error("Error: File upload only supports the following filetypes - " + allowedExtensions));
 }
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-// router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
-//     console.log('Trying to edit project with ID:', req.params.id);
-//     try {
-//         const project = await Project.findById(req.params.id);
-//         if (!project) {
-//             return res.status(404).json({ error: "Project not found" });
-//         }
-   
-//         Object.keys(req.body).forEach(key => {
-//             if (req.body[key]) {
-//                 project[key] = req.body[key];
-//             }
-//         }); 
-//         if (req.file) {
-//             const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
-//             project.imageUrl = imageUrl;
-//         }   
-//         await project.save();
-     
-//         res.json(project);
-//     } catch (error) {
-//         res.status(500).json({ error: "Internal server error while updating project.", detailedError: error.message });
-//     }
-// });
-
 router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     try {
-<<<<<<< HEAD
-      console.log('PUT request received for ID:', req.params.id);  // Log when the request is received
-      const project = await Project.findById(req.params.id);
-      
-      if (!project) {
-        console.log('Project not found:', req.params.id);
-        return res.status(404).json({ error: "Project not found" });
-      }
-  
-      Object.keys(req.body).forEach(key => {
-        if (req.body[key]) {
-          project[key] = req.body[key];
-        }
-      });
-  
-      if (req.file) {
-        console.log('Uploading file to Azure...');  // Log when starting to upload the file
-        const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
-        console.log('File uploaded, URL:', imageUrl);  // Log the URL after the file is uploaded
-        project.imageUrl = imageUrl;
-      }
-  
-      await project.save();
-      console.log('Project saved successfully:', project);  // Log the saved project
-      res.json(project);
-    } catch (error) {
-      console.error('Error in PUT route:', error);  // Log any error that occurs
-      res.status(500).json({ error: "Internal server error while updating project.", detailedError: error.message });
-=======
         const project = await Project.findById(req.params.id);
         if (!project) {
             return res.status(404).json({ error: "Closure not found" });
@@ -110,21 +54,18 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     }  catch (error) {
         console.error("Error while updating closure:", error);
         res.status(500).json({ error: "Internal server error while updating closure.", detailedError: error.message });
->>>>>>> editable-map
     }
-  });
-  
-
+});
 
 router.delete("/api/projects/:id", async (req, res) => {
     try {
         const project = await Project.findByIdAndDelete(req.params.id);
         if (!project) {
-            return res.status(404).json({ error: "Project not found" });
+            return res.status(404).json({ error: "Closure not found" });
         }
         res.json(project);
     } catch (error) {
-        res.status(500).json({ error: "Internal server error while deleting project." });
+        res.status(500).json({ error: "Internal server error while deleting closure." });
     }
 });
 

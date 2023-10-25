@@ -25,40 +25,7 @@ router.post('/upload-pdf', upload.fields([{ name: 'montlakeNoiseReport' }, { nam
         await uploadToAzure(file.buffer, file.originalname);
     }
 
-    res.redirect('/dashboard'); // this could go wherever, if in the futrue you wanted to redirect to another page
-});
-
-
-
-router.get("/dashboard", ensureAuthenticated, async (req, res) => {
-    try {
-        const projects = await Project.find({});
-
-        // Fetching the enum values from the Project model-- the caster method below is baked into the library functions
-        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
-        const timingFeaturesEnums = Project.schema.path('timingFeatures').caster.enumValues;
-        const impactTypeEnums = Project.schema.path('impactType').caster.enumValues;
-
-        // Rendering enum arrays to the Dashboard 
-        if (projects.length === 0) {
-            res.render("dashboard", {
-                projects: [],
-                allActivityTypes: activityTypeEnums,
-                allTimingFeatures: timingFeaturesEnums,
-                allImpactTypes: impactTypeEnums,
-                message: "No projects available."
-            });
-        } else {
-            res.render("dashboard", {
-                projects: projects,
-                allActivityTypes: activityTypeEnums,
-                allTimingFeatures: timingFeaturesEnums,
-                allImpactTypes: impactTypeEnums
-            });
-        }
-    } catch (error) {
-        res.status(500).send("Internal Server Error");
-    }
+    res.redirect('/dashboard'); // Or wherever you'd like to redirect after a successful upload
 });
 
 
@@ -174,25 +141,6 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
-<<<<<<< HEAD
-
-        // Conditional parsing of mapData
-        if (typeof req.body.mapData === 'string') {
-            try {
-                console.log("Raw mapData:", req.body.mapData);
-                req.body.mapData = JSON.parse(req.body.mapData);
-            } catch (error) {
-                console.error("Error saving project:", error);
-                if ("ValidationError" === error.name) {
-                    let messages = Object.values(error.errors).map(e => e.message);
-                    return res.status(400).json({ error: "Error in creating the event: " + messages.join(", ") });
-                }
-                return res.status(500).json({ error: "Internal server error." });
-            }            
-        }
-
-=======
->>>>>>> editable-map
         // Creating and saving the project
         const project = new Project(req.body);
         await project.save();

@@ -48,35 +48,6 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     try {
-<<<<<<< HEAD
-      console.log('PUT request received for ID:', req.params.id);  // Log when the request is received
-      const project = await Project.findById(req.params.id);
-      
-      if (!project) {
-        console.log('Project not found:', req.params.id);
-        return res.status(404).json({ error: "Project not found" });
-      }
-  
-      Object.keys(req.body).forEach(key => {
-        if (req.body[key]) {
-          project[key] = req.body[key];
-        }
-      });
-  
-      if (req.file) {
-        console.log('Uploading file to Azure...');  // Log when starting to upload the file
-        const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
-        console.log('File uploaded, URL:', imageUrl);  // Log the URL after the file is uploaded
-        project.imageUrl = imageUrl;
-      }
-  
-      await project.save();
-      console.log('Project saved successfully:', project);  // Log the saved project
-      res.json(project);
-    } catch (error) {
-      console.error('Error in PUT route:', error);  // Log any error that occurs
-      res.status(500).json({ error: "Internal server error while updating project.", detailedError: error.message });
-=======
         const project = await Project.findById(req.params.id);
         if (!project) {
             return res.status(404).json({ error: "Closure not found" });
@@ -110,7 +81,6 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     }  catch (error) {
         console.error("Error while updating closure:", error);
         res.status(500).json({ error: "Internal server error while updating closure.", detailedError: error.message });
->>>>>>> editable-map
     }
   });
   
