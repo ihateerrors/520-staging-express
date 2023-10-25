@@ -57,6 +57,38 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     }
 });
 
+
+router.get('/api/projects/:projectId/mapData', async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+
+        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+            res.status(400).send('Invalid Project ID');
+            return;
+        }
+
+        const project = await Project.findById(projectId);
+
+        if (!project) {
+            res.status(404).send('Project not found');
+            return;
+        }
+
+        if (!project.mapData) {
+            res.status(404).send('Map data not found for the project');
+            return;
+        }
+
+        res.json({
+            _id: project._id,
+            mapData: project.mapData
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 router.delete("/api/projects/:id", async (req, res) => {
     try {
         const project = await Project.findByIdAndDelete(req.params.id);
