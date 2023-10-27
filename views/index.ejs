@@ -271,7 +271,7 @@
               <div class="orange-banner" aria-live="polite">
                   <% if (project.bannerContent==='yes'){ %>
                       <h2 class="mt-4">ALERT: <%= project.activityName %></h2>
-                      <p><a href="/projects/<%=project._id %>" aria-label="View details for <%= project.activityName %>">View Details</a></p>
+                      <p><a href="/projects/<%=project.slug %>" aria-label="View details for <%= project.activityName %>">View Details</a></p>
                   <% } else {
                       console.log("No banner item")
                   } %>
@@ -325,7 +325,7 @@
                                               <span class="icon-box">
                                                   <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
-                                              <a href="/projects/<%=closure._id %>"><%=closure.activityName %></a>
+                                              <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
                                       <% }); %>
                                   <% } %>
@@ -339,7 +339,7 @@
                                               <span class="icon-box">
                                                   <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
-                                              <a href="/projects/<%=closure._id %>"><%=closure.activityName %></a>
+                                              <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
                                       <% }); %>
                                   <% } else { %>

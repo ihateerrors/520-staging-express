@@ -19,9 +19,9 @@ function fileFilter(req, file, cb) {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
+router.put("/api/projects/:projectId", upload.single("image"), async (req, res) => {
     try {
-        const project = await Project.findById(req.params.id);
+        const project = await Project.findOne({ projectId: req.params.projectId });
         if (!project) {
             return res.status(404).json({ error: "Closure not found" });
         }
@@ -57,9 +57,9 @@ router.put("/api/projects/:id", upload.single("image"), async (req, res) => {
     }
 });
 
-router.delete("/api/projects/:id", async (req, res) => {
+router.delete("/api/projects/:projectId", async (req, res) => {
     try {
-        const project = await Project.findByIdAndDelete(req.params.id);
+        const project = await Project.findOneAndDelete({ projectId: req.params.projectId });
         if (!project) {
             return res.status(404).json({ error: "Closure not found" });
         }

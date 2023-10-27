@@ -176,7 +176,7 @@ strong {
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
-                            <input type="hidden" name="mapData" data-id="<%= closure._id %>" data-json="<%= closure.mapData || '' %>" disabled>
+                            <input type="hidden" name="mapData" data-id="<%= closure.projectId || 'foobar' %>" data-json="<%= closure.mapData || '' %>" disabled> 
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= closure.activityName %>
                             </button>
@@ -255,7 +255,7 @@ strong {
           
                             <strong>Map Data:</strong>
                             <div class="greenborder" style="display:flex;">
-                                <div id="map-<%= closure._id%>" style="height:775px; width:100%;"></div>
+                                <div id="map-<%= closure.projectId%>" style="height:775px; width:100%;"></div>
                             </div>
           
                             <strong>Banner Content:</strong>
@@ -313,24 +313,11 @@ strong {
     // Define default styling values
     const defaultColor = '#f4661a';
     const defaultWidth = 8;
-    const fallbackFeature = { type: "FeatureCollection", features: [] }; // TODO: Make sure this doesn't cause data loss
-
-    const maybeSanitizeJSON = (json) => { // TODO: Kill this after refactor
-        let jsonString = json;
-        if (json.startsWith(',')) {
-            jsonString = json.slice(1);
-        } 
-        try {
-            const parsedData = JSON.parse(jsonString);
-            return parsedData;
-        } catch (error) {
-            console.error('Error parsing JSON:', error);
-        }
-    }
+    const fallbackFeature = { type: "FeatureCollection", features: [] };
 
     const createInitialGeoLayer = (geoJSON) => {
         try {
-            const geoJSONData = geoJSON ? maybeSanitizeJSON(geoJSON) : fallbackFeature;
+            const geoJSONData = geoJSON || fallbackFeature;
             const geoLayer = L.geoJSON(geoJSONData, {
                 style: function (feature) {
                     return {
@@ -356,9 +343,35 @@ strong {
         }
     };
 
-    const setUpMap = (geoJSON, id) => {
-        const mapContainer = document.getElementById(`map-${id}`);
-        const dataInput = document.querySelector(`input[data-id="${id}"]`);
+    const setUpEditControls = (map, geoLayer, dataInput) => {
+        const drawItems = new L.featureGroup();
+        geoLayer.eachLayer((layer) => {
+            drawItems.addLayer(layer);
+        });
+        drawItems.addTo(map);
+        const drawControl = new L.Control.Draw({
+            edit: { featureGroup: drawItems },
+        }).addTo(map);
+        map.on(L.Draw.Event.CREATED, (event) => {
+            const layer = event.layer;
+            drawItems.addLayer(layer);
+            const geoJSON = drawItems.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
+            });
+        map.on(L.Draw.Event.EDITED, (event) => {
+            const layers = event.layers;
+            const editedLayers = L.featureGroup();
+            layers.eachLayer((layer) => {
+                editedLayers.addLayer(layer);
+            });
+            const geoJSON = editedLayers.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
+        });
+        // return a teardown
+        return () => map.removeControl(drawControl);
+    };
+
+    const setUpMap = (mapContainer, geoJSON) => {
         const map = L.map(mapContainer).setView([47.6407, -122.2971], 8);
         L.gridLayer.googleMutant({
             type: 'roadmap',
@@ -367,33 +380,7 @@ strong {
         }).addTo(map);
         try {
             const geoLayer = createInitialGeoLayer(geoJSON);
-            const drawnItems = new L.featureGroup();
-            geoLayer.eachLayer((layer) => {
-                drawnItems.addLayer(layer);
-            });
-            drawnItems.addTo(map);
-            const drawControl = new L.Control.Draw({
-                edit: {
-                    featureGroup: drawnItems
-                }
-            }).addTo(map);
-            map.on(L.Draw.Event.CREATED, (event) => {
-                const layer = event.layer;
-                drawnItems.addLayer(layer);
-                const geoJSON = drawnItems.toGeoJSON();
-                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
-                console.log('Created new layer:', geoJSON); // TODO: Remove this
-            });
-            map.on(L.Draw.Event.EDITED, (event) => {
-                const layers = event.layers;
-                const editedLayers = L.featureGroup();
-                layers.eachLayer((layer) => {
-                    editedLayers.addLayer(layer);
-                });
-                const geoJSON = editedLayers.toGeoJSON();
-                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
-                console.log('Edited layer:', geoJSON); // TODO: Remove this
-            });
+            geoLayer.addTo(map);
             return { map, geoLayer };
         } catch (e) {
             console.error('Could not add layer to map:', e);
@@ -404,13 +391,15 @@ strong {
         console.log("Script started"); // Log when script starts
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
         dataInputs.forEach((input) => {
-            const id = input.getAttribute('data-id');
-            const geoJSON = input.getAttribute('data-json');
             const accordionItem = input.closest('.accordion-item');
             const accordionButton = accordionItem.querySelector('.accordion-button');
             const editButton = accordionItem.querySelector('.edit-btn');
             const deleteButton = accordionItem.querySelector('.delete-btn');
-            const { map, geoLayer } = setUpMap(geoJSON, id);
+
+            const id = input.getAttribute('data-id');
+            const geoJSON = input.getAttribute('data-json');
+            const mapContainer = document.getElementById(`map-${id}`);
+            const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
 
             accordionButton.addEventListener('click', () => {
                 try {
@@ -434,10 +423,18 @@ strong {
                 inputs.forEach(input => input.disabled = !input.disabled);
                 console.log("After toggle: File input disabled state:", fileInput.disabled); 
                 // Toggle button text between 'Edit' and 'Save'
+                let teardownEditControls = null;
                 if (editButton.innerText === 'Edit') {
                     editButton.innerText = 'Save';
+                    if (map && !teardownEditControls) {
+                        teardownEditControls = setUpEditControls(map, geoLayer, input);
+                    }
                 } else {
+                    editButton.innerText = 'Edit'
                     // Save logic with FormData
+                    if (teardownEditControls) {
+                        teardownEditControls();
+                    }
                     const formData = new FormData();
                     inputs.forEach(input => {
                         if (input.type === 'file') return;
@@ -467,6 +464,8 @@ strong {
                             alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
                             setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
                         }
+                        // This is a bit of a hack and could probably be handled better
+                        accordionButton.dispatchEvent(new MouseEvent('click'));
                     })
                     .catch(err => {
                         console.error('Fetch error:', err);

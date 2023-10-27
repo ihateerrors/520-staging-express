@@ -201,25 +201,21 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function handleFetchedData(data) {
     console.log('Data received:', data);
-    if (data && Array.isArray(data) && data.length > 0) {
+    if (data && Array.isArray(data)) {
         data.forEach(project => {
-            if (!project.mapData || !Array.isArray(project.mapData)) {
-                console.warn(`Invalid mapData for project with ID ${project._id}`);
+            if (!project.mapData || typeof project.mapData !== 'string') {
+                console.warn('Map data is missing or invalid');
                 return;
             }
-
             let geoJSONData = null;
-            if (typeof project.mapData[1] === 'string') {
-                try {
-                    geoJSONData = JSON.parse(project.mapData[1]);
-                } catch (e) {
-                    console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
-                    return;
-                }
+            try {
+                geoJSONData = JSON.parse(project.mapData);
+            } catch (e) {
+                console.warn('Failed to parse GeoJSON:', e);
+                return;
             }
-
             if (!geoJSONData) {
-                console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                console.warn(`GeoJSON data is missing or invalid for project with ID ${project.projectId}`);
                 return;
             }
 
@@ -244,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function(){
                             </p>
                             <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>
                             <p>${project.description || "Not specified"}</p>
-                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
+                            <a href="/projects/${project.slug}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
                             <br><br>
                             <p>
                                 <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
