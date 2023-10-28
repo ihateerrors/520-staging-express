@@ -176,7 +176,7 @@ strong {
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
-                            <input type="hidden" name="mapData" data-id="<%= closure.projectId || 'foobar' %>" data-json="<%= closure.mapData || '' %>" disabled> 
+                            <input type="hidden" name="mapData" data-id="<%= closure.projectId %>" data-json="<%= closure.mapData || '' %>" disabled> 
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= closure.activityName %>
                             </button>
