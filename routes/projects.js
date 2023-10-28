@@ -195,37 +195,6 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
     }
 });
 
-router.get('/api/projects/:slug/mapData', async (req, res) => {
-    try {
-        const slug = req.params.slug;
-
-        if (!slug || typeof slug !== 'string') {
-            res.status(400).send('Invalid Project ID');
-            return;
-        }
-
-        const project = await Project.findOne({ slug: slug });
-
-        if (!project) {
-            res.status(404).send('Project not found');
-            return;
-        }
-
-        if (!project.mapData) {
-            res.status(404).send('Map data not found for the project');
-            return;
-        }
-
-        res.json({
-            projectId: project.projectId,
-            mapData: project.mapData
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 router.get('/latest-closures', async (req, res) => {
     try {
         const today = new Date();
