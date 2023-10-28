@@ -199,35 +199,41 @@ strong {
                       </div>
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
-          
-                  
-                            <strong>Timing Features:</strong> 
-                            <ul>
-                                <% closure.timingFeatures.forEach(feature => { %>
-                                    <li><%= feature %></li>
-                                <% }); %>
-                            </ul>
         
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
-                            <strong>Activity Type:</strong> 
-                            <ul>
-                                <% closure.activityType.forEach(type => { %>
-                                    <li><%= type %></li>
+
+                            <strong>Activity Type:</strong>
+                            <div>
+                                <% activityTypes.forEach(type => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (closure.activityType && closure.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
+                                        <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
+                                    </div>
                                 <% }); %>
-                            </ul>
-        
-                            <strong>Impact Type:</strong> 
-                            <ul>
-                                <% closure.impactType.forEach(impact => { %>
-                                    <li><%= impact %></li>
+                            </div>
+                            <strong>Timing Features:</strong>
+                            <div>
+                                <% timingFeatures.forEach(feature => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                        <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
+                                    </div>
                                 <% }); %>
-                            </ul>
-        
-              
+                            </div>
+                            <strong>Impact Type:</strong>
+                            <div>
+                                <% impactTypes.forEach(impact => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (closure.impactType && closure.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
+                                        <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                                  
                             <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
                             imgElement.src = data.imageUrl;
                             imgElement.style.display = 'block';   -->
@@ -352,13 +358,26 @@ strong {
         const drawControl = new L.Control.Draw({
             edit: { featureGroup: drawItems },
         }).addTo(map);
-        map.on(L.Draw.Event.CREATED, (event) => {
+        const activeAccordion = document.querySelector('.accordion-collapse.collapse.show');
+        const saveEditButton = activeAccordion.querySelector('.edit-btn');
+        const deleteButton = activeAccordion.querySelector('.delete-btn');
+        const handleToggleSaveEditButton = () => {
+            if (saveEditButton) {
+                saveEditButton.disabled = !saveEditButton.disabled;
+            }
+            if (deleteButton) {
+                deleteButton.disabled = !deleteButton.disabled;
+            }
+        };
+        map.on(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+        map.on(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+        const onMapLayerCreated = (event) => {
             const layer = event.layer;
             drawItems.addLayer(layer);
             const geoJSON = drawItems.toGeoJSON();
             dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
-            });
-        map.on(L.Draw.Event.EDITED, (event) => {
+        }
+        const onMapLayerEdited = (event) => {
             const layers = event.layers;
             const editedLayers = L.featureGroup();
             layers.eachLayer((layer) => {
@@ -366,9 +385,17 @@ strong {
             });
             const geoJSON = editedLayers.toGeoJSON();
             dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
-        });
+        }
+        map.on(L.Draw.Event.CREATED, onMapLayerCreated);
+        map.on(L.Draw.Event.EDITED, onMapLayerEdited);
         // return a teardown
-        return () => map.removeControl(drawControl);
+        return () => {
+            map.off(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.CREATED, onMapLayerCreated);
+            map.off(L.Draw.Event.EDITED, onMapLayerEdited);
+            map.removeControl(drawControl)
+        };
     };
 
     const setUpMap = (mapContainer, geoJSON) => {
