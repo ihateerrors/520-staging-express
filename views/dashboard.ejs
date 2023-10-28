@@ -317,7 +317,7 @@ strong {
 
     const createInitialGeoLayer = (geoJSON) => {
         try {
-            const geoJSONData = geoJSON || fallbackFeature;
+            const geoJSONData = JSON.parse(geoJSON) || fallbackFeature;
             const geoLayer = L.geoJSON(geoJSONData, {
                 style: function (feature) {
                     return {
