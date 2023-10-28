@@ -38,7 +38,14 @@ router.post('/login', (req, res, next) => {
 router.get('/dashboard', ensureAuthenticated, async (req, res) => {
     try {
         const closures = await Project.find({}); // Fetch all entries
-        res.render('dashboard', { closures, success_msg: req.flash('success_msg') });
+        const activityTypes = Project.schema.path('activityType').caster.enumValues;
+        const timingFeatures = Project.schema.path('timingFeatures').caster.enumValues;
+        const impactTypes = Project.schema.path('impactType').caster.enumValues;
+        if (closures.length === 0) {
+            res.render('dashboard', { closures, activityTypes, timingFeatures, impactTypes, message: 'No closures available.' });
+            return;
+        }
+        res.render('dashboard', { closures, activityTypes, timingFeatures, impactTypes });
     } catch (error) {
         console.error("Error fetching closures:", error);
         res.status(500).send('Internal Server Error');
