@@ -9,6 +9,8 @@ const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
+
 router.get('/pdf-upload', (req, res) => {
     res.render('pdf-upload');
 });
@@ -118,16 +120,16 @@ router.post('/api/projects/mapData', async (req, res) => {
 });
 
 
-router.get('/projects/:projectId', async (req, res) => {
+router.get('/projects/:slug', async (req, res) => {
     try {
-        const projectId = req.params.projectId;
+        const slug = req.params.slug;
 
-        if (!mongoose.Types.ObjectId.isValid(projectId)) {
-            res.status(400).send('Invalid Project ID');
+        if (!slug || typeof slug !== 'string') {
+            res.status(400).send('Invalid slug');
             return;
         }
 
-        const project = await Project.findById(projectId);
+        const project = await Project.findOne({ slug: slug });
 
         if (!project) {
             res.status(404).send('Project not found');
@@ -174,28 +176,11 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
-
-        // Conditional parsing of mapData
-        if (typeof req.body.mapData === 'string') {
-            try {
-                console.log("Raw mapData:", req.body.mapData);
-                req.body.mapData = JSON.parse(req.body.mapData);
-            } catch (error) {
-                console.error("Error saving project:", error);
-                if ("ValidationError" === error.name) {
-                    let messages = Object.values(error.errors).map(e => e.message);
-                    return res.status(400).json({ error: "Error in creating the event: " + messages.join(", ") });
-                }
-                return res.status(500).json({ error: "Internal server error." });
-            }
-            
-        }
-
         // Creating and saving the project
         const project = new Project(req.body);
         await project.save();
         req.flash('success_msg', 'Construction event created successfully.');
-        res.redirect('/projectForm');
+        res.redirect('/dashboard');
     } catch (err) {
         console.error('Error:', err);
         
@@ -216,12 +201,12 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
     try {
         const projectId = req.params.projectId;
 
-        if (!mongoose.Types.ObjectId.isValid(projectId)) {
+        if (!validateProjectIdFromRequest(projectId)) {
             res.status(400).send('Invalid Project ID');
             return;
         }
 
-        const project = await Project.findById(projectId);
+        const project = await Project.findOne({ projectId: projectId });
 
         if (!project) {
             res.status(404).send('Project not found');
@@ -234,7 +219,7 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
         }
 
         res.json({
-            _id: project._id,
+            slug: project.slug,
             mapData: project.mapData
         });
     } catch (error) {

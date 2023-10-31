@@ -16,6 +16,15 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+
 <style>
 
 .alert {
@@ -169,6 +178,7 @@ strong {
                 <% projects.forEach((project, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
+                            <input type="hidden" name="mapData" data-id="<%= closure.projectId %>" data-json="<%= closure.mapData || '' %>" disabled> 
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= project.activityName %>
                             </button>
@@ -191,15 +201,21 @@ strong {
                           </div>
                       </div>
                                           <strong>Time:</strong>
+<<<<<<< HEAD
                             <input type="text" name="time" value="<%= project.time || '' %>" disabled>
                             <strong>Location:</strong>
                             <input type="text" class="mb-3" name="location" value="<%= project.location || '' %>" disabled>
 
                             
+=======
+                            <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
+        
+>>>>>>> 412665c20b9eb0839afbe4e8ab040ad4e93d4094
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= project.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
+<<<<<<< HEAD
                             <input type="text" name="trafficDescription" value="<%= project.trafficDescription || '' %>" disabled>
 
                             <strong>Activity Type:</strong>
@@ -266,6 +282,42 @@ strong {
                               <% }); %>
                             </div> -->
                             
+=======
+                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+
+                            <strong>Activity Type:</strong>
+                            <div>
+                                <% activityTypes.forEach(type => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (closure.activityType && closure.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
+                                        <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <strong>Timing Features:</strong>
+                            <div>
+                                <% timingFeatures.forEach(feature => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                        <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <strong>Impact Type:</strong>
+                            <div>
+                                <% impactTypes.forEach(impact => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (closure.impactType && closure.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
+                                        <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                                  
+                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
+                            imgElement.src = data.imageUrl;
+                            imgElement.style.display = 'block';   -->
+
+>>>>>>> 412665c20b9eb0839afbe4e8ab040ad4e93d4094
                             <strong>Image URL:</strong>
                                     <% if (project.imageUrl){
                             
@@ -310,10 +362,47 @@ strong {
                                 </div>
                             </section>
 
+<<<<<<< HEAD
+=======
+
+
+                                    
+
+                                                      <strong>Location:</strong>
+                            <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+          
+                            <strong>Map Data:</strong>
+                            <div class="greenborder" style="display:flex;">
+                                <div id="map-<%= closure.projectId%>" style="height:775px; width:100%;"></div>
+                            </div>
+          
+                            <strong>Banner Content:</strong>
+                            <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+          
+                            <strong>Post Date:</strong>
+                            <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
+          
+                            <strong>Remove Date:</strong>
+                            <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
+          
+                            <strong>Contact:</strong>
+                            <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+          
+                            <strong>Created At:</strong>
+                            <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+          
+                            <strong>Updated At:</strong>
+                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+          
+                            <button class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button class="btn btn-md btn-danger delete-btn">Delete</button>
+                          </div>
+>>>>>>> 412665c20b9eb0839afbe4e8ab040ad4e93d4094
                         </div>
 
 <!-- END Form's HTML -->
 <script>
+<<<<<<< HEAD
   document.addEventListener('DOMContentLoaded', function() {
       console.log("Script started");
 
@@ -421,6 +510,234 @@ strong {
 </script>
 
   
+=======
+    function ready(fn) {
+        if (document.readyState !== 'loading') {
+            fn();
+        } else {
+            document.addEventListener('DOMContentLoaded', fn);
+        }
+    }
+
+    // Define activity icons
+    const activityIcons = {
+        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+    };
+
+    // Define default styling values
+    const defaultColor = '#f4661a';
+    const defaultWidth = 8;
+    const fallbackFeature = { type: "FeatureCollection", features: [] };
+
+    const createInitialGeoLayer = (geoJSON) => {
+        try {
+            const geoJSONData = JSON.parse(geoJSON) || fallbackFeature;
+            const geoLayer = L.geoJSON(geoJSONData, {
+                style: function (feature) {
+                    return {
+                        color: feature.properties.color || defaultColor,
+                        weight: feature.properties.width || defaultWidth
+                    };
+                },
+                pointToLayer: function (feature, latlng) {
+                    // Try to get the icon URL based on the activity type
+                    const iconUrl = activityIcons[feature.properties.activityType];
+                    // If no icon URL is found, use a default one
+                    const finalIconUrl = iconUrl || "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png"; 
+                    const customIcon = L.icon({
+                        iconUrl: finalIconUrl,
+                        iconSize: [26, 26]
+                    });
+                    return L.marker(latlng, { icon: customIcon });
+                }
+            });
+            return geoLayer;
+        } catch (e) {
+            console.warn('Failed to setup GeoJSON layer:', e);
+        }
+    };
+
+    const setUpEditControls = (map, geoLayer, dataInput) => {
+        const drawItems = new L.featureGroup();
+        geoLayer.eachLayer((layer) => {
+            drawItems.addLayer(layer);
+        });
+        drawItems.addTo(map);
+        const drawControl = new L.Control.Draw({
+            edit: { featureGroup: drawItems },
+        }).addTo(map);
+        const activeAccordion = document.querySelector('.accordion-collapse.collapse.show');
+        const saveEditButton = activeAccordion.querySelector('.edit-btn');
+        const deleteButton = activeAccordion.querySelector('.delete-btn');
+        const handleToggleSaveEditButton = () => {
+            if (saveEditButton) {
+                saveEditButton.disabled = !saveEditButton.disabled;
+            }
+            if (deleteButton) {
+                deleteButton.disabled = !deleteButton.disabled;
+            }
+        };
+        map.on(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+        map.on(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+        const onMapLayerCreated = (event) => {
+            const layer = event.layer;
+            drawItems.addLayer(layer);
+            const geoJSON = drawItems.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
+        }
+        const onMapLayerEdited = (event) => {
+            const layers = event.layers;
+            const editedLayers = L.featureGroup();
+            layers.eachLayer((layer) => {
+                editedLayers.addLayer(layer);
+            });
+            const geoJSON = editedLayers.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
+        }
+        map.on(L.Draw.Event.CREATED, onMapLayerCreated);
+        map.on(L.Draw.Event.EDITED, onMapLayerEdited);
+        // return a teardown
+        return () => {
+            map.off(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.CREATED, onMapLayerCreated);
+            map.off(L.Draw.Event.EDITED, onMapLayerEdited);
+            map.removeControl(drawControl)
+        };
+    };
+
+    const setUpMap = (mapContainer, geoJSON) => {
+        const map = L.map(mapContainer).setView([47.6407, -122.2971], 8);
+        L.gridLayer.googleMutant({
+            type: 'roadmap',
+            maxZoom: 17,
+            apiKey: 'AIzaSyC-0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+        }).addTo(map);
+        try {
+            const geoLayer = createInitialGeoLayer(geoJSON);
+            geoLayer.addTo(map);
+            return { map, geoLayer };
+        } catch (e) {
+            console.error('Could not add layer to map:', e);
+        }
+    };
+
+    ready(() => {
+        console.log("Script started"); // Log when script starts
+        const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
+        dataInputs.forEach((input) => {
+            const accordionItem = input.closest('.accordion-item');
+            const accordionButton = accordionItem.querySelector('.accordion-button');
+            const editButton = accordionItem.querySelector('.edit-btn');
+            const deleteButton = accordionItem.querySelector('.delete-btn');
+
+            const id = input.getAttribute('data-id');
+            const geoJSON = input.getAttribute('data-json');
+            const mapContainer = document.getElementById(`map-${id}`);
+            const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
+
+            accordionButton.addEventListener('click', () => {
+                try {
+                    if (!map || !geoLayer) {
+                        console.warn('Map or bounds not found');
+                        return;
+                    }
+                    map.invalidateSize();
+                    map.fitBounds(geoLayer.getBounds());
+                } catch(e) {
+                    console.warn('Failed to fit map bounds:', e);
+                }
+            });
+
+            editButton.addEventListener('click', () => {
+                console.log('Edit button clicked');
+                const inputs = accordionItem.querySelectorAll('input');
+                const fileInput = accordionItem.querySelector('input[type=file]');
+                console.log("Located file input:", fileInput);
+                // Toggle the input fields' disabled state
+                inputs.forEach(input => input.disabled = !input.disabled);
+                console.log("After toggle: File input disabled state:", fileInput.disabled); 
+                // Toggle button text between 'Edit' and 'Save'
+                let teardownEditControls = null;
+                if (editButton.innerText === 'Edit') {
+                    editButton.innerText = 'Save';
+                    if (map && !teardownEditControls) {
+                        teardownEditControls = setUpEditControls(map, geoLayer, input);
+                    }
+                } else {
+                    editButton.innerText = 'Edit'
+                    // Save logic with FormData
+                    if (teardownEditControls) {
+                        teardownEditControls();
+                    }
+                    const formData = new FormData();
+                    inputs.forEach(input => {
+                        if (input.type === 'file') return;
+                        if (input.name === 'mapData') {
+                            formData.append('mapData', input.getAttribute('data-json'));
+                        } else {
+                            formData.append(input.name, input.value);
+                        }
+                    });
+                    if (fileInput.files[0]) {
+                        formData.append('image', fileInput.files[0]);
+                    }
+                    fetch(`/api/projects/${id}`, {
+                        method: 'PUT',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const alertPlaceholder = document.getElementById('alertPlaceholder');
+                        if (data.error) {
+                            console.error('Error:', data.error);
+                            // Display error alert
+                            alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                        } else {
+                            // Display success alert
+                            alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                        }
+                        // This is a bit of a hack and could probably be handled better
+                        accordionButton.dispatchEvent(new MouseEvent('click'));
+                    })
+                    .catch(err => {
+                        console.error('Fetch error:', err);
+                        const alertPlaceholder = document.getElementById('alertPlaceholder');
+                        alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
+                        setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                    });
+                }
+            });
+
+            deleteButton.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to delete this closure?')) {
+                    try {
+                        const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+                        if (response.ok) {
+                            accordionItem.remove();
+                            alert('Closure deleted successfully!');
+                        } else {
+                            const data = await response.json();
+                            alert('Error deleting closure: ' + data.error);
+                        }
+                    } catch (err) {
+                        console.error('Error deleting closure:', err);
+                        alert('There was an error deleting the closure.');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+>>>>>>> 412665c20b9eb0839afbe4e8ab040ad4e93d4094
     </body>
     </html>
 

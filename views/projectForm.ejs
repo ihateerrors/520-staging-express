@@ -120,8 +120,8 @@ type="text/css" />
 
   <form action="/api/projects" method="post" enctype="multipart/form-data" style="font-size: 1.2rem; margin-left: 7%; margin-right: 7%;" onsubmit="return handleSubmit()">
     <div class="mb-3">
-        <label for="activityName" class="form-label selection-header">Construction Actvity Title</label>
-        <input type="text" class="form-control" id="activityName" name="activityName">
+        <label for="activityName" class="form-label">Construction Actvity Title</label>
+        <input type="text" class="form-control" id="activityName" name="activityName" required>
     </div>
 
     <div class="mb-3">
@@ -236,38 +236,33 @@ type="text/css" />
 </section>
 <!-- END Form's HTML -->
 <script>
+    function displayFormMessage(message, type) {
+        const errorMessageBox = document.getElementById('errorMessage');
+        const successMessageBox = document.querySelector('.success-message');
+        // Reset previous messages
+        errorMessageBox.innerHTML = '';
+        successMessageBox.innerHTML = '';
 
-function displayFormMessage(message, type) {
-    const errorMessageBox = document.getElementById('errorMessage');
-    const successMessageBox = document.querySelector('.success-message');
+        const alertBox = document.createElement('div');
 
-    // Reset previous messages
-    errorMessageBox.innerHTML = '';
-    successMessageBox.innerHTML = '';
+        if (type === 'error') {
+            alertBox.className = 'alert alert-danger';
+            errorMessageBox.appendChild(alertBox);
+        } else if (type === 'success') {
+            alertBox.className = 'alert alert-success';
+            successMessageBox.appendChild(alertBox);
+        }
 
-    const alertBox = document.createElement('div');
-
-    if (type === 'error') {
-        alertBox.className = 'alert alert-danger';
-        errorMessageBox.appendChild(alertBox);
-    } else if (type === 'success') {
-        alertBox.className = 'alert alert-success';
-        successMessageBox.appendChild(alertBox);
+        alertBox.textContent = message;
     }
 
-    alertBox.textContent = message;
-}
-
-
     const map = L.map('map').setView([47.6407, -122.2971], 15);
-    
     // Add Google Mutant layer
     L.gridLayer.googleMutant({
         type: 'roadmap',
         maxZoom: 20,
         apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
     }).addTo(map);
-    
     // Drawing controls
     const drawnItems = new L.FeatureGroup().addTo(map);
     const drawControl = new L.Control.Draw({
@@ -275,29 +270,30 @@ function displayFormMessage(message, type) {
             featureGroup: drawnItems
         }
     }).addTo(map);
-    
     map.on(L.Draw.Event.CREATED, function(event) {
         const layer = event.layer;
         drawnItems.addLayer(layer);
     });
-    
     map.on(L.Draw.Event.EDITED, function(event) {
         const layers = event.layers;
         layers.eachLayer(function(layer) {
             // Update the layers here if necessary
         });
     });
-    
-   
+
     document.querySelector('form').addEventListener('submit', async function(e) {
         e.preventDefault();
-    
+        if (e.target.checkValidity() === false) {
+            e.stopPropagation();
+            throw new Error('Activity name, start date, and post date are required.');
+        }
+
         // Extract form data
         const formData = new FormData(e.target);
     
         // Convert drawn items to geoJSON and add to the form data
         const drawnData = drawnItems.toGeoJSON();
-        formData.append('mapData', JSON.stringify(drawnData));
+        formData.set('mapData', JSON.stringify(drawnData));
     
         // POST request to send form data and drawn items to the server
         try {
@@ -305,32 +301,21 @@ function displayFormMessage(message, type) {
                 method: 'POST',
                 body: formData
             });
-    
-
-
-
-// Handle success
-if (response.ok) {
-    displayFormMessage("Construction event created successfully.", 'success');
-} else {
-    const data = await response.json();
-    console.error("Error saving project:", data.error);
-    displayFormMessage(data.error, 'error');
-}
+            // Handle success
             if (response.ok) {
-                            window.location.href = "/projectForm"; 
+                displayFormMessage("Construction event created successfully.", 'success');
             } else {
-                             const data = await response.json();
+                const data = await response.json();
                 console.error("Error saving project:", data.error);
+                displayFormMessage(data.error, 'error');
             }
         } catch (error) {
                 console.error("Failed to submit form:", error);
                 displayFormMessage("Error: Failed to submit form. Please try again.", 'error');
-            }
-
+        }
     });
     </script>
-    
+
   </body>
 </html>
 
