@@ -200,33 +200,45 @@ strong {
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
           
-                  
-                            <strong>Timing Features:</strong> 
-                            <ul>
-                                <% closure.timingFeatures.forEach(feature => { %>
-                                    <li><%= feature %></li>
+           
+
+
+
+                            <strong>Activity Type:</strong>
+                            <div>
+                                <% activityTypes.forEach(type => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (closure.activityType && closure.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
+                                        <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
+                                    </div>
                                 <% }); %>
-                            </ul>
-        
+                            </div>
+                            <strong>Timing Features:</strong>
+                            <div>
+                                <% timingFeatures.forEach(feature => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
+                                        <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <strong>Impact Type:</strong>
+                            <div>
+                                <% impactTypes.forEach(impact => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (closure.impactType && closure.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
+                                        <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
-                            <strong>Activity Type:</strong> 
-                            <ul>
-                                <% closure.activityType.forEach(type => { %>
-                                    <li><%= type %></li>
-                                <% }); %>
-                            </ul>
-        
-                            <strong>Impact Type:</strong> 
-                            <ul>
-                                <% closure.impactType.forEach(impact => { %>
-                                    <li><%= impact %></li>
-                                <% }); %>
-                            </ul>
-        
+
+                
               
                             <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
                             imgElement.src = data.imageUrl;

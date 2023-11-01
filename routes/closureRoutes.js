@@ -59,7 +59,7 @@ router.put("/api/projects/:id", upload.single("image"), async (e, r) => {
         await t.save();
         r.json(t);
     } catch (e) {
-        r.status(500).json({ error: "Internal server error while updating closure.", detailedError: e.message });
+        r.status(500).json({ error: "Internal server error while updating closure." });
     }
 });
 
