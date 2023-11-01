@@ -211,7 +211,7 @@ strong {
 
                             <strong>Activity Type:</strong>
                             <div>
-                                <% activityTypes.forEach(type => { %>
+                                <% allActivityTypes.forEach(type => { %>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
                                         <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
@@ -220,7 +220,7 @@ strong {
                             </div>
                             <strong>Timing Features:</strong>
                             <div>
-                                <% timingFeatures.forEach(feature => { %>
+                                <% allTimingFeatures.forEach(feature => { %>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
                                         <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
@@ -229,7 +229,7 @@ strong {
                             </div>
                             <strong>Impact Type:</strong>
                             <div>
-                                <% impactTypes.forEach(impact => { %>
+                                <% allImpactTypes.forEach(impact => { %>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
                                         <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
