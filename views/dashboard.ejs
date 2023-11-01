@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -7,7 +6,6 @@
 
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
 type="text/css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
@@ -15,7 +13,6 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/styles3.css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
 <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
@@ -175,6 +172,7 @@ strong {
                     </div>
 
             <div class="accordion" id="closureAccordion">
+                <% if (projects.length > 0) { %>
                 <% projects.forEach((project, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
@@ -237,11 +235,7 @@ strong {
                                 <% }); %>
                             </div>
                                   
-                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
-                            imgElement.src = data.imageUrl;
-                            imgElement.style.display = 'block';   -->
-
-                            <strong>Image URL:</strong>
+                                       <strong>Image URL:</strong>
                                     <% if (project.imageUrl){
                             
                                       %>                                 
@@ -282,43 +276,12 @@ strong {
                                             </div>
                                         </div>
                                     <% }); %>
+                                    <% } else { %>
+                                        <p>No closures found</p>
+                                    <% } %>
                                 </div>
                             </section>
-
-
-
-                                    
-
-                                                      <strong>Location:</strong>
-                            <input type="text" class="mb-3" name="location" value="<%= project.location || '' %>" disabled>
-          
-                            <strong>Map Data:</strong>
-                            <div class="greenborder" style="display:flex;">
-                                <div id="map-<%= project.projectId%>" style="height:775px; width:100%;"></div>
-                            </div>
-          
-                            <strong>Banner Content:</strong>
-                            <input type="text" name="bannerContent" value="<%= project.bannerContent || '' %>" disabled>
-          
-                            <strong>Post Date:</strong>
-                            <input type="date" name="postDate" value="<%= project.postDate.toISOString().split('T')[0] %>" disabled>
-          
-                            <strong>Remove Date:</strong>
-                            <input type="date" name="removeDate" value="<%= project.removeDate ? project.removeDate.toISOString().split('T')[0] : '' %>" disabled>
-          
-                            <strong>Contact:</strong>
-                            <input type="text" name="contact" value="<%= project.contact || '' %>" disabled>
-          
-                            <strong>Created At:</strong>
-                            <input type="date" name="createdAt" value="<%= project.createdAt.toISOString().split('T')[0] %>" disabled>
-          
-                            <strong>Updated At:</strong>
-                            <input type="date" name="updatedAt" value="<%= project.updatedAt.toISOString().split('T')[0] %>" disabled><br>
-          
-                            <button class="btn btn-md btn-secondary edit-btn">Edit</button>
-                            <button class="btn btn-md btn-danger delete-btn">Delete</button>
-                          </div>
-                        </div>
+                        
 
 <!-- END Form's HTML -->
 <script>
@@ -509,11 +472,11 @@ strong {
                             console.error('Error:', data.error);
                             // Display error alert
                             alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
-                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 10000);  // Remove the alert after 10 seconds
                         } else {
                             // Display success alert
                             alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
-                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 10000);  
                         }
                         // This is a bit of a hack and could probably be handled better
                         accordionButton.dispatchEvent(new MouseEvent('click'));
@@ -522,7 +485,7 @@ strong {
                         console.error('Fetch error:', err);
                         const alertPlaceholder = document.getElementById('alertPlaceholder');
                         alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                        setTimeout(() => alertPlaceholder.innerHTML = '', 10000);
                     });
                 }
             });

@@ -42,43 +42,28 @@ router.get("/dashboard", ensureAuthenticated, async (req, res) => {
         const impactTypeEnums = Project.schema.path('impactType').caster.enumValues;
 
         // Rendering logic remains the same, but we'll add the enum arrays to the rendered view
-    //     if (projects.length === 0) {
-    //         res.render("dashboard", {
-    //             projects: [],
-    //             allActivityTypes: activityTypeEnums,
-    //             allTimingFeatures: timingFeaturesEnums,
-    //             allImpactTypes: impactTypeEnums,
-    //             message: "No projects available."
-    //         });
-    //     } else {
-    //         res.render("dashboard", {
-    //             projects: projects,
-    //             allActivityTypes: activityTypeEnums,
-    //             allTimingFeatures: timingFeaturesEnums,
-    //             allImpactTypes: impactTypeEnums
-    //         });
-    //     }
-    // } catch (error) {
-    //     res.status(500).send("Internal Server Error");
-    // }
-    // });
-
-    res.render("dashboard", {
-        projects: projects,
-        allActivityTypes: activityTypeEnums,
-        allTimingFeatures: timingFeaturesEnums,
-        allImpactTypes: impactTypeEnums,
-        message: projects.length === 0 ? "No projects available." : ""
-    });
-} catch (error) {
-    // Handle error scenario (logging the error or sending an error message)
-    console.error(error);
-    res.render("dashboard", {
-        projects: [],
-        message: "Error retrieving projects."
-    });
-}
+        if (projects.length === 0) {
+            res.render("dashboard", {
+                projects: [],
+                allActivityTypes: activityTypeEnums,
+                allTimingFeatures: timingFeaturesEnums,
+                allImpactTypes: impactTypeEnums,
+                message: "No projects available."
+            });
+        } else {
+            res.render("dashboard", {
+                projects: projects,
+                allActivityTypes: activityTypeEnums,
+                allTimingFeatures: timingFeaturesEnums,
+                allImpactTypes: impactTypeEnums
+            });
+        }
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
 });
+
+
 router.get('/api/test', (req, res) => res.send('Test successful!'));
 
 router.get('/api/projects/mapData', async (req, res) => {
