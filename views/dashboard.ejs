@@ -6,6 +6,7 @@
 
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
 <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
 type="text/css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
@@ -13,6 +14,7 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/styles3.css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
 <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
@@ -97,7 +99,6 @@ strong {
   </head>
   <body>
     
-    
     <header id="header" style="width: 100vw">
         <div class="container-fluid header-container">
           <div class="row">
@@ -143,14 +144,14 @@ strong {
             </div>
           </div>
         </div>
-    </header>
+      </header>
     <div class="container">
          <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
             <h1 class="wdot-dkgreen" style="font-size: 42px; line-height: 50px; margin-top: 60px;">Welcome to the SR 520 Construction Corner Dashboard</h1>
             <p><strong></strong></p>
             <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
-            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View and Edit Closures</a>
+            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closures</a>
               
             </a>  <br><br>
         </div>
@@ -159,10 +160,10 @@ strong {
         <section style="margin: 3%;">
             <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
             <div id="past-closures"></div>
-            <!-- This is where we want the alerts to show -->
+            <!-- Place this where we want the alerts to show -->
                     <div id="alertPlaceholder">
-<!-- 
-                      <div class="alert alert-success" role="alert">
+
+                      <!-- <div class="alert alert-success" role="alert">
                        Closure edited successfully.
                       </div>
                       <div class="alert alert-danger" role="alert">
@@ -172,118 +173,120 @@ strong {
                     </div>
 
             <div class="accordion" id="closureAccordion">
-                <% if (projects.length > 0) { %>
-                <% projects.forEach((project, index) => { %>
+                <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
-                            <input type="hidden" name="mapData" data-id="<%= project.projectId %>" data-json="<%= project.mapData || '' %>" disabled> 
+                            <input type="hidden" name="mapData" data-id="<%= closure._id %>" data-json="<%= closure.mapData || '' %>" disabled>
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
-                                <%= project.activityName %>
+                                <%= closure.activityName %>
                             </button>
                         </h2>
-                        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#projectAccordion">
+                        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
-                            <form action="/updateProject" method="post">
                             <strong>Activity Name:</strong>
-                            <input type="text" name="activityName" value="<%= project.activityName %>" disabled><br>
+                            <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
           
                          <div class="date-container">
                           <div class="date-item">
                               <strong>Start Date:</strong>
-                              <input type="date" name="startDate" value="<%= project.startDate.toISOString().split('T')[0] %>" disabled>
+                              <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
                           </div>
                       
                           <div class="date-item">
                               <strong>End Date:</strong>
-                              <input type="date" name="endDate" value="<%= project.endDate ? project.endDate.toISOString().split('T')[0] : '' %>" disabled>
+                              <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
                           </div>
                       </div>
                                           <strong>Time:</strong>
-                            <input type="text" name="time" value="<%= project.time || '' %>" disabled>
+                            <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
+          
+                  
+                            <strong>Timing Features:</strong> 
+                            <ul>
+                                <% closure.timingFeatures.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                <% }); %>
+                            </ul>
         
                             <strong>Description:</strong>
-                            <input type="text" name="description" value="<%= project.description || '' %>" disabled>
+                            <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
-                            <input type="text" name="trafficDescription" value="<%= project.trafficDescription || '' %>" disabled>
+                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                            <strong>Activity Type:</strong> 
+                            <ul>
+                                <% closure.activityType.forEach(type => { %>
+                                    <li><%= type %></li>
+                                <% }); %>
+                            </ul>
+        
+                            <strong>Impact Type:</strong> 
+                            <ul>
+                                <% closure.impactType.forEach(impact => { %>
+                                    <li><%= impact %></li>
+                                <% }); %>
+                            </ul>
+        
+              
+                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
+                            imgElement.src = data.imageUrl;
+                            imgElement.style.display = 'block';   -->
 
-                            <strong>Activity Type:</strong>
-                            <div>
-                                <% allActivityTypes.forEach(type => { %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (project.activityType && project.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
-                                        <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
-                                    </div>
-                                <% }); %>
-                            </div>
-                            <strong>Timing Features:</strong>
-                            <div>
-                                <% allTimingFeatures.forEach(feature => { %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (project.timingFeatures && project.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
-                                        <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
-                                    </div>
-                                <% }); %>
-                            </div>
-                            <strong>Impact Type:</strong>
-                            <div>
-                                <% allImpactTypes.forEach(impact => { %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (project.impactType && project.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
-                                        <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
-                                    </div>
-                                <% }); %>
-                            </div>
-                                  
-                                       <strong>Image URL:</strong>
-                                    <% if (project.imageUrl){
+                            <strong>Image URL:</strong>
+                                    <% if (closure.imageUrl){
                             
                                       %>                                 
-                                    <a href="<%=project.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%= project.imageUrl %>" alt="Project Image" style="max-width: 900px;"></a>
+                                    <a href="<%=closure.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
                                     <% } else { %>
                                     <span class="edit-image">Replace image</span>
                                     <img id="img<%=index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
                                     <% } %><br><br>
 
-                                    <input type="file" name="image" id="image" disabled><br> 
 
-                                                                      
-                                                <strong>Map Data:</strong>
-                                                <input type="text" name="mapData" value="<%= JSON.stringify(project.mapData) || '' %>" disabled>
-                            
-                                                <strong>Banner Content:</strong>
-                                                <input type="text" name="bannerContent" value="<%= project.bannerContent || '' %>" disabled>
-                            
-                                                <strong>Post Date:</strong>
-                                                <input type="date" name="postDate" value="<%= project.postDate.toISOString().split('T')[0] %>" disabled>
-                            
-                                                <strong>Remove Date:</strong>
-                                                <input type="date" name="removeDate" value="<%= project.removeDate ? project.removeDate.toISOString().split('T')[0] : '' %>" disabled>
-                            
-                                                <strong>Contact:</strong>
-                                                <input type="text" name="contact" value="<%= project.contact || '' %>" disabled>
-                            
-                                                <strong>Created At:</strong>
-                                                <input type="date" name="createdAt" value="<%= project.createdAt.toISOString().split('T')[0] %>" disabled>
-                            
-                                                <strong>Updated At:</strong>
-                                                <input type="date" name="updatedAt" value="<%= project.updatedAt.toISOString().split('T')[0] %>" disabled><br>
-                            
-                                                <button class="btn btn-md btn-secondary edit-btn" data-id="<%= project._id %>">Edit</button>
-                                                <button class="btn btn-md btn-danger delete-btn" data-id="<%= project._id %>">Delete</button>
-                                              </form>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    <% }); %>
-                                    <% } else { %>
-                                        <p>No closures found</p>
-                                    <% } %>
-                                </div>
-                            </section>
-                        
+                                    <input type="file" name="image" id="image" disabled><br> 
+                                  
+
+                                                      <strong>Location:</strong>
+                            <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+          
+                            <strong>Map Data:</strong>
+                            <div class="greenborder" style="display:flex;">
+                                <div id="map-<%= closure._id%>" style="height:775px; width:100%;"></div>
+                            </div>
+          
+                            <strong>Banner Content:</strong>
+                            <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+          
+                            <strong>Post Date:</strong>
+                            <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
+          
+                            <strong>Remove Date:</strong>
+                            <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
+          
+                            <strong>Contact:</strong>
+                            <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+          
+                            <strong>Created At:</strong>
+                            <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+          
+                            <strong>Updated At:</strong>
+                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+          
+                            <button class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button class="btn btn-md btn-danger delete-btn">Delete</button>
+                          </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            
+   
+        </section>
+
+    </div>
 
 <!-- END Form's HTML -->
+
 <script>
     function ready(fn) {
         if (document.readyState !== 'loading') {
@@ -306,11 +309,24 @@ strong {
     // Define default styling values
     const defaultColor = '#f4661a';
     const defaultWidth = 8;
-    const fallbackFeature = { type: "FeatureCollection", features: [] };
+    const fallbackFeature = { type: "FeatureCollection", features: [] }; // TODO: Make sure this doesn't cause data loss
+
+    const maybeSanitizeJSON = (json) => { // TODO: Kill this after refactor
+        let jsonString = json;
+        if (json.startsWith(',')) {
+            jsonString = json.slice(1);
+        } 
+        try {
+            const parsedData = JSON.parse(jsonString);
+            return parsedData;
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+        }
+    }
 
     const createInitialGeoLayer = (geoJSON) => {
         try {
-            const geoJSONData = JSON.parse(geoJSON) || fallbackFeature;
+            const geoJSONData = geoJSON ? maybeSanitizeJSON(geoJSON) : fallbackFeature;
             const geoLayer = L.geoJSON(geoJSONData, {
                 style: function (feature) {
                     return {
@@ -336,56 +352,9 @@ strong {
         }
     };
 
-    const setUpEditControls = (map, geoLayer, dataInput) => {
-        const drawItems = new L.featureGroup();
-        geoLayer.eachLayer((layer) => {
-            drawItems.addLayer(layer);
-        });
-        drawItems.addTo(map);
-        const drawControl = new L.Control.Draw({
-            edit: { featureGroup: drawItems },
-        }).addTo(map);
-        const activeAccordion = document.querySelector('.accordion-collapse.collapse.show');
-        const saveEditButton = activeAccordion.querySelector('.edit-btn');
-        const deleteButton = activeAccordion.querySelector('.delete-btn');
-        const handleToggleSaveEditButton = () => {
-            if (saveEditButton) {
-                saveEditButton.disabled = !saveEditButton.disabled;
-            }
-            if (deleteButton) {
-                deleteButton.disabled = !deleteButton.disabled;
-            }
-        };
-        map.on(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
-        map.on(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
-        const onMapLayerCreated = (event) => {
-            const layer = event.layer;
-            drawItems.addLayer(layer);
-            const geoJSON = drawItems.toGeoJSON();
-            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
-        }
-        const onMapLayerEdited = (event) => {
-            const layers = event.layers;
-            const editedLayers = L.featureGroup();
-            layers.eachLayer((layer) => {
-                editedLayers.addLayer(layer);
-            });
-            const geoJSON = editedLayers.toGeoJSON();
-            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
-        }
-        map.on(L.Draw.Event.CREATED, onMapLayerCreated);
-        map.on(L.Draw.Event.EDITED, onMapLayerEdited);
-        // return a teardown
-        return () => {
-            map.off(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
-            map.off(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
-            map.off(L.Draw.Event.CREATED, onMapLayerCreated);
-            map.off(L.Draw.Event.EDITED, onMapLayerEdited);
-            map.removeControl(drawControl)
-        };
-    };
-
-    const setUpMap = (mapContainer, geoJSON) => {
+    const setUpMap = (geoJSON, id) => {
+        const mapContainer = document.getElementById(`map-${id}`);
+        const dataInput = document.querySelector(`input[data-id="${id}"]`);
         const map = L.map(mapContainer).setView([47.6407, -122.2971], 8);
         L.gridLayer.googleMutant({
             type: 'roadmap',
@@ -394,7 +363,33 @@ strong {
         }).addTo(map);
         try {
             const geoLayer = createInitialGeoLayer(geoJSON);
-            geoLayer.addTo(map);
+            const drawnItems = new L.featureGroup();
+            geoLayer.eachLayer((layer) => {
+                drawnItems.addLayer(layer);
+            });
+            drawnItems.addTo(map);
+            const drawControl = new L.Control.Draw({
+                edit: {
+                    featureGroup: drawnItems
+                }
+            }).addTo(map);
+            map.on(L.Draw.Event.CREATED, (event) => {
+                const layer = event.layer;
+                drawnItems.addLayer(layer);
+                const geoJSON = drawnItems.toGeoJSON();
+                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                console.log('Created new layer:', geoJSON); // TODO: Remove this
+            });
+            map.on(L.Draw.Event.EDITED, (event) => {
+                const layers = event.layers;
+                const editedLayers = L.featureGroup();
+                layers.eachLayer((layer) => {
+                    editedLayers.addLayer(layer);
+                });
+                const geoJSON = editedLayers.toGeoJSON();
+                dataInput.setAttribute('data-json', JSON.stringify(geoJSON));
+                console.log('Edited layer:', geoJSON); // TODO: Remove this
+            });
             return { map, geoLayer };
         } catch (e) {
             console.error('Could not add layer to map:', e);
@@ -405,15 +400,13 @@ strong {
         console.log("Script started"); // Log when script starts
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
         dataInputs.forEach((input) => {
+            const id = input.getAttribute('data-id');
+            const geoJSON = input.getAttribute('data-json');
             const accordionItem = input.closest('.accordion-item');
             const accordionButton = accordionItem.querySelector('.accordion-button');
             const editButton = accordionItem.querySelector('.edit-btn');
             const deleteButton = accordionItem.querySelector('.delete-btn');
-
-            const id = input.getAttribute('data-id');
-            const geoJSON = input.getAttribute('data-json');
-            const mapContainer = document.getElementById(`map-${id}`);
-            const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
+            const { map, geoLayer } = setUpMap(geoJSON, id);
 
             accordionButton.addEventListener('click', () => {
                 try {
@@ -437,18 +430,10 @@ strong {
                 inputs.forEach(input => input.disabled = !input.disabled);
                 console.log("After toggle: File input disabled state:", fileInput.disabled); 
                 // Toggle button text between 'Edit' and 'Save'
-                let teardownEditControls = null;
                 if (editButton.innerText === 'Edit') {
                     editButton.innerText = 'Save';
-                    if (map && !teardownEditControls) {
-                        teardownEditControls = setUpEditControls(map, geoLayer, input);
-                    }
                 } else {
-                    editButton.innerText = 'Edit'
                     // Save logic with FormData
-                    if (teardownEditControls) {
-                        teardownEditControls();
-                    }
                     const formData = new FormData();
                     inputs.forEach(input => {
                         if (input.type === 'file') return;
@@ -472,20 +457,18 @@ strong {
                             console.error('Error:', data.error);
                             // Display error alert
                             alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
-                            setTimeout(() => alertPlaceholder.innerHTML = '', 10000);  // Remove the alert after 10 seconds
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
                         } else {
                             // Display success alert
                             alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
-                            setTimeout(() => alertPlaceholder.innerHTML = '', 10000);  
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
                         }
-                        // This is a bit of a hack and could probably be handled better
-                        accordionButton.dispatchEvent(new MouseEvent('click'));
                     })
                     .catch(err => {
                         console.error('Fetch error:', err);
                         const alertPlaceholder = document.getElementById('alertPlaceholder');
                         alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
-                        setTimeout(() => alertPlaceholder.innerHTML = '', 10000);
+                        setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
                     });
                 }
             });
@@ -514,3 +497,4 @@ strong {
     </body>
     </html>
 
+<!-- END Form's HTML -->
