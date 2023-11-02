@@ -205,7 +205,7 @@ router.get('/latest-closures', async (req, res) => {
             postDate: { $lte: today }
         })
         .sort({ postDate: -1 }) // This sorts by postDate in descending order.
-        .limit(10)
+        .limit(4)
         .exec();
 
         res.json(closures);
