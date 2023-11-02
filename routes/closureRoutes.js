@@ -21,36 +21,42 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.put("/api/projects/:projectId", upload.single("image"), async (req, res) => {
     try {
-        const project = await Project.findOne({ projectId: req.params.projectId });
+        const projectId = req.params.projectId;
+        const project = await Project.findOne({ projectId: projectId });
+
         if (!project) {
             return res.status(404).json({ error: "Closure not found" });
         }
 
-        Object.keys(req.body).forEach(key => {
-            if (req.body[key] && project[key] !== undefined) {
-                project[key] = req.body[key];
-            }
-        });
+        const data = req.body;
+        const updateData = {
+            activityName: data.activityName,
+            startDate: data.startDate && new Date(data.startDate),
+            endDate: data.endDate && new Date(data.endDate),
+            time: data.time,
+            timingFeatures: data.timingFeatures || [], 
+            description: data.description,
+            trafficDescription: data.trafficDescription,
+            activityType: data.activityType || [],
+            impactType: data.impactType || [],
+            location: data.location,
+            mapData: data.mapData,
+            bannerContent: data.bannerContent,
+            postDate: data.postDate && new Date(data.postDate),
+            removeDate: data.removeDate && new Date(data.removeDate),
+            contact: data.contact
+        };
 
-        ["startDate", "endDate", "postDate", "removeDate", "createdAt", "updatedAt"].forEach(dateKey => {
-            if (req.body[dateKey]) {
-                project[dateKey] = new Date(req.body[dateKey]);
-            }
-        });
-
-        if (req.file) {
-            const imageUrl = await uploadToAzure(req.file.buffer, req.file.originalname);
-            project.imageUrl = imageUrl;
+        const file = req.file; // The image file after multer middleware
+        if (file) {
+            const imageUrl = await uploadToAzure(file.buffer, file.originalname);
+            updateData.imageUrl = imageUrl;
         }
 
-        ["timingFeatures", "activityType", "impactType"].forEach(key => {
-            if (req.body[key] && typeof req.body[key] === "string") {
-                project[key] = req.body[key].split(",").map(item => item.trim());
-            }
-        });
+        project.set(updateData);
 
-        await project.save();
-        res.json(project);
+        const updatedProject = await project.save();
+        res.status(200).json(updatedProject);
     }  catch (error) {
         console.error("Error while updating closure:", error);
         res.status(500).json({ error: "Internal server error while updating closure.", detailedError: error.message });
