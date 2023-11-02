@@ -238,11 +238,6 @@ strong {
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
 
-                
-              
-                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
-                            imgElement.src = data.imageUrl;
-                            imgElement.style.display = 'block';   -->
 
                             <strong>Image URL:</strong>
                                     <% if (closure.imageUrl){
@@ -323,18 +318,19 @@ strong {
     const defaultWidth = 8;
     const fallbackFeature = { type: "FeatureCollection", features: [] }; // TODO: Make sure this doesn't cause data loss
 
-    const maybeSanitizeJSON = (json) => { // TODO: Kill this after refactor
-        let jsonString = json;
-        if (json.startsWith(',')) {
-            jsonString = json.slice(1);
-        } 
-        try {
-            const parsedData = JSON.parse(jsonString);
-            return parsedData;
-        } catch (error) {
-            console.error('Error parsing JSON:', error);
-        }
-    }
+    // const maybeSanitizeJSON = (json) => {         
+       
+    //     let jsonString = json;
+    //     if (json.startsWith(',')) {
+    //         jsonString = json.slice(1);
+    //     } 
+    //     try {
+    //         const parsedData = JSON.parse(jsonString);
+    //         return parsedData;
+    //     } catch (error) {
+    //         console.error('Error parsing JSON:', error);
+    //     }
+    // }
 
     const createInitialGeoLayer = (geoJSON) => {
         try {
