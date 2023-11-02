@@ -444,11 +444,8 @@ strong {
             editButton.addEventListener('click', () => {
                 console.log('Edit button clicked');
                 const inputs = accordionItem.querySelectorAll('input');
-                const fileInput = accordionItem.querySelector('input[type=file]');
-                console.log("Located file input:", fileInput);
                 // Toggle the input fields' disabled state
                 inputs.forEach(input => input.disabled = !input.disabled);
-                console.log("After toggle: File input disabled state:", fileInput.disabled); 
                 // Toggle button text between 'Edit' and 'Save'
                 let teardownEditControls = null;
                 if (editButton.innerText === 'Edit') {
@@ -460,20 +457,25 @@ strong {
                     editButton.innerText = 'Edit'
                     // Save logic with FormData
                     if (teardownEditControls) {
+                        // Remove the edit controls from the map
                         teardownEditControls();
                     }
                     const formData = new FormData();
                     inputs.forEach(input => {
-                        if (input.type === 'file') return;
-                        if (input.name === 'mapData') {
+                        if (input.type === 'file' && input.name === 'image') {
+                            if (input.files[0]) {
+                                formData.append('image', input.files[0]);
+                            }
+                        } else if (input.name === 'mapData') {
                             formData.append('mapData', input.getAttribute('data-json'));
+                        } else if (input.name === 'activityType[]' || input.name === 'timingFeatures[]' || input.name === 'impactType[]') {
+                            if (input.checked) {
+                                formData.append(input.name, input.value);
+                            }
                         } else {
                             formData.append(input.name, input.value);
                         }
                     });
-                    if (fileInput.files[0]) {
-                        formData.append('image', fileInput.files[0]);
-                    }
                     fetch(`/api/projects/${id}`, {
                         method: 'PUT',
                         body: formData
