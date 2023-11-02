@@ -31,8 +31,8 @@ router.put("/api/projects/:projectId", upload.single("image"), async (req, res) 
         const data = req.body;
         const updateData = {
             activityName: data.activityName,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: data.startDate && new Date(data.startDate),
+            endDate: data.endDate && new Date(data.endDate),
             time: data.time,
             timingFeatures: data.timingFeatures || [], 
             description: data.description,
@@ -42,8 +42,8 @@ router.put("/api/projects/:projectId", upload.single("image"), async (req, res) 
             location: data.location,
             mapData: data.mapData,
             bannerContent: data.bannerContent,
-            postDate: data.postDate,
-            removeDate: data.removeDate,
+            postDate: data.postDate && new Date(data.postDate),
+            removeDate: data.removeDate && new Date(data.removeDate),
             contact: data.contact
         };
 
