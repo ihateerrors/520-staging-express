@@ -140,27 +140,6 @@ type="text/css" />
         <input type="text" class="form-control" id="time" name="time" placeholder="10:00 AM - 5:00 PM">
     </div>
 
-            <div class="mb-3">
-                <p style="font-size: 18px;">Timing Features</p>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Around-the-clock" id="aroundTheClock" name="timingFeatures[]">
-                    <label class="form-check-label" for="aroundTheClock">Around-the-clock</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Nighttime" id="nighttime" name="timingFeatures[]">
-                    <label class="form-check-label" for="nighttime">Nighttime</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Daytime" id="daytime" name="timingFeatures[]">
-                    <label class="form-check-label" for="daytime">Daytime</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="Overnight" id="overnight" name="timingFeatures[]">
-                    <label class="form-check-label" for="overnight">Overnight</label>
-                </div>
-            </div>
-        
-
     <div class="mb-3" style="font-size: 18px;">
         <label for="description" class="form-label">Activity Description</label>
         <textarea class="form-control" id="description" rows="4" name="description"></textarea>
@@ -171,37 +150,60 @@ type="text/css" />
         <textarea class="form-control" id="trafficDescription" rows="4" name="trafficDescription"></textarea>
     </div>
 
+    <div class="mb-3" style="font-size: 18px">
+        <p style="font-size: 20px; font-weight: 600;">Timing Features</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="aroundTheClock" id="aroundTheClock" name="timingFeatures[]">
+            <label class="form-check-label" for="aroundTheClock">Around-the-clock</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="nighttime" id="nighttime" name="timingFeatures[]">
+            <label class="form-check-label" for="nighttime">Nighttime</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="daytime" id="daytime" name="timingFeatures[]">
+            <label class="form-check-label" for="daytime">Daytime</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="overnight" id="overnight" name="timingFeatures[]">
+            <label class="form-check-label" for="overnight">Overnight</label>
+        </div>
+    </div>
+
+    <!-- <div class="mb-3" style="font-size: 18px;"> TODO: Is this even needed here?
+        <p style="font-size: 20px; font-weight: 600;">Map Features</p>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="cameras" id="cameras" name="mapFeatures[]">
+            <label class="form-check-label" for="cameras">Cameras</label>
+        </div>
+    </div> -->
+
     <div class="mb-3" style="font-size: 18px;">
         <p style="font-size: 20px; font-weight: 600;">Activity Type</p>
         <!-- Checkboxes for Activity Type -->
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Full highway closure" id="fullHighway" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="fullHighway" id="fullHighway" name="activityType[]">
             <label class="form-check-label" for="fullHighway">Full highway closure</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Partial highway closure" id="partialHighway" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="partialHighway" id="partialHighway" name="activityType[]">
             <label class="form-check-label" for="partialHighway">Partial highway closure</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Street and lane closures" id="streetClosure" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="streetAndLane" id="streetClosure" name="activityType[]">
             <label class="form-check-label" for="streetClosure">Street and lane closures</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Trail closure" id="trailClosure" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="trail" id="trailClosure" name="activityType[]">
             <label class="form-check-label" for="trailClosure">Trail closure</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Ramp closure" id="rampClosure" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="ramp" id="rampClosure" name="activityType[]">
             <label class="form-check-label" for="rampClosure">Ramp closure</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="High-impact construction" id="highImpact" name="activityType[]">
+            <input class="form-check-input" type="checkbox" value="highImpact" id="highImpact" name="activityType[]">
             <label class="form-check-label" for="highImpact">High-impact construction</label>
-        </div>
-
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Cameras" id="cameras" name="activityType[]">
-            <label class="form-check-label" for="cameras">Cameras</label>
         </div>
     </div>
 
@@ -209,28 +211,28 @@ type="text/css" />
         <p style="font-size: 20px; font-weight: 600;">Impact Type</p>
         <!-- Checkboxes for Impact Type -->
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Bike/pedestrian" id="bikePedestrian" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="bikePedestrian" id="bikePedestrian" name="impactType[]">
             <label class="form-check-label" for="bikePedestrian">Bike/pedestrian</label>
         </div>
     
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Light" id="light" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="light" id="light" name="impactType[]">
             <label class="form-check-label" for="light">Light</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Traffic" id="traffic" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="traffic" id="traffic" name="impactType[]">
             <label class="form-check-label" for="traffic">Traffic</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Dust" id="dust" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="dust" id="dust" name="impactType[]">
             <label class="form-check-label" for="dust">Dust</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Noise" id="noise" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="noise" id="noise" name="impactType[]">
             <label class="form-check-label" for="noise">Noise</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Vibration" id="vibration" name="impactType[]">
+            <input class="form-check-input" type="checkbox" value="vibration" id="vibration" name="impactType[]">
             <label class="form-check-label" for="vibration">Vibration</label>
         </div>
     </div>
