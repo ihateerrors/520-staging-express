@@ -210,8 +210,8 @@ strong {
                             <div>
                                 <% activityTypes.forEach(type => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=type %>" disabled <% if (closure.activityType && closure.activityType.includes(type)) { %>checked<% } %> id="activity_<%=type.replace(/ /g, '_') %>" name="activityType[]">
-                                        <label class="form-check-label" for="activity_<%=type.replace(/ /g, '_') %>"><%=type %></label>
+                                        <input class="form-check-input" type="checkbox" value="<%=type.id %>" disabled <% if (closure.activityType && closure.activityType.includes(type.id)) { %>checked<% } %> id="<%=type.id %>" name="activityType[]">
+                                        <label class="form-check-label" for="<%=type.id %>"><%=type.message %></label>
                                     </div>
                                 <% }); %>
                             </div>
@@ -219,8 +219,8 @@ strong {
                             <div>
                                 <% timingFeatures.forEach(feature => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=feature %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature)) { %>checked<% } %> id="timing_<%=feature.replace(/ /g, '_') %>" name="timingFeatures[]">
-                                        <label class="form-check-label" for="timing_<%=feature.replace(/ /g, '_') %>"><%=feature %></label>
+                                        <input class="form-check-input" type="checkbox" value="<%=feature.id %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature.id)) { %>checked<% } %> id="<%=feature.id %>" name="timingFeatures[]">
+                                        <label class="form-check-label" for="<%=feature.id %>"><%=feature.message %></label>
                                     </div>
                                 <% }); %>
                             </div>
@@ -228,8 +228,8 @@ strong {
                             <div>
                                 <% impactTypes.forEach(impact => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=impact %>" disabled <% if (closure.impactType && closure.impactType.includes(impact)) { %>checked<% } %> id="impact_<%=impact.replace(/ /g, '_') %>" name="impactType[]">
-                                        <label class="form-check-label" for="impact_<%=impact.replace(/ /g, '_') %>"><%=impact %></label>
+                                        <input class="form-check-input" type="checkbox" value="<%=impact.id %>" disabled <% if (closure.impactType && closure.impactType.includes(impact.id)) { %>checked<% } %> id="<%=impact.id %>" name="impactType[]">
+                                        <label class="form-check-label" for="<%=impact.id %>"><%=impact.message %></label>
                                     </div>
                                 <% }); %>
                             </div>
@@ -308,12 +308,12 @@ strong {
 
     // Define activity icons
     const activityIcons = {
-        "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-        "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-        "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-        "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-        "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
-        "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+        "fullHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "partialHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "streetAndLane": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "ramp": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "highImpact": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "trail": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
     };
 
     // Define default styling values
