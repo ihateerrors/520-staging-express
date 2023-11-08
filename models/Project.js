@@ -5,6 +5,10 @@ const { customAlphabet } = require('nanoid');
 const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 10);
 
+/**
+ * Note: If you add to an enum, you must also add to the message.properties file
+ */
+
 const ProjectSchema = new mongoose.Schema({
     activityName: {
         type: String,
@@ -24,7 +28,7 @@ const ProjectSchema = new mongoose.Schema({
     },
     timingFeatures: [{
         type: String,
-        enum: ["Around-the-clock", "Nighttime", "Daytime", "Overnight"]
+        enum: ["aroundTheClock", "nighttime", "daytime", "overnight"]
     }],
     description: {
         type: String,
@@ -37,26 +41,30 @@ const ProjectSchema = new mongoose.Schema({
     activityType: [{
         type: String,
         enum: [
-            "Full highway closure",
-            "Partial highway closure",
-            "Street and lane closures",
-            "Trail closure",
-            "Ramp closure",
-            "High-impact construction",
-            "Cameras"
+            "fullHighway",
+            "partialHighway",
+            "streetAndLane",
+            "trail",
+            "ramp",
+            "highImpact"
         ]
     }],
     impactType: [{
         type: String,
         required: false,
         enum: [
-            "Bike/pedestrian",
-            "Light",
-            "Traffic",
-            "Dust",
-            "Noise",
-            "Vibration"
+            "bikePedestrian",
+            "light",
+            "traffic",
+            "dust",
+            "noise",
+            "vibration"
         ]
+    }],
+    mapFeatures: [{
+        type: String,
+        required: false,
+        enum: ["cameras"]
     }],
     imageUrl: {
         type: String,  // saves to Azure database which generates the URL stored in MongoDB
