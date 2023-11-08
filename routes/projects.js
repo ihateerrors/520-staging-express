@@ -115,16 +115,37 @@ router.get('/api/projects', async (req, res) => {
     try {
         let filters = {};
 
-        if (req.query.startDate) filters.startDate = { $gte: new Date(req.query.startDate) };
-        if (req.query.endDate) filters.endDate = { $lte: new Date(req.query.endDate) };
-        if (req.query.types) filters.activityType = { $in: req.query.types.split(",") };
-        if (req.query.cameras) filters.cameras = req.query.cameras === 'true';
+        if (req.query.startDate) {
+            filters.startDate = { $gte: new Date(req.query.startDate) };
+        }
+        if (req.query.endDate) {
+            filters.endDate = { $lte: new Date(req.query.endDate) };
+        }
+        if (req.query.types) {
+            if (req.query.types === "all") {
+                filters.activityType = { $in: [
+					// if you add a new activity type, add it here
+					"fullHighway",
+					"partialHighway",
+					"streetAndLane",
+					"trail",
+					"ramp",
+					"highImpact"
+				] };
+            } else {
+                filters.activityType = { $in: req.query.types.split(",") };
+            }
+        }
+
+        // if (req.query.cameras) {
+		// 	filters.cameras = req.query.cameras === "true";
+		// }
 
         const projects = await Project.find(filters);
         res.json(projects);
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send("Internal Server Error");
     }
 });
 
