@@ -183,6 +183,7 @@ strong {
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
+                            <form id="editForm">
                             <strong>Activity Name:</strong>
                             <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
           
@@ -282,8 +283,9 @@ strong {
                             <strong>Updated At:</strong>
                             <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
           
-                            <button class="btn btn-md btn-secondary edit-btn">Edit</button>
-                            <button class="btn btn-md btn-danger delete-btn">Delete</button>
+                            <button type="button" class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button type="button" class="btn btn-md btn-danger delete-btn">Delete</button>
+                            </form>
                           </div>
                         </div>
                     </div>
@@ -415,7 +417,6 @@ strong {
     };
 
     ready(() => {
-        console.log("Script started"); // Log when script starts
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
         dataInputs.forEach((input) => {
             const accordionItem = input.closest('.accordion-item');
@@ -454,7 +455,7 @@ strong {
                         teardownEditControls = setUpEditControls(map, geoLayer, input);
                     }
                 } else {
-                    editButton.innerText = 'Edit'
+                    editButton.innerText = 'Edit';
                     // Save logic with FormData
                     if (teardownEditControls) {
                         // Remove the edit controls from the map

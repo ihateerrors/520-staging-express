@@ -106,7 +106,7 @@ const ProjectSchema = new mongoose.Schema({
     },
     contact: {
         type: String,
-        enum: ['206-777-8885', '206-316-2559', '206-200-9484'],  
+        enum: ['206-775-8885', '206-316-2559', '206-200-9484'],  
         required: false
     },
     projectId: {
