@@ -110,30 +110,46 @@ router.get('/projects/:slug', async (req, res) => {
     }
 });
 
+const isValidDate = (date) => date && date instanceof Date;
+
 router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
     try {
-        let filters = {};
+        const filters = [];
+        // Dates from query parameters are in ISO format
+        const startDate = new Date(req.query.startDate);
+        const endDate = new Date(req.query.endDate);
+        
+        if (isValidDate(startDate) && isValidDate(endDate)) { 
+            filters.push({
+                $or: [{
+                    startDate: { $lte: endDate.toISOString() },
+                    endDate: { $gte: startDate.toISOString() }
+                }]
+            })
+        } else if (isValidDate(startDate)) {
+            filters.push({ endDate: { $gte: startDate.toISOString() } });
+        } else if (isValidDate(endDate)) {
+            filters.push({ startDate: { $lte: endDate.toISOString() } });
+        } else {
+            console.error("Invalid start and end date");
+            res.status(400).json({ message: 'Invalid start and end date' });
+            return;
+        }
 
-        if (req.query.startDate) {
-            filters.startDate = { $gte: new Date(req.query.startDate) };
-        }
-        if (req.query.endDate) {
-            filters.endDate = { $lte: new Date(req.query.endDate) };
-        }
         if (req.query.types) {
             if (req.query.types === "all") {
-                filters.activityType = { $in: [
-					// if you add a new activity type, add it here
-					"fullHighway",
-					"partialHighway",
-					"streetAndLane",
-					"trail",
-					"ramp",
-					"highImpact"
-				] };
+                filters.push({ activityType: { $in: [
+                    // if you add a new activity type, add it here
+                    "fullHighway",
+                    "partialHighway",
+                    "streetAndLane",
+                    "trail",
+                    "ramp",
+                    "highImpact"
+                ] } })
             } else {
-                filters.activityType = { $in: req.query.types.split(",") };
+                filters.push({ activityType: { $in: req.query.types.split(",") } })
             }
         }
 
@@ -141,7 +157,7 @@ router.get('/api/projects', async (req, res) => {
 		// 	filters.cameras = req.query.cameras === "true";
 		// }
 
-        const projects = await Project.find(filters);
+        const projects = await Project.find({ $and: filters });
         res.json(projects);
     } catch (error) {
         console.error(error);
@@ -164,8 +180,28 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
+
+        const dateFields = ['startDate', 'endDate', 'postDate', 'removeDate'];
+        const dates = {};
+        // Converting date strings to ISO format
+        dateFields.forEach((field) => {
+            if (req.body[field]) {
+                const date = new Date(req.body[field]);
+                const isoDate = date.toISOString();
+                if (isoDate === 'Invalid Date') {
+                    throw new Error('Invalid date for field:', field);
+                }
+                dates[field] = isoDate;
+            }
+        });
+
+        const data = {
+            ...req.body,
+            ...dates
+        };
+
         // Creating and saving the project
-        const project = new Project(req.body);
+        const project = new Project(data);
         await project.save();
         req.flash('success_msg', 'Construction event created successfully.');
         res.redirect('/dashboard');

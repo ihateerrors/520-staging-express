@@ -28,32 +28,35 @@ router.put("/api/projects/:projectId", upload.single("image"), async (req, res) 
             return res.status(404).json({ error: "Closure not found" });
         }
 
-        const data = req.body;
-        const updateData = {
-            activityName: data.activityName,
-            startDate: data.startDate && new Date(data.startDate),
-            endDate: data.endDate && new Date(data.endDate),
-            time: data.time,
-            timingFeatures: data.timingFeatures || [], 
-            description: data.description,
-            trafficDescription: data.trafficDescription,
-            activityType: data.activityType || [],
-            impactType: data.impactType || [],
-            location: data.location,
-            mapData: data.mapData,
-            bannerContent: data.bannerContent,
-            postDate: data.postDate && new Date(data.postDate),
-            removeDate: data.removeDate && new Date(data.removeDate),
-            contact: data.contact
+        const dateFields = ['startDate', 'endDate', 'postDate', 'removeDate'];
+        const dates = {};
+        // Converting date strings to ISO format
+        dateFields.forEach((field) => {
+            if (req.body[field]) {
+                const date = new Date(req.body[field]);
+                const isoDate = date.toISOString();
+                if (isoDate === 'Invalid Date') {
+                    throw new Error('Invalid date for field:', field);
+                }
+                dates[field] = isoDate;
+            }
+        });
+
+        const data = {
+            ...req.body,
+            timingFeatures: req.body.timingFeatures || [],
+            activityType: req.body.activityType || [],
+            impactType: req.body.impactType || [],
+            ...dates
         };
 
         const file = req.file; // The image file after multer middleware
         if (file) {
             const imageUrl = await uploadToAzure(file.buffer, file.originalname);
-            updateData.imageUrl = imageUrl;
+            data.imageUrl = imageUrl;
         }
 
-        project.set(updateData);
+        project.set(data);
 
         const updatedProject = await project.save();
         res.status(200).json(updatedProject);
