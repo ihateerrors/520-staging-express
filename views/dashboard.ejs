@@ -52,7 +52,7 @@ type="text/css" />
 }
 
 /* Input styling */
-input[type="text"], input[type="date"] {
+input[type="text"], input[type="date"], select {
     min-width: 80%;  /* Takes 80% width of its container for more space */
     border: 1px solid #ced4da;
     padding: 5px 12px;
@@ -266,7 +266,10 @@ strong {
                             </div>
           
                             <strong>Banner Content:</strong>
-                            <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+                            <select id="bannerContent" name="bannerContent" disabled>
+                                <option value="no" <%= (!closure.bannerContent || closure.bannerContent === 'no') ? 'selected' : '' %>>No</option>
+                                <option value="yes" <%= closure.bannerContent === 'yes' ? 'selected' : '' %>>Yes</option>
+                            </select>
           
                             <strong>Post Date:</strong>
                             <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
@@ -275,7 +278,11 @@ strong {
                             <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
           
                             <strong>Contact:</strong>
-                            <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+                            <select id="contact" name="contact" disabled>
+                                <option value="montlake" <%= closure.contact === 'montlake' ? 'selected' : '' %>>Montlake contact, 206-775-8885</option>
+                                <option value="i5" <%= closure.contact === 'i5' ? 'selected' : '' %>>I-5 contact, 206-316-2559</option>
+                                <option value="general" <%= closure.contact === 'general' ? 'selected' : '' %>>General contact, 206-200-9484</option>
+                            </select>
           
                             <strong>Created At:</strong>
                             <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
@@ -444,7 +451,10 @@ strong {
 
             editButton.addEventListener('click', () => {
                 console.log('Edit button clicked');
-                const inputs = accordionItem.querySelectorAll('input');
+                const allInputs = accordionItem.querySelectorAll('input');
+                const allSelect = accordionItem.querySelectorAll('select');
+
+                const inputs = [...allInputs, ...allSelect];
                 // Toggle the input fields' disabled state
                 inputs.forEach(input => input.disabled = !input.disabled);
                 // Toggle button text between 'Edit' and 'Save'
