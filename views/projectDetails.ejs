@@ -47,6 +47,25 @@
  .navbar a {
   text-decoration: none !important;
  }
+ .sidebarList {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 10px;
+  max-width: 368px;
+ }
+ .sidebarList li .icon-box {
+	width: 25px;
+	height: 25px;
+	margin-right: 5px;
+ }
+.sidebarList li .icon-box::before {
+	content: '';
+	display: inline-flex;
+	background-image: url("https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png");
+	background-size: cover;
+	width: 25px;
+	height: 100%;
+}
 </style>
 </head>
 
@@ -129,8 +148,11 @@
                             <div class="col-lg-3">
                               <!-- Card 1 -->
                                 <div class="closure-sidebar">                         
-                                    <h4 class="text-center wdot-dkgreen ml-3"><strong>Current and upcoming closures</strong></h4><br>
-                                    <ul id="sidebarList" class="sidebarList"></ul>                                                        
+                                    <h4 class="wdot-dkgreen ml-3"><strong>Closures today</strong></h4><br>
+                                    
+                                    <ul id="current" class="sidebarList"></ul> 
+                                    <h4 class="wdot-dkgreen ml-3"><strong>Upcoming closures</strong></h4><br>
+                                    <ul id="upcoming" class="sidebarList"></ul>                                                     
                                       <br>
                                </div>                                        
                              </div>
@@ -160,18 +182,36 @@
 <!-- ### End footer ### -->  
     <!-- scripts to get the closures -->
     <script>
-      fetch('/latest-closures') // TODO: I think there are some issues with this endpoint
+      fetch('/api/projects/currentAndUpcoming')
       .then(response => response.json())
-      .then(closures => {
-          const sidebarList = document.getElementById('sidebarList');
-  
-          closures.forEach(closure => {
+      .then(({ currentClosures, upcomingClosures }) => {
+          const currentList = document.getElementById('current');
+          const upcomingList = document.getElementById('upcoming');
+
+          currentClosures.forEach((closure) => {
               const listItem = document.createElement('li');
+              listItem.classList.add('closure-item');
               const link = document.createElement('a');
               link.href = `/projects/${closure.slug}`;
               link.innerText = closure.activityName;
+							const iconBox = document.createElement('span');
+							iconBox.classList.add('icon-box');
+							listItem.appendChild(iconBox);
               listItem.appendChild(link);
-              sidebarList.appendChild(listItem);
+              currentList.appendChild(listItem);
+          });
+
+          upcomingClosures.forEach((closure) => {
+              const listItem = document.createElement('li');
+              const link = document.createElement('a');
+              listItem.classList.add('closure-item');
+              link.href = `/projects/${closure.slug}`;
+              link.innerText = closure.activityName;
+							const iconBox = document.createElement('span');
+							iconBox.classList.add('icon-box');
+							listItem.appendChild(iconBox);
+              listItem.appendChild(link);
+              upcomingList.appendChild(listItem);
           });
       })
       .catch(error => console.error('Error fetching latest closures:', error));

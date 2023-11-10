@@ -295,6 +295,23 @@ router.get('/latest-closures', async (req, res) => {
     }
 });
 
+router.get('/api/projects/currentAndUpcoming', async (req, res) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);  // set to start of the day
+
+    const currentClosures = await Project.find({
+        startDate: { $lte: today },
+        endDate: { $gte: today }
+    }).sort({ postDate: -1 });
+
+    // Get upcoming closures
+    const upcomingClosures = await Project.find({
+        startDate: { $gt: today }
+    }).sort({ postDate: -1 });
+
+    res.json({ currentClosures, upcomingClosures });
+});
+
 const fetchRecentClosures = async () => {
     try {
         return await Project.find({}).limit(10);
