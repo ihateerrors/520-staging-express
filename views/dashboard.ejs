@@ -95,25 +95,19 @@ strong {
     text-align: left;
 }
 
-.delete-image {
-    background-color: transparent;
-    border: none;
-}
-
-.delete-image:hover {
-    cursor: pointer;
-    color: #dc3545;
-}
-
-.delete-image:disabled {
-    background-color: transparent;
-    border: none;
-    color: #545454;
-}
-
 .date {
     font-size: 1em;
     line-height: 1rem;
+}
+
+.supportive-text {
+    font-size: 0.8em;
+    line-height: 1rem;
+    color: #545454;
+    padding-bottom: 0;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    text-indent: 0.5rem;
 }
 
 </style>
@@ -261,20 +255,21 @@ strong {
                             imgElement.style.display = 'block';   -->
 
                             <strong>Image URL:</strong>
-                                    <% if (closure.imageUrl){
-                            
-                                      %>                                 
-                                    <a href="<%=closure.imageUrl %>" id="img-link-<%=closure.projectId %>" target="_blank"><img id="img-<%=closure.projectId %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
-                                    <% } else { %>
-                                    <span class="edit-image">Replace image</span>
-                                    <img id="img-<%=closure.projectId %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
-                                    <% } %><br><br>
+                                <% if (closure.imageUrl) { %>                                 
+                                    <a href="<%=closure.imageUrl %>" id="img-link-<%=closure.projectId %>" target="_blank">
+                                        <img id="img-<%=closure.projectId %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;">
+                                    </a>
+                                <% } else { %>
+                                    <img id="img-<%=closure.projectId %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;"> <!-- TODO: What is this for? -->
+                                <% } %>
 
-
+                                <div>
                                     <input type="file" name="image" value="<%= closure.imageUrl ?? '' %>" id="image" disabled>
-                                    <br/>
-                                    <input type="button" name="delete-image" class="btn btn-md delete-image" disabled value="Delete File"/>
-                                    <br> 
+                                    <p class="edit-image supportive-text">Add or replace image file; to clear a file selection, click "Choose File" then click "Cancel"</p>
+                                    
+                                    <input type="button" name="delete-image" class="delete-image" disabled value="Delete File"/>
+                                    <p class="supportive-text">Permanently delete image; necessary to remove an image file previously saved to a closure</p>
+                                </div>
 
 
 
@@ -455,13 +450,13 @@ strong {
             const editButton = accordionItem.querySelector('.edit-btn');
             const deleteButton = accordionItem.querySelector('.delete-btn');
 
-            const deleteImage = accordionItem.querySelector('.delete-image');
-            const editImage = accordionItem.querySelector('.edit-image');
-
             const id = input.getAttribute('data-id');
             const geoJSON = input.getAttribute('data-json');
             const mapContainer = document.getElementById(`map-${id}`);
             const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
+
+            const deleteImage = accordionItem.querySelector('.delete-image');
+            const imgElement = accordionItem.querySelector(`#img-${id}`);
 
             accordionButton.addEventListener('click', () => {
                 try {
@@ -484,7 +479,7 @@ strong {
                 const inputs = [...allInputs, ...allSelect];
                 // Toggle the input fields' disabled state
                 inputs.forEach(input => {
-                    if (editImage && input.name === 'delete-image') {
+                    if (!imgElement.getAttribute('src') && input.name === 'delete-image') {
                         return;
                     }
                     input.disabled = !input.disabled
@@ -571,7 +566,6 @@ strong {
                     try {
                         const response = await fetch(`/api/projects/${id}/image`, { method: 'DELETE' });
                         if (response.ok) {
-                            const imgElement = accordionItem.querySelector(`#img-${id}`);
                             const imgLink = accordionItem.querySelector(`#img-link-${id}`)
                             imgElement.src = '';
                             imgLink.href = '';
