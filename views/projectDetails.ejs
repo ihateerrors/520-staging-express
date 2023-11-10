@@ -81,7 +81,7 @@
                                     <% project.timingFeatures.forEach(function(feature) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= feature %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
+                                            <%= feature.message %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
                                         </li>
                                     <% }); %>
                                 </ul>
@@ -90,7 +90,7 @@
                                     <% project.activityType.forEach(function(type) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= type %> <!-- Use 'type' here instead of 'project.activityType' -->
+                                            <%= type.message %> <!-- Use 'type' here instead of 'project.activityType' -->
                                         </li>
                                     <% }); %>
                                 </ul>

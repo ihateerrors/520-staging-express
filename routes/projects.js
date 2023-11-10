@@ -8,6 +8,8 @@ const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const propertiesReader = require('properties-reader');
+const messages = propertiesReader('message.properties');
 
 const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
 
@@ -103,7 +105,28 @@ router.get('/projects/:slug', async (req, res) => {
             return;
         }
 
-        res.render('projectDetails', { project, formatDate });
+        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
+        const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
+
+        const activityType = activityTypeEnums.map((activityType) => {
+            const key = `activityType.${activityType}`;
+            const message = messages.get(key);
+            return { id: activityType, message: message };
+        });
+
+        const timingFeatures = timingFeatureEnums.map((timingFeature) => {
+            const key = `timingFeature.${timingFeature}`;
+            const message = messages.get(key);
+            return { id: timingFeature, message: message };
+        });
+
+        const projectData = {
+            ...project.toObject(),
+            activityType,
+            timingFeatures
+        };
+
+        res.render('projectDetails', { project: projectData, formatDate });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
