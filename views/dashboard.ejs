@@ -111,6 +111,11 @@ strong {
     color: #545454;
 }
 
+.date {
+    font-size: 1em;
+    line-height: 1rem;
+}
+
 </style>
   </head>
   <body>
@@ -304,10 +309,10 @@ strong {
                             </select>
           
                             <strong>Created At:</strong>
-                            <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+                            <p class="date"><%= closure.createdAt.toISOString().split('T')[0] %></p>
           
                             <strong>Updated At:</strong>
-                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+                            <p class="date"><%= closure.updatedAt.toISOString().split('T')[0] %></p>
           
                             <button type="button" class="btn btn-md btn-secondary edit-btn">Edit</button>
                             <button type="button" class="btn btn-md btn-danger delete-btn">Delete</button>
