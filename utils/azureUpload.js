@@ -39,8 +39,21 @@ const uploadToAzure = async (buffer, fileName) => {
     return blockBlobClient.url;
 };
 
+const deleteFromAzure = async (blobName) => {
+    const decodedBlobName = decodeURIComponent(blobName);
+    const blockBlobClient = containerClient.getBlockBlobClient(decodedBlobName);
+    try {
+        const response = await blockBlobClient.delete();
+        return response;
+    } catch (error) {
+        console.error("Error while deleting blob:", error);
+        return false;
+    }
+};
+
 module.exports = {
-    uploadToAzure
+    uploadToAzure,
+    deleteFromAzure
 };
 
 

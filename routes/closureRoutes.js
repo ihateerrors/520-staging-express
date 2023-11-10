@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const Project = require('../models/Project');
-const { uploadToAzure } = require("../utils/azureUpload");
+const { uploadToAzure, deleteFromAzure } = require("../utils/azureUpload");
 
 const storage = multer.memoryStorage();
 
@@ -77,5 +77,18 @@ router.delete("/api/projects/:projectId", async (req, res) => {
         res.status(500).json({ error: "Internal server error while deleting closure." });
     }
 });
+
+router.delete("/api/projects/:projectId/image", async (req, res) => {
+    const project = await Project.findOne({ projectId: req.params.projectId });
+    const blobName = project.imageUrl.split('/').pop();
+    const response = await deleteFromAzure(blobName);
+    if (!response) {
+        return res.status(500).json({ error: "Internal server error while deleting image." });
+    }
+    project.imageUrl = null;
+    await project.save();
+    res.status(200).json({ message: "Image deleted successfully" });
+});
+
 
 module.exports = router;
