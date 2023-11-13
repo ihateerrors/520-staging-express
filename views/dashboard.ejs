@@ -15,7 +15,20 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+
 <style>
+
+.alert {
+    transition: opacity 1s;
+}
 /* Spacing between entries */
 .accordion-item {
     margin-bottom: 20px;
@@ -39,7 +52,7 @@ type="text/css" />
 }
 
 /* Input styling */
-input[type="text"], input[type="date"] {
+input[type="text"], input[type="date"], select {
     min-width: 80%;  /* Takes 80% width of its container for more space */
     border: 1px solid #ced4da;
     padding: 5px 12px;
@@ -80,6 +93,21 @@ strong {
     line-height: 30px;
     font-weight: 600;
     text-align: left;
+}
+
+.date {
+    font-size: 1em;
+    line-height: 1rem;
+}
+
+.supportive-text {
+    font-size: 0.8em;
+    line-height: 1rem;
+    color: #545454;
+    padding-bottom: 0;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    text-indent: 0.5rem;
 }
 
 </style>
@@ -147,27 +175,34 @@ strong {
         <section style="margin: 3%;">
             <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
             <div id="past-closures"></div>
+            <!-- Place this where we want the alerts to show -->
+                    <div id="alertPlaceholder">
+
+                      <!-- <div class="alert alert-success" role="alert">
+                       Closure edited successfully.
+                      </div>
+                      <div class="alert alert-danger" role="alert">
+                     D'oh! Your closure edit didn't work--please try again. 
+                      </div>
+                       -->
+                    </div>
+
             <div class="accordion" id="closureAccordion">
                 <% closures.forEach((closure, index) => { %>
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading<%= index %>">
+                            <input type="hidden" name="mapData" data-id="<%= closure.projectId %>" data-json="<%= closure.mapData || '' %>" disabled> 
                             <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
                                 <%= closure.activityName %>
                             </button>
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
+                            <form id="editForm">
                             <strong>Activity Name:</strong>
                             <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
           
-                            <!-- <strong>Start Date:</strong>
-                            <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled><br>
-          
-                            <strong>End Date:</strong>
-                            <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled><br>
-           -->
-
-                        <div class="date-container">
+                         <div class="date-container">
                           <div class="date-item">
                               <strong>Start Date:</strong>
                               <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
@@ -180,41 +215,80 @@ strong {
                       </div>
                                           <strong>Time:</strong>
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
-          
-                            <strong>Timing Features:</strong>
-                            <input type="text" name="timingFeatures" value="<%= closure.timingFeatures.join(', ') %>" disabled>
-          
+        
                             <strong>Description:</strong>
                             <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
           
                             <strong>Traffic Description:</strong>
                             <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
-          
+
                             <strong>Activity Type:</strong>
-                            <input type="text" name="activityType" value="<%= closure.activityType.join(', ') %>" disabled>
-          
+                            <div>
+                                <% activityTypes.forEach(type => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=type.id %>" disabled <% if (closure.activityType && closure.activityType.includes(type.id)) { %>checked<% } %> id="<%=type.id %>" name="activityType[]">
+                                        <label class="form-check-label" for="<%=type.id %>"><%=type.message %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <strong>Timing Features:</strong>
+                            <div>
+                                <% timingFeatures.forEach(feature => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=feature.id %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature.id)) { %>checked<% } %> id="<%=feature.id %>" name="timingFeatures[]">
+                                        <label class="form-check-label" for="<%=feature.id %>"><%=feature.message %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
                             <strong>Impact Type:</strong>
-                            <input type="text" name="impactType" value="<%= closure.impactType.join(', ') %>" disabled><br>
-          
+                            <div>
+                                <% impactTypes.forEach(impact => { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=impact.id %>" disabled <% if (closure.impactType && closure.impactType.includes(impact.id)) { %>checked<% } %> id="<%=impact.id %>" name="impactType[]">
+                                        <label class="form-check-label" for="<%=impact.id %>"><%=impact.message %></label>
+                                    </div>
+                                <% }); %>
+                            </div>
+                                  
+                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
+                            imgElement.src = data.imageUrl;
+                            imgElement.style.display = 'block';   -->
+
                             <strong>Image URL:</strong>
-                            <input type="text" name="imageUrl" value="<%= closure.imageUrl || '' %>" disabled onchange="updateImage(this.value, 'img<%= index %>')"><br>
-                          
-                            <% if (closure.imageUrl) { %>
-                                <a href="<%= closure.imageUrl %>" target="_blank">
-                                    <img id="img<%= index %>" class="img-fluid" src="<%= closure.imageUrl %>" alt="Closure Image" style="max-width: 600px;">
-                                </a>
-                            <% } else { %>
-                                <img id="img<%= index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 600px;">
-                            <% } %>    <p style="font-size: small;"><em>Click on image to view the sharable permalink to the image in a new</em></p><br>
-                            
-                            <strong>Location:</strong>
+                                <% if (closure.imageUrl) { %>                                 
+                                    <a href="<%=closure.imageUrl %>" id="img-link-<%=closure.projectId %>" target="_blank">
+                                        <img id="img-<%=closure.projectId %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;">
+                                    </a>
+                                <% } else { %>
+                                    <img id="img-<%=closure.projectId %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;"> <!-- TODO: What is this for? -->
+                                <% } %>
+
+                                <div>
+                                    <input type="file" name="image" value="<%= closure.imageUrl ?? '' %>" id="image" disabled>
+                                    <p class="edit-image supportive-text">Add or replace image file; to clear a file selection, click "Choose File" then click "Cancel"</p>
+                                    
+                                    <input type="button" name="delete-image" class="delete-image" disabled value="Delete File"/>
+                                    <p class="supportive-text">Permanently delete image; necessary to remove an image file previously saved to a closure</p>
+                                </div>
+
+
+
+
+                                    
+
+                                                      <strong>Location:</strong>
                             <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
           
                             <strong>Map Data:</strong>
-                            <input type="text" name="mapData" value="<%= JSON.stringify(closure.mapData) || '' %>" disabled>
+                            <div class="greenborder" style="display:flex;">
+                                <div id="map-<%= closure.projectId%>" style="height:775px; width:100%;"></div>
+                            </div>
           
                             <strong>Banner Content:</strong>
-                            <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+                            <select id="bannerContent" name="bannerContent" disabled>
+                                <option value="no" <%= (!closure.bannerContent || closure.bannerContent === 'no') ? 'selected' : '' %>>No</option>
+                                <option value="yes" <%= closure.bannerContent === 'yes' ? 'selected' : '' %>>Yes</option>
+                            </select>
           
                             <strong>Post Date:</strong>
                             <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
@@ -223,16 +297,21 @@ strong {
                             <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
           
                             <strong>Contact:</strong>
-                            <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+                            <select id="contact" name="contact" disabled>
+                                <option value="montlake" <%= closure.contact === 'montlake' ? 'selected' : '' %>>Montlake contact, 206-775-8885</option>
+                                <option value="i5" <%= closure.contact === 'i5' ? 'selected' : '' %>>I-5 contact, 206-316-2559</option>
+                                <option value="general" <%= closure.contact === 'general' ? 'selected' : '' %>>General contact, 206-200-9484</option>
+                            </select>
           
                             <strong>Created At:</strong>
-                            <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+                            <p class="date"><%= closure.createdAt.toISOString().split('T')[0] %></p>
           
                             <strong>Updated At:</strong>
-                            <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+                            <p class="date"><%= closure.updatedAt.toISOString().split('T')[0] %></p>
           
-                            <button class="btn btn-md btn-secondary edit-btn" data-id="<%= closure._id %>">Edit</button>
-                            <button class="btn btn-md btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
+                            <button type="button" class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button type="button" class="btn btn-md btn-danger delete-btn">Delete</button>
+                            </form>
                           </div>
                         </div>
                     </div>
@@ -246,82 +325,268 @@ strong {
 
 <!-- END Form's HTML -->
 
-
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-
-// Handle the edit button click
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const parentContainer = this.closest('.accordion-item');
-        const inputs = parentContainer.querySelectorAll('input');
-
-        inputs.forEach(input => {
-            input.disabled = !input.disabled;
-        });
-        
-        // Toggle button text between 'Edit' and 'Submit'
-        if (this.innerText === 'Edit') {
-            this.innerText = 'Save';
+    function ready(fn) {
+        if (document.readyState !== 'loading') {
+            fn();
         } else {
-            // Collecting the data to send it back to the server
-            const updatedData = {};
+            document.addEventListener('DOMContentLoaded', fn);
+        }
+    }
 
-            inputs.forEach(input => {
-                updatedData[input.name] = input.value;
-            });
-            
-            fetch(`/closure/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
+    // Define activity icons
+    const activityIcons = {
+        "fullHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "partialHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "streetAndLane": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "ramp": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "highImpact": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "trail": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+    };
+
+    // Define default styling values
+    const defaultColor = '#f4661a';
+    const defaultWidth = 8;
+    const fallbackFeature = { type: "FeatureCollection", features: [] };
+
+    const createInitialGeoLayer = (geoJSON) => {
+        try {
+            const geoJSONData = JSON.parse(geoJSON) || fallbackFeature;
+            const geoLayer = L.geoJSON(geoJSONData, {
+                style: function (feature) {
+                    return {
+                        color: feature.properties.color || defaultColor,
+                        weight: feature.properties.width || defaultWidth
+                    };
                 },
-                body: JSON.stringify(updatedData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Provide feedback to the user indicating success
-                this.innerText = 'Edit';
-            })
-            .catch(err => {
-                // Handle any errors by informing the user something went wrong
-                console.error(err);
+                pointToLayer: function (feature, latlng) {
+                    // Try to get the icon URL based on the activity type
+                    const iconUrl = activityIcons[feature.properties.activityType];
+                    // If no icon URL is found, use a default one
+                    const finalIconUrl = iconUrl || "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png"; 
+                    const customIcon = L.icon({
+                        iconUrl: finalIconUrl,
+                        iconSize: [26, 26]
+                    });
+                    return L.marker(latlng, { icon: customIcon });
+                }
             });
+            return geoLayer;
+        } catch (e) {
+            console.warn('Failed to setup GeoJSON layer:', e);
         }
-    });
-});
+    };
 
-// Handle the delete button click
-document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', async function() {
-        const id = this.getAttribute('data-id');
-        
-        // Ask for confirmation before deletion
-        if (confirm('Are you sure you want to delete this closure?')) {
-            try {
-                const response = await fetch(`/closure/${id}`, {
-                    method: 'DELETE'
-                });
-                
-                const data = await response.json();
-                
-                // On successful deletion, you can either remove the specific closure from the list or simply reload the page.
-                location.reload();
-            } catch (e) {
-                console.error('Error deleting closure:', e);
+    const setUpEditControls = (map, geoLayer, dataInput) => {
+        const drawItems = new L.featureGroup();
+        geoLayer.eachLayer((layer) => {
+            drawItems.addLayer(layer);
+        });
+        drawItems.addTo(map);
+        const drawControl = new L.Control.Draw({
+            edit: { featureGroup: drawItems },
+        }).addTo(map);
+        const activeAccordion = document.querySelector('.accordion-collapse.collapse.show');
+        const saveEditButton = activeAccordion.querySelector('.edit-btn');
+        const deleteButton = activeAccordion.querySelector('.delete-btn');
+        const handleToggleSaveEditButton = () => {
+            if (saveEditButton) {
+                saveEditButton.disabled = !saveEditButton.disabled;
             }
+            if (deleteButton) {
+                deleteButton.disabled = !deleteButton.disabled;
+            }
+        };
+        map.on(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+        map.on(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+        const onMapLayerCreated = (event) => {
+            const layer = event.layer;
+            drawItems.addLayer(layer);
+            const geoJSON = drawItems.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
         }
+        const onMapLayerEdited = (event) => {
+            const layers = event.layers;
+            const editedLayers = L.featureGroup();
+            layers.eachLayer((layer) => {
+                editedLayers.addLayer(layer);
+            });
+            const geoJSON = editedLayers.toGeoJSON();
+            dataInput.setAttribute("data-json", JSON.stringify(geoJSON));
+        }
+        map.on(L.Draw.Event.CREATED, onMapLayerCreated);
+        map.on(L.Draw.Event.EDITED, onMapLayerEdited);
+        // return a teardown
+        return () => {
+            map.off(L.Draw.Event.TOOLBAROPENED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.TOOLBARCLOSED, handleToggleSaveEditButton);
+            map.off(L.Draw.Event.CREATED, onMapLayerCreated);
+            map.off(L.Draw.Event.EDITED, onMapLayerEdited);
+            map.removeControl(drawControl)
+        };
+    };
+
+    const setUpMap = (mapContainer, geoJSON) => {
+        const map = L.map(mapContainer).setView([47.6407, -122.2971], 8);
+        L.gridLayer.googleMutant({
+            type: 'roadmap',
+            maxZoom: 17,
+            apiKey: 'AIzaSyC-0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+        }).addTo(map);
+        try {
+            const geoLayer = createInitialGeoLayer(geoJSON);
+            geoLayer.addTo(map);
+            return { map, geoLayer };
+        } catch (e) {
+            console.error('Could not add layer to map:', e);
+        }
+    };
+
+    ready(() => {
+        const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
+        dataInputs.forEach((input) => {
+            const accordionItem = input.closest('.accordion-item');
+            const accordionButton = accordionItem.querySelector('.accordion-button');
+            const editButton = accordionItem.querySelector('.edit-btn');
+            const deleteButton = accordionItem.querySelector('.delete-btn');
+
+            const id = input.getAttribute('data-id');
+            const geoJSON = input.getAttribute('data-json');
+            const mapContainer = document.getElementById(`map-${id}`);
+            const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
+
+            const deleteImage = accordionItem.querySelector('.delete-image');
+            const imgElement = accordionItem.querySelector(`#img-${id}`);
+
+            accordionButton.addEventListener('click', () => {
+                try {
+                    if (!map || !geoLayer) {
+                        console.warn('Map or bounds not found');
+                        return;
+                    }
+                    map.invalidateSize();
+                    map.fitBounds(geoLayer.getBounds());
+                } catch(e) {
+                    console.warn('Failed to fit map bounds:', e);
+                }
+            });
+
+            editButton.addEventListener('click', () => {
+                console.log('Edit button clicked');
+                const allInputs = accordionItem.querySelectorAll('input');
+                const allSelect = accordionItem.querySelectorAll('select')
+
+                const inputs = [...allInputs, ...allSelect];
+                // Toggle the input fields' disabled state
+                inputs.forEach(input => {
+                    if (!imgElement.getAttribute('src') && input.name === 'delete-image') {
+                        return;
+                    }
+                    input.disabled = !input.disabled
+                });
+                // Toggle button text between 'Edit' and 'Save'
+                let teardownEditControls = null;
+                if (editButton.innerText === 'Edit') {
+                    editButton.innerText = 'Save';
+                    if (map && !teardownEditControls) {
+                        teardownEditControls = setUpEditControls(map, geoLayer, input);
+                    }
+                } else {
+                    editButton.innerText = 'Edit';
+                    // Save logic with FormData
+                    if (teardownEditControls) {
+                        // Remove the edit controls from the map
+                        teardownEditControls();
+                    }
+                    const formData = new FormData();
+                    inputs.forEach(input => {
+                        if (input.type === 'file' && input.name === 'image') {
+                            if (input.files[0]) {
+                                formData.append('image', input.files[0]);
+                            }
+                        } else if (input.name === 'mapData') {
+                            formData.append('mapData', input.getAttribute('data-json'));
+                        } else if (input.name === 'activityType[]' || input.name === 'timingFeatures[]' || input.name === 'impactType[]') {
+                            if (input.checked) {
+                                formData.append(input.name, input.value);
+                            }
+                        } else {
+                            formData.append(input.name, input.value);
+                        }
+                    });
+                    fetch(`/api/projects/${id}`, {
+                        method: 'PUT',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const alertPlaceholder = document.getElementById('alertPlaceholder');
+                        if (data.error) {
+                            console.error('Error:', data.error);
+                            // Display error alert
+                            alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                        } else {
+                            // Display success alert
+                            alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
+                            setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                        }
+                        // This is a bit of a hack and could probably be handled better
+                        accordionButton.dispatchEvent(new MouseEvent('click'));
+                    })
+                    .catch(err => {
+                        console.error('Fetch error:', err);
+                        const alertPlaceholder = document.getElementById('alertPlaceholder');
+                        alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
+                        setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                    });
+                }
+            });
+
+            deleteButton.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to delete this closure?')) {
+                    try {
+                        const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+                        if (response.ok) {
+                            accordionItem.remove();
+                            alert('Closure deleted successfully!');
+                        } else {
+                            const data = await response.json();
+                            alert('Error deleting closure: ' + data.error);
+                        }
+                    } catch (err) {
+                        console.error('Error deleting closure:', err);
+                        alert('There was an error deleting the closure.');
+                    }
+                }
+            });
+
+            deleteImage.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to delete this image?')) {
+                    try {
+                        const response = await fetch(`/api/projects/${id}/image`, { method: 'DELETE' });
+                        if (response.ok) {
+                            const imgLink = accordionItem.querySelector(`#img-link-${id}`)
+                            imgElement.src = '';
+                            imgLink.href = '';
+                            imgLink.style.display = 'none';
+                            deleteImage.disabled = true;
+                            alert('Image deleted successfully!');
+                        } else {
+                            const data = await response.json();
+                            alert('Error deleting image: ' + data.error);
+                        }
+                    } catch (err) {
+                        console.error('Error deleting image:', err);
+                        alert('There was an error deleting the image.');
+                    }
+                }
+            })
+        });
     });
-});
-
-});
-
-
-
 </script>
-    
-  </body>
-</html>
 
+    </body>
+    </html>
+
+<!-- END Form's HTML -->

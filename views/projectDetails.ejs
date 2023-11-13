@@ -47,6 +47,25 @@
  .navbar a {
   text-decoration: none !important;
  }
+ .sidebarList {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 10px;
+  max-width: 368px;
+ }
+ .sidebarList li .icon-box {
+	width: 25px;
+	height: 25px;
+	margin-right: 5px;
+ }
+.sidebarList li .icon-box::before {
+	content: '';
+	display: inline-flex;
+	background-image: url("https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png");
+	background-size: cover;
+	width: 25px;
+	height: 100%;
+}
 </style>
 </head>
 
@@ -81,7 +100,8 @@
                                     <% project.timingFeatures.forEach(function(feature) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= feature %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
+
+                                            <%= feature.message %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
                                         </li>
                                     <% }); %>
                                 </ul>
@@ -90,7 +110,8 @@
                                     <% project.activityType.forEach(function(type) { %>
                                         <li>
                                             <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= type %> <!-- Use 'type' here instead of 'project.activityType' -->
+
+                                            <%= type.message %> <!-- Use 'type' here instead of 'project.activityType' -->
                                         </li>
                                     <% }); %>
                                 </ul>
@@ -129,8 +150,11 @@
                             <div class="col-lg-3">
                               <!-- Card 1 -->
                                 <div class="closure-sidebar">                         
-                                    <h4 class="text-center wdot-dkgreen ml-3"><strong>Current and upcoming closures</strong></h4><br>
-                                    <ul id="sidebarList" class="sidebarList"></ul>                                                        
+                                    <h4 class="wdot-dkgreen ml-3"><strong>Closures today</strong></h4><br>
+                                    
+                                    <ul id="current" class="sidebarList"></ul> 
+                                    <h4 class="wdot-dkgreen ml-3"><strong>Upcoming closures</strong></h4><br>
+                                    <ul id="upcoming" class="sidebarList"></ul>                                                     
                                       <br>
                                </div>                                        
                              </div>
@@ -160,18 +184,36 @@
 <!-- ### End footer ### -->  
     <!-- scripts to get the closures -->
     <script>
-      fetch('/latest-closures')
+      fetch('/api/projects/currentAndUpcoming')
       .then(response => response.json())
-      .then(closures => {
-          const sidebarList = document.getElementById('sidebarList');
-  
-          closures.forEach(closure => {
+      .then(({ currentClosures, upcomingClosures }) => {
+          const currentList = document.getElementById('current');
+          const upcomingList = document.getElementById('upcoming');
+
+          currentClosures.forEach((closure) => {
+              const listItem = document.createElement('li');
+              listItem.classList.add('closure-item');
+              const link = document.createElement('a');
+              link.href = `/projects/${closure.slug}`;
+              link.innerText = closure.activityName;
+							const iconBox = document.createElement('span');
+							iconBox.classList.add('icon-box');
+							listItem.appendChild(iconBox);
+              listItem.appendChild(link);
+              currentList.appendChild(listItem);
+          });
+
+          upcomingClosures.forEach((closure) => {
               const listItem = document.createElement('li');
               const link = document.createElement('a');
-              link.href = `/projects/${closure._id}`;
+              listItem.classList.add('closure-item');
+              link.href = `/projects/${closure.slug}`;
               link.innerText = closure.activityName;
+							const iconBox = document.createElement('span');
+							iconBox.classList.add('icon-box');
+							listItem.appendChild(iconBox);
               listItem.appendChild(link);
-              sidebarList.appendChild(listItem);
+              upcomingList.appendChild(listItem);
           });
       })
       .catch(error => console.error('Error fetching latest closures:', error));
@@ -189,14 +231,14 @@
   }).addTo(map);
 
   // Define activity icons
-  const activityIcons = {
-      "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-      "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-      "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-      "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
-      "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
-      "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
-  };
+    const activityIcons = {
+        "fullHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "partialHighway": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "streetAndLane": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "ramp": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+        "highImpact": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+        "trail": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png"
+    };
 
   // Define default styling values
   const defaultColor = '#f4661a';
@@ -204,22 +246,19 @@
 
   function fetchMapDataForProject(projectId) {
     const apiUrl = `/api/projects/${projectId}/mapData`;
-    
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            if (!data.mapData || !Array.isArray(data.mapData) || data.mapData.length !== 2) {
-                console.warn('Invalid data structure from API.');
+            if (!data.mapData || typeof data.mapData !== 'string') {
+                console.warn('Map data is missing or invalid');
                 return;
             }
             let geoJSONData = null;
-            if (typeof data.mapData[1] === 'string') {
-                try {
-                    geoJSONData = JSON.parse(data.mapData[1]);
-                } catch (e) {
-                    console.warn('Failed to parse GeoJSON:', e);
-                    return;
-                }
+            try {
+                geoJSONData = JSON.parse(data.mapData);
+            } catch (e) {
+                console.warn('Failed to parse GeoJSON:', e);
+                return;
             }
             if (!geoJSONData) {
                 console.warn('GeoJSON data is missing or invalid.');
@@ -235,31 +274,27 @@
                 pointToLayer: function (feature, latlng) {
                     // Try to get the icon URL based on the activity type
                     const iconUrl = activityIcons[feature.properties.activityType];
-
                     // If no icon URL is found, use a default one
                     const finalIconUrl = iconUrl || "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png"; 
                     const customIcon = L.icon({
                         iconUrl: finalIconUrl,
                         iconSize: [26, 26]
                     });
-
                     return L.marker(latlng, { icon: customIcon });
                 }
-                            }).addTo(map);
+              }).addTo(map);
             // Adjust the map view to fit the bounds of the geoJSON data
             map.fitBounds(geoLayer.getBounds());
         })
         .catch(error => console.error('Error fetching map data:', error));
-}
-  // Extract the projectId from the URL
-  const urlParts = window.location.pathname.split('/');
-  const projectId = urlParts[2];  // Assumes the URL structure is like /projects/<projectId>
-  console.log(projectId);  // Add this line
+  }
+  // Extract the projectId
+  const projectId = '<%= project.projectId %>';
 
   if (projectId) {
       fetchMapDataForProject(projectId);
   } else {
-      console.error('Could not derive projectId from the URL.');
+      console.error('Could not derive slug from the URL.');
   }
 </script>
 

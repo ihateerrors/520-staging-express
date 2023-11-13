@@ -1,67 +1,94 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Closure = require('../models/Project');  // Using the correct model
+const multer = require("multer");
+const path = require("path");
+const Project = require('../models/Project');
+const { uploadToAzure, deleteFromAzure } = require("../utils/azureUpload");
 
-// Endpoint to edit a closure by its ID
-router.put('/:id', async (req, res) => {
+const storage = multer.memoryStorage();
+
+function fileFilter(req, file, cb) {
+    const allowedExtensions = /jpeg|jpg|png|gif/;
+    const mimetypeCheck = allowedExtensions.test(file.mimetype);
+    const extnameCheck = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+    if (mimetypeCheck && extnameCheck) {
+        return cb(null, true);
+    }
+    cb(new Error("Error: File upload only supports the following filetypes - " + allowedExtensions));
+}
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+router.put("/api/projects/:projectId", upload.single("image"), async (req, res) => {
     try {
-        const closure = await Closure.findById(req.params.id);
-        
-        if (!closure) {
-            return res.status(404).send('Closure not found');
+        const projectId = req.params.projectId;
+        const project = await Project.findOne({ projectId: projectId });
+
+        if (!project) {
+            return res.status(404).json({ error: "Closure not found" });
         }
 
-        // Convert string dates back to Date objects
-        if (req.body.startDate) {
-            req.body.startDate = new Date(req.body.startDate);
+        const dateFields = ['startDate', 'endDate', 'postDate', 'removeDate'];
+        const dates = {};
+        // Converting date strings to ISO format
+        dateFields.forEach((field) => {
+            if (req.body[field]) {
+                const date = new Date(req.body[field]);
+                const isoDate = date.toISOString();
+                if (isoDate === 'Invalid Date') {
+                    throw new Error('Invalid date for field:', field);
+                }
+                dates[field] = isoDate;
+            }
+        });
+
+        const data = {
+            ...req.body,
+            timingFeatures: req.body.timingFeatures || [],
+            activityType: req.body.activityType || [],
+            impactType: req.body.impactType || [],
+            ...dates
+        };
+
+        const file = req.file; // The image file after multer middleware
+        if (file) {
+            const imageUrl = await uploadToAzure(file.buffer, file.originalname);
+            data.imageUrl = imageUrl;
         }
 
-        if (req.body.endDate) {
-            req.body.endDate = new Date(req.body.endDate);
-        }
+        project.set(data);
 
-        if (req.body.postDate) {
-            req.body.postDate = new Date(req.body.postDate);
-        }
-
-        if (req.body.removeDate) {
-            req.body.removeDate = new Date(req.body.removeDate);
-        }
-
-        if (req.body.createdAt) {
-            req.body.createdAt = new Date(req.body.createdAt);
-        }
-
-        if (req.body.updatedAt) {
-            req.body.updatedAt = new Date(req.body.updatedAt);
-        }
-
-        // Merge the updated fields into the closure object
-        Object.assign(closure, req.body);
-
-        // Save the updated closure
-        await closure.save();
-
-        res.json(closure); // Send the updated closure data back to the client as a response
-
-    } catch (e) {
-        console.error('Error updating closure:', e);
-        res.status(500).send('Internal server error while updating closure.');
+        const updatedProject = await project.save();
+        res.status(200).json(updatedProject);
+    }  catch (error) {
+        console.error("Error while updating closure:", error);
+        res.status(500).json({ error: "Internal server error while updating closure.", detailedError: error.message });
     }
 });
 
-// Endpoint to delete a closure by its ID
-router.delete('/:id', async (req, res) => {
+router.delete("/api/projects/:projectId", async (req, res) => {
     try {
-        const closure = await Closure.findByIdAndDelete(req.params.id);
-        if (!closure) {
-            return res.status(404).send('Closure not found');
+        const project = await Project.findOneAndDelete({ projectId: req.params.projectId });
+        if (!project) {
+            return res.status(404).json({ error: "Closure not found" });
         }
-        res.send(closure);
-    } catch (e) {
-        console.error('Error deleting closure:', e);
-        res.status(500).send('Internal server error while deleting closure.');
+        res.json(project);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error while deleting closure." });
     }
 });
+
+router.delete("/api/projects/:projectId/image", async (req, res) => {
+    const project = await Project.findOne({ projectId: req.params.projectId });
+    const blobName = project.imageUrl.split('/').pop();
+    const response = await deleteFromAzure(blobName);
+    if (!response) {
+        return res.status(500).json({ error: "Internal server error while deleting image." });
+    }
+    project.imageUrl = null;
+    await project.save();
+    res.status(200).json({ message: "Image deleted successfully" });
+});
+
 
 module.exports = router;
