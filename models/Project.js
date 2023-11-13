@@ -120,40 +120,9 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-  },
-  bannerContent: {
-    type: String,
-    required: true,
-    enum: ['yes', 'no']  // It ensures only 'yes' or 'no' values are stored for this field
-  },
-  postDate: {
-    type: Date,
-    required: true
-  },
-  removeDate: {
-    type: Date,
-    default: null  // If no date is provided, null is set by default
-  },
-  contact: {
-    type: String,
-    enum: ['montlake', 'i5', 'general'],
-    required: false
-  },
-  projectId: {
-    type: String,
-    unique: true,
-    default: function() {
-      return nanoid();
-    }
-  },
-  slug: {
-    type: String,
-    required: true
-  }
 }, { timestamps: true });
 
 ProjectSchema.pre('validate', async function(next) {
-
     // Generate a slug from the title
     const originalSlug = slugify(this.activityName, { lower: true, strict: true });
     // Check if the generated slug already exists in the database
