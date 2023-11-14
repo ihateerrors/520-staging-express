@@ -21,6 +21,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script> -->
 
 <style>
     .toggle-icon {
@@ -150,56 +151,37 @@ document.addEventListener("DOMContentLoaded", function(){
     setupFormSubmission();
     fetchMapData();
 
-    function initCameraMarkers(map) {
+    function initCameraMarkers(map){
+     
+            const mapCameras = {
+                    "Montlake Freeway Station": [47.6427395, -122.3039562],
+                    "Montlake Blvd": [47.6406178, -122.3058297],
+                    "Evergreen Point Lid": [47.6423737, -122.2412252],
+                    "84th Ave NE Lid": [47.6335835, -122.2102367],
+                    "92nd Ave NE Lid": [47.6298285, -122.2057622],
+                    "Bellevue Way Lid": [47.6182216, -122.2054495],
+                    "Yarrow Point Lid": [47.6475817, -122.2196779],
+                    "Hunts Point": [47.6450325, -122.2258702],
+                    "Medina Lid": [47.6270626, -122.2389892],
+                    "I-5/NE 45th St": [47.661095, -122.313153],
+                    "Montlake/520 Interchange": [47.6406806, -122.3037303],
+                    "SR 520/NE 148th St": [47.731715, -122.144903],
+                    "SR 520/Redmond Way": [47.673978, -122.121263],
+                        };
 
-const cameras = [
-    {
-        lat: 47.644611,
-        lng: -122.304694,
-        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_3/view_1'
-    },
-    {
-        lat: 47.645056,
-        lng: -122.301972,
-        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_1/view_1'
-    },
-    {
-        lat: 47.644861,
-        lng: -122.298111,
-        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_2/view_1'
-    },
-    {
-        lat: 47.644861,
-        lng: -122.298583,
-        iframeSrc: 'https://share.earthcam.net/tJ90CoLmq7TzrY396Yd88B9B2qPMb6E316d3h59C-OM!/sr_520__-_montlake_project/camera_4/view_1'
+        const cameras = L.layerGroup();
+        Object.entries(mapCameras).forEach(([name, coordinates]) => {
+            const cameraIcon = L.icon({
+                iconUrl: "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png",
+                iconSize: [26, 26],
+                popupAnchor: [0, -41],
+                 shadowUrl: null  // Add this line
+            });
+            const marker = L.marker(coordinates, { icon: cameraIcon }).addTo(cameras);
+            marker.bindPopup();
+        });
+        cameras.addTo(map);
     }
-];
-
-const cameraLayerGroup = L.layerGroup();
-const cameraIcon = L.icon({
-    iconUrl: "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png",
-    iconSize: [26, 26],
-    popupAnchor: [0, -41],
-    shadowUrl: null
-});
-
-cameras.forEach(camera => {
-    const marker = L.marker([camera.lat, camera.lng], { icon: cameraIcon }).addTo(cameraLayerGroup);
-    marker.bindPopup(
-        `<div style="width: 100%; padding: 15px;">
-             <p>
-                <iframe src="${camera.iframeSrc}" style="width: 100%; height: 450px; border: none;"></iframe>
-            </p>
-         </div>`,
-        {
-            maxWidth: 480,
-            minWidth: 480,
-        }
-    );
-});
-
-cameraLayerGroup.addTo(map);
-}
 
     function fetchMapData(startDate='', endDate='', types=[]){
         mapLayerGroup.clearLayers();
@@ -219,21 +201,25 @@ cameraLayerGroup.addTo(map);
 
     function handleFetchedData(data) {
     console.log('Data received:', data);
-    if (data && Array.isArray(data)) {
+    if (data && Array.isArray(data) && data.length > 0) {
         data.forEach(project => {
-            if (!project.mapData || typeof project.mapData !== 'string') {
-                console.warn('Map data is missing or invalid');
+            if (!project.mapData || !Array.isArray(project.mapData)) {
+                console.warn(`Invalid mapData for project with ID ${project._id}`);
                 return;
             }
+
             let geoJSONData = null;
-            try {
-                geoJSONData = JSON.parse(project.mapData);
-            } catch (e) {
-                console.warn('Failed to parse GeoJSON:', e);
-                return;
+            if (typeof project.mapData[1] === 'string') {
+                try {
+                    geoJSONData = JSON.parse(project.mapData[1]);
+                } catch (e) {
+                    console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                    return;
+                }
             }
+
             if (!geoJSONData) {
-                console.warn(`GeoJSON data is missing or invalid for project with ID ${project.projectId}`);
+                console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
                 return;
             }
 
@@ -241,11 +227,11 @@ cameraLayerGroup.addTo(map);
             const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
 
             const timingFeaturesHTML = project.timingFeatures.map(feature =>
-                `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" class="mr-2" alt="Checked Mark" width="25" height="25">${feature}`
-            ).join(' '); 
+                `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature}`
+            ).join(' ');
 
             const activityTypeHTML = project.activityType.map(type =>
-                `<img src="${activityIcons[type] || "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png"}" class="mr-2" alt="Checked Mark" width="25" height="25">${type}`
+                `<img src="${activityIcons[type] || "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png"}" alt="Checked Mark" width="25" height="25">${type}`
             ).join(' ');
 
             const popupContent = `
@@ -258,7 +244,7 @@ cameraLayerGroup.addTo(map);
                             </p>
                             <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>
                             <p>${project.description || "Not specified"}</p>
-                            <a href="/projects/${project.slug}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
+                            <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a>
                             <br><br>
                             <p>
                                 <span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
@@ -333,7 +319,7 @@ cameraLayerGroup.addTo(map);
 </script>
 
      
-         <!-- <script>gh
+         <!-- <script>
                  $(document).ready(function() {
                     $('.toggle-icon').click(function() {
                         $('form').toggle(); // Toggles visibility of the form
@@ -354,3 +340,4 @@ cameraLayerGroup.addTo(map);
 
 </body>
 </html>
+

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <title>SR 520 Construction Dashboard </title>
+
+<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
+<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> 
+<link rel="stylesheet" media="all" href="/css/styles3.css" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<style>
+
+.alert {
+    transition: opacity 1s;
+}
+/* Spacing between entries */
+.accordion-item {
+    margin-bottom: 20px;
+}
+
+/* Uniform button sizes */
+.btn {
+    width: 100px;  /* Adjust width as needed */
+    height: 40px;
+    display: inline-block;
+}
+.date-container {
+    display: flex;
+    justify-content: space-between;  /* This will distribute the space evenly between the two date items */
+    align-items: center;
+}
+
+.date-item {
+    flex: 1;  /* This will make sure both date items take equal space */
+    padding: 0 10px;  /* A little padding for spacing */
+}
+
+/* Input styling */
+input[type="text"], input[type="date"] {
+    min-width: 80%;  /* Takes 80% width of its container for more space */
+    border: 1px solid #ced4da;
+    padding: 5px 12px;
+    border-radius: 4px;  /* Rounded corners */
+    margin: 12px 0;  /* Increased vertical spacing */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+    background-color: #f7f7f7;  /* Light background for contrast */
+    display: block;  /* To take up full width and push subsequent content to new line */
+}
+
+/* Accordion content styling */
+.accordion-body {
+    padding: 15px;
+}
+
+/* For the images */
+.img-fluid {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* For the labels */
+strong {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 5px;  /* Space between label and the associated input */
+}
+
+/* Edit and Delete buttons spacing */
+.edit-btn, .delete-btn {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+/* Improved font styling for accordion button */
+.accordion-button.fw-600 {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 600;
+    text-align: left;
+}
+
+</style>
+  </head>
+  <body>
+    
+    <header id="header" style="width: 100vw">
+        <div class="container-fluid header-container">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="headerflex">
+                <a
+                  class="logo"
+                  href="https://wsdot.wa.gov/"
+                  title="Home"
+                  rel="home"
+                  rel="noreferrer"
+                >
+                  <img
+                    src="https://sr520construction.blob.core.windows.net/520-uploads/wsdot-logo-white.svg"
+                    alt="Home"
+                    loading="lazy"
+                    style="float: left; position: sticky; text-decoration: none"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="container3">
+                <ul class="topnav2" style="float: right">
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a
+                      class="nodec"
+                      href="https://wsdot.wa.gov/construction-planning/major-projects/sr-520-bridge-replacement-and-hov-program"
+                      >SR 520 Program</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/news/">News</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/goodtogo/"
+                      ><em>Good To Go!</em></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    <div class="container">
+         <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
+            <h1 class="wdot-dkgreen" style="font-size: 42px; line-height: 50px; margin-top: 60px;">Welcome to the SR 520 Construction Corner Dashboard</h1>
+            <p><strong></strong></p>
+            <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
+                Enter a new closure
+            </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closures</a>
+              
+            </a>  <br><br>
+        </div>
+        <!-- <div id="past-closures"></div> -->
+
+        <section style="margin: 3%;">
+            <h2 class="wdot-dkgreen" style="font-size: 24px; font-weight: 600;">Current and Past Closures:</h2>
+            <div id="past-closures"></div>
+            <!-- Place this where we want the alerts to show -->
+                    <div id="alertPlaceholder">
+
+                      <!-- <div class="alert alert-success" role="alert">
+                       Closure edited successfully.
+                      </div>
+                      <div class="alert alert-danger" role="alert">
+                     D'oh! Your closure edit didn't work--please try again. 
+                      </div>
+                       -->
+                    </div>
+
+            <div class="accordion" id="closureAccordion">
+                <% closures.forEach((closure, index) => { %>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<%= index %>">
+                            <button class="accordion-button fw-600" type="button" style="font-size: 18px; line-height: 30px; font-weight:500;" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="true" aria-controls="collapse<%= index %>">
+                                <%= closure.activityName %>
+                            </button>
+                        </h2>
+                        <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
+                          <div class="accordion-body" style="font-size: 18px;">
+                            <strong>Activity Name:</strong>
+                            <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
+          
+                         <div class="date-container">
+                          <div class="date-item">
+                              <strong>Start Date:</strong>
+                              <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
+                          </div>
+                      
+                          <div class="date-item">
+                              <strong>End Date:</strong>
+                              <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
+                          </div>
+                      </div>
+                                          <strong>Time:</strong>
+                            <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
+                            <strong>Location:</strong>
+                            <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+
+                            
+                            <strong>Description:</strong>
+                            <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
+          
+                            <strong>Traffic Description:</strong>
+                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                                                     
+                          <strong>Activity Type:</strong> 
+                            <ul> 
+                                <% closure.activityType.forEach(type => { %>
+                                    <li><%= type %></li>
+                                <% }); %>
+                            </ul>
+
+                            <strong>Timing Features:</strong> 
+                            <ul>
+                                <% closure.timingFeatures.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                <% }); %>
+                            </ul>
+        
+                            <strong>Impact Type:</strong> 
+                            <ul>
+                                <% closure.impactType.forEach(impact => { %>
+                                    <li><%= impact %></li>
+                                <% }); %>
+                            </ul>
+        
+              
+                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
+                            imgElement.src = data.imageUrl;
+                            imgElement.style.display = 'block';   -->
+
+                            <strong>Image URL:</strong>
+                                    <% if (closure.imageUrl){
+                            
+                                      %>                                 
+                                    <a href="<%=closure.imageUrl %>" target="_blank"><img id="img<%=index %>" class="img-fluid" src="<%=closure.imageUrl %>" alt="Closure Image" style="max-width: 900px;"></a>
+                                    <% } else { %>
+                                    <span class="edit-image">Replace image</span>
+                                    <img id="img<%=index %>" class="img-fluid" src="" alt="Closure Image" style="display: none; max-width: 700px;">
+                                    <% } %><br><br>
+
+                                    <input type="file" name="image" id="image" disabled><br> 
+
+                                                      <strong>Location:</strong>
+                                                <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+                            
+                                                <strong>Map Data:</strong>
+                                                <input type="text" name="mapData" value="<%= JSON.stringify(closure.mapData) || '' %>" disabled>
+                            
+                                                <strong>Banner Content:</strong>
+                                                <input type="text" name="bannerContent" value="<%= closure.bannerContent || '' %>" disabled>
+                            
+                                                <strong>Post Date:</strong>
+                                                <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
+                            
+                                                <strong>Remove Date:</strong>
+                                                <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
+                            
+                                                <strong>Contact:</strong>
+                                                <input type="text" name="contact" value="<%= closure.contact || '' %>" disabled>
+                            
+                                                <strong>Created At:</strong>
+                                                <input type="date" name="createdAt" value="<%= closure.createdAt.toISOString().split('T')[0] %>" disabled>
+                            
+                                                <strong>Updated At:</strong>
+                                                <input type="date" name="updatedAt" value="<%= closure.updatedAt.toISOString().split('T')[0] %>" disabled><br>
+                            
+                                                <button class="btn btn-md btn-secondary edit-btn" data-id="<%= closure._id %>">Edit</button>
+                                                <button class="btn btn-md btn-danger delete-btn" data-id="<%= closure._id %>">Delete</button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                                </section>
+
+                            </div>
+
+<!-- END Form's HTML -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      console.log("Script started"); // Log when script starts
+  
+      const editButtons = document.querySelectorAll('.edit-btn');
+      const deleteButtons = document.querySelectorAll('.delete-btn');
+  
+      editButtons.forEach(editBtn => {
+    editBtn.addEventListener('click', function() {
+        console.log('Edit button clicked');
+
+        const accordionItem = this.closest('.accordion-item');
+        console.log("Accordion item:", accordionItem);
+
+        const inputs = accordionItem.querySelectorAll('input');
+        const fileInput = accordionItem.querySelector('input[type=file]');
+        console.log("Located file input:", fileInput);
+
+        const id = this.getAttribute('data-id');
+
+        // Toggle the input fields' disabled state
+        inputs.forEach(input => input.disabled = !input.disabled);
+        console.log("After toggle: File input disabled state:", fileInput.disabled); 
+
+        // Toggle button text between 'Edit' and 'Save'
+        if (this.innerText === 'Edit') {
+            this.innerText = 'Save';
+        } else {
+                  // Save logic with FormData
+                  const formData = new FormData();
+                  inputs.forEach(input => {
+                      if (input.type !== 'file') {
+                          formData.append(input.name, input.value);
+                      }
+                  });
+  
+                  if (fileInput.files[0]) {
+                      formData.append('image', fileInput.files[0]);
+                  }
+  
+                  fetch(`/api/projects/${id}`, {
+                      method: 'PUT',
+                      body: formData
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      
+                      if (data.error) {
+                          console.error('Error:', data.error);
+                          // Display error alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">Failed to update closure. Please try again.</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      } else {
+                          // Display success alert
+                          alertPlaceholder.innerHTML = '<div class="alert alert-success" role="alert">Closure updated successfully!</div>';
+                          setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                      }
+                  })
+                  .catch(err => {
+                      console.error('Fetch error:', err);
+                      const alertPlaceholder = document.getElementById('alertPlaceholder');
+                      alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
+                      setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
+                  });
+              }
+          });
+      });
+  
+      // delete button start
+  
+      deleteButtons.forEach(deleteBtn => {
+          deleteBtn.addEventListener('click', async function() {
+              const accordionItem = this.closest('.accordion-item');
+              const id = this.getAttribute('data-id');
+              if (confirm('Are you sure you want to delete this closure?')) {
+                  try {
+                      const response = await fetch(`/closure/${id}`, { method: 'DELETE' });
+                      if (response.ok) {
+                          accordionItem.remove();
+                          alert('Closure deleted successfully!');
+                      } else {
+                          const data = await response.json();
+                          alert('Error deleting closure: ' + data.error);
+                      }
+                  } catch (err) {
+                      console.error('Error deleting closure:', err);
+                      alert('There was an error deleting the closure.');
+                  }
+              }
+          });
+      });
+  });
+  </script>
+  
+    </body>
+    </html>
+
+<!-- END Form's HTML -->
