@@ -16,7 +16,8 @@ const Project = require('./models/Project');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
 const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your directory structure
-
+const propertiesReader = require('properties-reader');
+const messages = propertiesReader('message.properties');
 
 // Routes imports
 const loginRoutes = require('./routes/login');
@@ -33,6 +34,11 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.locals.moment = require('moment');
+app.use((req, _, next) => {
+    // Add messages to the request object so they can be accessed in the view
+    req.messages = messages;
+    next();
+});
 
 // Session, flash and passport setup
 app.use(session({
@@ -152,7 +158,8 @@ app.get('/', async (req, res) => {
             project,
             closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
             currentClosures, 
-            upcomingClosures
+            upcomingClosures,
+            messages: req.messages
         });
 
     } catch (error) {

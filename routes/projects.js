@@ -8,8 +8,8 @@ const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const propertiesReader = require('properties-reader');
-const messages = propertiesReader('message.properties');
+// const propertiesReader = require('properties-reader');
+// const messages = propertiesReader('message.properties');
 
 const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
 
@@ -107,8 +107,9 @@ router.get('/projects/:slug', async (req, res) => {
 
         const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
         const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
+        const messages = req.messages;
 
-        const activityType = activityTypeEnums.map((activityType) => {
+        const activityType = activityTypeEnums.map((activityType) => { // TODO:  Not great to be rounding these up ever time, fix when there's time
             const key = `activityType.${activityType}`;
             const message = messages.get(key);
             return { id: activityType, message: message };
@@ -120,8 +121,11 @@ router.get('/projects/:slug', async (req, res) => {
             return { id: timingFeature, message: message };
         });
 
+        const contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
+
         const projectData = {
             ...project.toObject(),
+            contact,
             activityType,
             timingFeatures
         };
@@ -180,7 +184,23 @@ router.get('/api/projects', async (req, res) => {
 		// 	filters.cameras = req.query.cameras === "true";
 		// }
 
-        const projects = await Project.find({ $and: filters });
+        const projects = await Project.find({ $and: filters }).lean().exec();
+        const messages = req.messages;
+
+        projects.forEach((project) => {
+            project.activityType = project.activityType.map((type) => {
+                const key = `activityType.${type}`;
+                const message = messages.get(key);
+                return { id: type, message: message };
+            });
+            project.timingFeatures = project.timingFeatures.map((feature) => {
+                const key = `timingFeature.${feature}`;
+                const message = messages.get(key);
+                return { id: feature, message: message };
+            });
+            project.contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
+        });
+
         res.json(projects);
     } catch (error) {
         console.error(error);

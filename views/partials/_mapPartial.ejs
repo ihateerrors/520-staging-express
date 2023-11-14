@@ -351,7 +351,7 @@
                             const timingFeaturesHTML = project.timingFeatures
                                 .map(
                                     (feature) =>
-                                        `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" class="mr-2" alt="Checked Mark" width="25" height="25">${feature}`
+                                        `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" class="mr-2" alt="Checked Mark" width="25" height="25">${feature.message}`
                                 )
                                 .join(" ");
 
@@ -359,9 +359,9 @@
                                 .map(
                                     (type) =>
                                         `<img src="${
-                                            activityIcons[type] ||
+                                            activityIcons[type.id] ||
                                             "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png"
-                                        }" class="mr-2" alt="Checked Mark" width="25" height="25">${type}`
+                                        }" class="mr-2" alt="Checked Mark" width="25" height="25">${type.message}`
                                 )
                                 .join(" ");
 
@@ -382,14 +382,14 @@
 									<p>
 										<span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
 										Email: sr520bridge@wsdot.wa.gov<br/>
-										24-hour construction hotline: ${project.contact} 
+										24-hour construction hotline: ${project.contact.message} 
 									</p>
 								</div>
 							`;
 
-                            const iconUrl = activityIcons[project.activityType[0]];
+                            const iconUrl = activityIcons[project.activityType[0].id];
                             if (!iconUrl) {
-                                console.warn(`No icon URL found for type: ${project.activityType[0]}`);
+                                console.warn(`No icon URL found for type: ${project.activityType[0].id}`);
                                 return;
                             }
 
