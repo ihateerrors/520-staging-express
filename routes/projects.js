@@ -8,6 +8,8 @@ const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+// const propertiesReader = require('properties-reader');
+// const messages = propertiesReader('message.properties');
 
 const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
 
@@ -103,28 +105,106 @@ router.get('/projects/:slug', async (req, res) => {
             return;
         }
 
-        res.render('projectDetails', { project, formatDate });
+        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
+        const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
+        const messages = req.messages;
+
+        const activityType = activityTypeEnums.map((activityType) => { // TODO:  Not great to be rounding these up ever time, fix when there's time
+            const key = `activityType.${activityType}`;
+            const message = messages.get(key);
+            return { id: activityType, message: message };
+        });
+
+        const timingFeatures = timingFeatureEnums.map((timingFeature) => {
+            const key = `timingFeature.${timingFeature}`;
+            const message = messages.get(key);
+            return { id: timingFeature, message: message };
+        });
+
+        const contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
+
+        const projectData = {
+            ...project.toObject(),
+            contact,
+            activityType,
+            timingFeatures
+        };
+
+        res.render('projectDetails', { project: projectData, formatDate });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
 
+const isValidDate = (date) => date && date instanceof Date;
+
 router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
     try {
-        let filters = {};
+        const filters = [];
+        // Dates from query parameters are in ISO format
+        const startDate = new Date(req.query.startDate);
+        const endDate = new Date(req.query.endDate);
+        
+        if (isValidDate(startDate) && isValidDate(endDate)) { 
+            filters.push({
+                $or: [{
+                    startDate: { $lte: endDate.toISOString() },
+                    endDate: { $gte: startDate.toISOString() }
+                }]
+            })
+        } else if (isValidDate(startDate)) {
+            filters.push({ endDate: { $gte: startDate.toISOString() } });
+        } else if (isValidDate(endDate)) {
+            filters.push({ startDate: { $lte: endDate.toISOString() } });
+        } else {
+            console.error("Invalid start and end date");
+            res.status(400).json({ message: 'Invalid start and end date' });
+            return;
+        }
 
-        if (req.query.startDate) filters.startDate = { $gte: new Date(req.query.startDate) };
-        if (req.query.endDate) filters.endDate = { $lte: new Date(req.query.endDate) };
-        if (req.query.types) filters.activityType = { $in: req.query.types.split(",") };
-        if (req.query.cameras) filters.cameras = req.query.cameras === 'true';
+        if (req.query.types) {
+            if (req.query.types === "all") {
+                filters.push({ activityType: { $in: [
+                    // if you add a new activity type, add it here
+                    "fullHighway",
+                    "partialHighway",
+                    "streetAndLane",
+                    "trail",
+                    "ramp",
+                    "highImpact"
+                ] } })
+            } else {
+                filters.push({ activityType: { $in: req.query.types.split(",") } })
+            }
+        }
 
-        const projects = await Project.find(filters);
+        // if (req.query.cameras) {
+		// 	filters.cameras = req.query.cameras === "true";
+		// }
+
+        const projects = await Project.find({ $and: filters }).lean().exec();
+        const messages = req.messages;
+
+        projects.forEach((project) => {
+            project.activityType = project.activityType.map((type) => {
+                const key = `activityType.${type}`;
+                const message = messages.get(key);
+                return { id: type, message: message };
+            });
+            project.timingFeatures = project.timingFeatures.map((feature) => {
+                const key = `timingFeature.${feature}`;
+                const message = messages.get(key);
+                return { id: feature, message: message };
+            });
+            project.contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
+        });
+
         res.json(projects);
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send("Internal Server Error");
     }
 });
 
@@ -143,8 +223,28 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
             console.log(azureFileUrl);
             req.body.imageUrl = azureFileUrl;  // Saves the URL to the image in the database
         }
+
+        const dateFields = ['startDate', 'endDate', 'postDate', 'removeDate'];
+        const dates = {};
+        // Converting date strings to ISO format
+        dateFields.forEach((field) => {
+            if (req.body[field]) {
+                const date = new Date(req.body[field]);
+                const isoDate = date.toISOString();
+                if (isoDate === 'Invalid Date') {
+                    throw new Error('Invalid date for field:', field);
+                }
+                dates[field] = isoDate;
+            }
+        });
+
+        const data = {
+            ...req.body,
+            ...dates
+        };
+
         // Creating and saving the project
-        const project = new Project(req.body);
+        const project = new Project(data);
         await project.save();
         req.flash('success_msg', 'Construction event created successfully.');
         res.redirect('/dashboard');
@@ -213,6 +313,23 @@ router.get('/latest-closures', async (req, res) => {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+router.get('/api/projects/currentAndUpcoming', async (req, res) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);  // set to start of the day
+
+    const currentClosures = await Project.find({
+        startDate: { $lte: today },
+        endDate: { $gte: today }
+    }).sort({ postDate: -1 });
+
+    // Get upcoming closures
+    const upcomingClosures = await Project.find({
+        startDate: { $gt: today }
+    }).sort({ postDate: -1 });
+
+    res.json({ currentClosures, upcomingClosures });
 });
 
 const fetchRecentClosures = async () => {
