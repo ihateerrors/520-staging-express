@@ -8,8 +8,6 @@ const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-// const propertiesReader = require('properties-reader');
-// const messages = propertiesReader('message.properties');
 
 const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
 
@@ -98,36 +96,31 @@ router.get('/projects/:slug', async (req, res) => {
             return;
         }
 
-        const project = await Project.findOne({ slug: slug });
+        const project = await Project.findOne({ slug: slug }).lean().exec();
 
         if (!project) {
             res.status(404).send('Project not found');
             return;
         }
 
-        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
-        const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
         const messages = req.messages;
 
-        const activityType = activityTypeEnums.map((activityType) => { // TODO:  Not great to be rounding these up ever time, fix when there's time
-            const key = `activityType.${activityType}`;
+        const activityType = project.activityType.map((type) => {
+            const key = `activityType.${type}`;
             const message = messages.get(key);
-            return { id: activityType, message: message };
+            return { id: type, message: message };
         });
-
-        const timingFeatures = timingFeatureEnums.map((timingFeature) => {
-            const key = `timingFeature.${timingFeature}`;
+        const timingFeatures = project.timingFeatures.map((feature) => {
+            const key = `timingFeature.${feature}`;
             const message = messages.get(key);
-            return { id: timingFeature, message: message };
+            return { id: feature, message: message };
         });
-
-        const contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
 
         const projectData = {
-            ...project.toObject(),
-            contact,
+            ...project,
             activityType,
-            timingFeatures
+            timingFeatures,
+            contact: { id: project.contact, message: messages.get(`contact.${project.contact}`) }
         };
 
         res.render('projectDetails', { project: projectData, formatDate });
