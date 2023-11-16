@@ -183,6 +183,7 @@
                                         id="cameras"
                                         name="cameras"
                                         value="cameras"
+                                        checked
                                     />
                                     <label class="form-check-label" for="cameras">Cameras</label>
                                 </div>
@@ -446,7 +447,7 @@
                     });
                 }
 
-                let cameraLayer = null;
+                let cameraLayer = initCameraMarkers(map);
 
                 function handleFormInputChange(event) {
                     const input = event.target;
@@ -455,6 +456,7 @@
                             cameraLayer = initCameraMarkers(map);
                         } else {
                             map.removeLayer(cameraLayer);
+                            cameraLayer = null;
                         }
                         return;
                     }
