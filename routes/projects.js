@@ -173,11 +173,7 @@ router.get('/api/projects', async (req, res) => {
             }
         }
 
-        // if (req.query.cameras) {
-		// 	filters.cameras = req.query.cameras === "true";
-		// }
-
-        const projects = await Project.find({ $and: filters }).lean().exec();
+        const projects = !req.query.types ? [] : await Project.find({ $and: filters }).lean().exec();
         const messages = req.messages;
 
         projects.forEach((project) => {

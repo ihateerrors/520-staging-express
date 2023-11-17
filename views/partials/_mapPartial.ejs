@@ -121,6 +121,7 @@
                                         id="fullHighway"
                                         name="activityType"
                                         value="fullHighway"
+                                        checked
                                     /><label class="form-check-label" for="fullHighway">Full highway closures</label>
                                 </div>
                                 <div class="form-check">
@@ -130,6 +131,7 @@
                                         id="partialHighway"
                                         name="activityType"
                                         value="partialHighway"
+                                        checked
                                     /><label class="form-check-label" for="partialHighway"
                                         >Partial highway closures</label
                                     >
@@ -141,6 +143,7 @@
                                         id="streetAndLane"
                                         name="activityType"
                                         value="streetAndLane"
+                                        checked
                                     /><label class="form-check-label" for="streetAndLane"
                                         >Street and lane closures</label
                                     >
@@ -152,6 +155,7 @@
                                         id="trail"
                                         name="activityType"
                                         value="trail"
+                                        checked
                                     /><label class="form-check-label" for="trail">Trail closures</label>
                                 </div>
                                 <div class="form-check">
@@ -161,6 +165,7 @@
                                         id="ramp"
                                         name="activityType"
                                         value="ramp"
+                                        checked
                                     /><label class="form-check-label" for="ramp">Ramp closures</label>
                                 </div>
                                 <div class="form-check">
@@ -170,6 +175,7 @@
                                         id="highImpact"
                                         name="activityType"
                                         value="highImpact"
+                                        checked
                                     /><label class="form-check-label" for="highImpact">High-impact construction</label>
                                 </div>
                             </div>
@@ -249,8 +255,11 @@
                 }
             ];
 
+            const NUM_ACTIVITY_TYPES = 6;
+
             document.addEventListener("DOMContentLoaded", function () {
                 const currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0);
                 const twoWeeksAheadDate = new Date();
                 twoWeeksAheadDate.setDate(twoWeeksAheadDate.getDate() + 14);
 
@@ -442,7 +451,11 @@
                     });
                     checkboxes.forEach((checkbox) => {
                         checkbox.addEventListener("change", function () {
-                            selectAllCheckbox.checked = false;
+                            if (Array.from(checkboxes).every((checkbox) => checkbox.checked)) {
+                                selectAllCheckbox.checked = true;
+                            } else {
+                                selectAllCheckbox.checked = false;
+                            }
                         });
                     });
                 }
@@ -463,13 +476,19 @@
 
                     const startDate = new Date(document.getElementById("start").value);
                     const endDate = new Date(document.getElementById("end").value);
-                    const types = Array.from(
-                        input.id === "selectAll"
-                            ? document.querySelectorAll('input[type="checkbox"][name="activityType"]')
-                            : document.querySelectorAll('input[type="checkbox"][name="activityType"]:checked')
-                    ).map((input) => input.value);
-
-                    fetchMapData(startDate, endDate, types);
+                    const getTypes = () => {
+                        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="activityType"]');
+                        if (input.id === 'selectAll') {
+                            const checkedCount = Array.from(checkboxes).filter((checkbox) => checkbox.checked).length;
+                            if (checkedCount === NUM_ACTIVITY_TYPES) {
+                                return [];
+                            }
+                            return Array.from(checkboxes).map((checkbox) => checkbox.value);
+                        }
+                        const checked = Array.from(checkboxes).filter((checkbox) => checkbox.checked);
+                        return checked.map((input) => input.value);
+                    }
+                    fetchMapData(startDate, endDate, getTypes());
                 }
             });
         </script>
