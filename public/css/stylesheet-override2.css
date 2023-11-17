@@ -1920,3 +1920,9 @@ div.flickr-carousel {
 #success {
   color: green;
 }
+
+.timing-features {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns:  repeat(2, 30px 1fr);
+}
