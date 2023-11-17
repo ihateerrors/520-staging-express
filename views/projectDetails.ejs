@@ -113,6 +113,15 @@
                                         </li>
                                     <% }); %>
                                 </ul>
+
+                                <ul style="list-style-type: none; font-size: 18px;">
+                                  <% project.impactType.forEach(function(type) { %>
+                                      <li>
+                                          <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                          <%= type.message %>
+                                      </li>
+                                  <% }); %>
+                              </ul>
                                 
                               </div>
                               

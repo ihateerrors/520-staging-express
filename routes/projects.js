@@ -115,11 +115,17 @@ router.get('/projects/:slug', async (req, res) => {
             const message = messages.get(key);
             return { id: feature, message: message };
         });
+        const impactType = project.impactType.map((impact) => {
+            const key = `impactType.${impact}`;
+            const message = messages.get(key);
+            return { id: impact, message: message };
+        });
 
         const projectData = {
             ...project,
             activityType,
             timingFeatures,
+            impactType,
             contact: { id: project.contact, message: messages.get(`contact.${project.contact}`) }
         };
 
@@ -186,6 +192,11 @@ router.get('/api/projects', async (req, res) => {
                 const key = `timingFeature.${feature}`;
                 const message = messages.get(key);
                 return { id: feature, message: message };
+            });
+            project.impactType = project.impactType.map((impact) => {
+                const key = `impactType.${impact}`;
+                const message = messages.get(key);
+                return { id: impact, message: message };
             });
             project.contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
         });
