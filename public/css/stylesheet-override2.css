@@ -1925,4 +1925,5 @@ div.flickr-carousel {
   display: grid;
   grid-template-rows: auto;
   grid-template-columns:  repeat(2, 30px 1fr);
+  row-gap: 4px;
 }
