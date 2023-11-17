@@ -91,55 +91,55 @@
                           <div class="row pl-sm-4 pl-lg-3 pt-5">
                             <div class="col-lg-9 col-sm-12">
                               <div class="project-content ">
-                                <div class="content-left col-lg-6">
-                                <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
-                                <p><strong>Time:</strong> <%= project.time %></p>    
-                                
-                                <p><strong>Activity Details:</strong></p>
-                                <ul style="list-style-type: none; font-size: 18px;">
-                                    <% project.timingFeatures.forEach(function(feature) { %>
-                                        <li>
-                                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= feature.message %> <!-- Use 'feature' here instead of 'project.timingFeatures' -->
-                                        </li>
-                                    <% }); %>
-                                </ul>
-                                
-                                <ul style="list-style-type: none; font-size: 18px;">
-                                    <% project.activityType.forEach(function(type) { %>
-                                        <li>
-                                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                            <%= type.message %> <!-- Use 'type' here instead of 'project.activityType' -->
-                                        </li>
-                                    <% }); %>
-                                </ul>
-
-                                <ul style="list-style-type: none; font-size: 18px;">
-                                  <% project.impactType.forEach(function(type) { %>
-                                      <li>
-                                          <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                          <%= type.message %>
-                                      </li>
-                                  <% }); %>
-                              </ul>
-                                
-                              </div>
-                              
-                              <div class="content-right col-lg-6">
-                                
-                                  <% if (project.imageUrl && project.imageUrl.trim() !== '') { %>
-                                    <figure>
-                                    <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>">
-                                    <figcaption><em>Click on image to expand</em></figcaption>
-                                  </figure>
+                                <div class="<%= project.imageUrl && project.imageUrl.trim() !== '' ? 'content-left col-lg-6' : 'col-lg-12' %>">
+                                    <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
+                                    <p><strong>Time:</strong> <%= project.time %></p>    
+                            
+                                    <p><strong>Activity Details:</strong></p>
+                                    <ul style="list-style-type: none; font-size: 18px;">
+                                        <% project.timingFeatures.forEach(function(feature) { %>
+                                            <li>
+                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                                <%= feature.message %>
+                                            </li>
+                                        <% }); %>
+                                    </ul>
+                            
+                                    <ul style="list-style-type: none; font-size: 18px;">
+                                        <% project.activityType.forEach(function(type) { %>
+                                            <li>
+                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                                <%= type.message %>
+                                            </li>
+                                        <% }); %>
+                                    </ul>
+                            
+                                    <ul style="list-style-type: none; font-size: 18px;">
+                                        <% project.impactType.forEach(function(type) { %>
+                                            <li>
+                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                                <%= type.message %>
+                                            </li>
+                                        <% }); %>
+                                    </ul>
+                            
+                                    <div class="mr-3 pt-3">
+                                        <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
+                                        <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
+                                    </div>
+                                </div>
+                            
+                                <% if (project.imageUrl && project.imageUrl.trim() !== '') { %>
+                                    <div class="content-right col-lg-6">
+                                        <figure>
+                                            <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>">
+                                            <figcaption><em>Click on image to expand</em></figcaption>
+                                        </figure>
+                                    </div>
                                 <% } %>
-                                                              
-                              </div>
-                              <div class="ml-4 mr-3 pt-3 ">
-                                <p><strong>Description: </strong><%= project.description ? project.description : 'Description not available' %></p>
-                                <p><strong>Traffic impact:</strong> <%= project.trafficDescription %></p>
-                              </div>
-                            </div> 
+                            
+                            </div>
+                            
 
                                 <!-- ### Photo Lightbox ###  -->
                                 <dialog id="light-box">
@@ -169,15 +169,17 @@
                           </div>   
 
                         <div class="mt-5">
+                          <div class="mt-2">
+                            <p class="pt-2"><strong>Contact Info:</strong></p>
+                            <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong>  <%= project.contact.message %></p>
+                                                          
+                        </div>
                          <div class="greenborder" style="display: flex;"> 
+                          
                                       <div id="map" width: 100%;></div>
                            </div>
                            <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
-                           <div class="mt-2">
-                              <p class="pt-2"><strong>Contact Info:</strong></p>
-                              <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>24-hour construction hotline:</strong>  <%= project.contact.message %></p>
-                                                            
-                          </div>
+                    
                           </div>
                      </div>
                 <br>
