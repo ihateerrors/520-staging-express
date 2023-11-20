@@ -269,6 +269,9 @@ strong {
                                     
                                     <input type="button" name="delete-image" class="delete-image" disabled value="Delete File"/>
                                     <p class="supportive-text">Permanently delete image; necessary to remove an image file previously saved to a closure</p>
+
+                                    <input type="text" name="imageAltText" value="<%= closure.imageAltText || '' %>" disabled>
+                                    <p class="supportive-text">Alt text for the uploaded image</p>
                                 </div>
 
 
@@ -511,6 +514,10 @@ strong {
                                 formData.append(input.name, input.value);
                             }
                         } else {
+                            if (input.name === 'delete-image') {
+                                // for now we're making a separate request to delete the image, so we'll skip this input
+                                return;
+                            }
                             formData.append(input.name, input.value);
                         }
                     });

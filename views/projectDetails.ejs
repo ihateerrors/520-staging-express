@@ -134,7 +134,7 @@
                                 <% if (project.imageUrl && project.imageUrl.trim() !== '') { %>
                                     <div class="content-right col-lg-6">
                                         <figure>
-                                            <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>">
+                                            <img id="showDialog" class="img-fluid w-100" src="<%= project.imageUrl %>" alt="<%= project.imageAltText || '' %>" />
                                             <figcaption><em>Click on image to expand</em></figcaption>
                                         </figure>
                                     </div>
