@@ -375,13 +375,6 @@
                                 )
                                 .join(" ");
 
-                            const inpactTypeHTML = project.impactType
-                                .map(
-                                    (type) =>
-                                        `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" class="mr-2" alt="Checked Mark" width="25" height="25">${type.message}`
-                                )
-                                .join(" ");
-
                             const popupContent = `
 								<div class="popup-content">
 									<h3>${project.activityName}</h3>
@@ -391,9 +384,8 @@
 										<span style="font-weight: 600">Time:</span>${project.time}
 									</p>
 									<div class="timing-features">
-                                        ${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;
-                                        ${activityTypeHTML}&nbsp;&nbsp;&nbsp;
-                                        ${inpactTypeHTML}
+                                        ${activityTypeHTML}
+                                        ${timingFeaturesHTML}
                                     </div>
 									<p>${project.description || "Not specified"}</p>
 									<a href="/projects/${

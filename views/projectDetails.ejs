@@ -94,8 +94,18 @@
                                 <div class="<%= project.imageUrl && project.imageUrl.trim() !== '' ? 'content-left col-lg-6' : 'col-lg-12' %>">
                                     <p><strong>Date:</strong> <%= formatDate(project.startDate) %> to <%= formatDate(project.endDate) %> </p>
                                     <p><strong>Time:</strong> <%= project.time %></p>    
-                            
+
                                     <p><strong>Activity Details:</strong></p>
+                                    <ul style="list-style-type: none; font-size: 18px;">
+                                      <% project.activityType.forEach(function(type) { %>
+                                        <li>
+                                          <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" style="height: 25px; width: 25px;"> 
+                                          <%= type.message %>
+                                        </li>
+                                        <% }); %>
+                                      </ul>
+                            
+                        
                                     <ul style="list-style-type: none; font-size: 18px;">
                                         <% project.timingFeatures.forEach(function(feature) { %>
                                             <li>
@@ -105,15 +115,7 @@
                                         <% }); %>
                                     </ul>
                                     
-                                    <ul style="list-style-type: none; font-size: 18px;">
-                                      <% project.activityType.forEach(function(type) { %>
-                                        <li>
-                                          <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
-                                          <%= type.message %>
-                                        </li>
-                                        <% }); %>
-                                      </ul>
-                            
+                                    <p><strong>Impact type:</strong></p>
                                     <ul style="list-style-type: none; font-size: 18px;">
                                         <% project.impactType.forEach(function(type) { %>
                                             <li>
