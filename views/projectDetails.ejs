@@ -54,17 +54,18 @@
   max-width: 368px;
  }
  .sidebarList li .icon-box {
-	width: 25px;
-	height: 25px;
-	margin-right: 5px;
+    display: block;
+    background-color: #fff;
+    text-align: center;
+    line-height: 25px;
+    transform: skew(10deg);
+    margin-right: 6px;
  }
-.sidebarList li .icon-box::before {
-	content: '';
-	display: inline-flex;
-	background-image: url("https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png");
-	background-size: cover;
-	width: 25px;
-	height: 100%;
+ .sidebarList li .icon-img {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    bottom: 1px;
 }
 </style>
 </head>
@@ -151,7 +152,12 @@
                                    </figure>
                                     <button id="close-btn">Close</button>                                
 
-                                </dialog>                              
+                                </dialog>      
+                                
+                                <div class="greenborder" style="display: flex;"> 
+                                  <div id="map" width: 100%;></div>
+                                </div>
+                                <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
                           </div>
                 
 
@@ -159,12 +165,11 @@
                             <div class="col-lg-3">
                               <!-- Card 1 -->
                                 <div class="closure-sidebar">                         
-                                    <h4 class="wdot-dkgreen ml-3"><strong>Closures today</strong></h4><br>
-                                    
+                                    <h4 id="currentLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Closures today</strong></h4><br>
                                     <ul id="current" class="sidebarList"></ul> 
-                                    <h4 class="wdot-dkgreen ml-3"><strong>Upcoming closures</strong></h4><br>
+                                    <h4 id="upcomingLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Upcoming closures</strong></h4><br>
                                     <ul id="upcoming" class="sidebarList"></ul>                                                     
-                                      <br>
+                                    <br>
                                </div>                                        
                              </div>
                              <!-- sidebar end -->                                                
@@ -172,17 +177,17 @@
 
                         <div class="mt-5 mt-lg-0">
                           <div>
-                            <p class="pt-2"><strong>Contact Info:</strong></p>
+                            <p class="pt-2"><strong>Contact Info</strong></p>
                             <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>SR 520 Program information line:</strong>  <%= project.contact.message %></p>
                                                           
                         </div>
-                         <div class="greenborder" style="display: flex;"> 
+                         <!-- <div class="greenborder" style="display: flex;"> 
                           
                                       <div id="map" width: 100%;></div>
                            </div>
                            <p class="mt-4"><em>Note: This tool is presented for planning purposes only. Construction is inherently dependent on weather and other factors, and activities are subject to change.</em></p>
                     
-                          </div>
+                          </div> -->
                      </div>
                 <br>
             </div>
@@ -195,37 +200,63 @@
 <!-- ### End footer ### -->  
     <!-- scripts to get the closures -->
     <script>
+      const getIcon = (closure) => {
+        const activityType = closure.activityType[0];
+        if (activityType === 'trail') {
+            return 'https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png';
+        } else if (activityType === 'highImpact') {
+            return 'https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png';
+        } else {
+            return 'https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png';
+        }
+      };
+      const currentList = document.getElementById('current');
+      const currentLabel = document.getElementById('currentLabel');
+      const upcomingList = document.getElementById('upcoming');
+      const upcomingLabel = document.getElementById('upcomingLabel');
       fetch('/api/projects/currentAndUpcoming')
       .then(response => response.json())
       .then(({ currentClosures, upcomingClosures }) => {
-          const currentList = document.getElementById('current');
-          const upcomingList = document.getElementById('upcoming');
-
           currentClosures.forEach((closure) => {
+              const icon = getIcon(closure);
               const listItem = document.createElement('li');
+              const iconBox = document.createElement('span');
+							iconBox.classList.add('icon-box');
+              const iconImg = document.createElement('img');
+              iconImg.src = icon;
+              iconImg.classList.add('icon-img');
+              iconBox.appendChild(iconImg);
+              listItem.appendChild(iconBox);
               listItem.classList.add('closure-item');
               const link = document.createElement('a');
               link.href = `/projects/${closure.slug}`;
               link.innerText = closure.activityName;
-							const iconBox = document.createElement('span');
-							iconBox.classList.add('icon-box');
-							listItem.appendChild(iconBox);
               listItem.appendChild(link);
               currentList.appendChild(listItem);
           });
-
+          if (currentClosures.length > 0) {
+              currentLabel.style.visibility = 'visible';
+          }
           upcomingClosures.forEach((closure) => {
+              const icon = getIcon(closure);
               const listItem = document.createElement('li');
-              const link = document.createElement('a');
+              const iconBox = document.createElement('span');
+              iconBox.classList.add('icon-box');
+              const iconImg = document.createElement('img');
+              iconImg.src = icon;
+              iconImg.classList.add('icon-img');
+              iconBox.appendChild(iconImg);
+              listItem.appendChild(iconBox);
               listItem.classList.add('closure-item');
+              const link = document.createElement('a');
               link.href = `/projects/${closure.slug}`;
               link.innerText = closure.activityName;
-							const iconBox = document.createElement('span');
-							iconBox.classList.add('icon-box');
-							listItem.appendChild(iconBox);
               listItem.appendChild(link);
               upcomingList.appendChild(listItem);
           });
+          if (upcomingClosures.length > 0) {
+              upcomingLabel.style.visibility = 'visible';
+          }
       })
       .catch(error => console.error('Error fetching latest closures:', error));
   </script>
