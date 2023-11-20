@@ -365,6 +365,9 @@ type="text/css" />
             // Handle success
             if (response.ok) {
                 displayFormMessage("Construction event created successfully.", 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
             } else {
                 const data = await response.json();
                 console.error("Error saving project:", data.error);
