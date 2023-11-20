@@ -282,7 +282,7 @@
                 form.addEventListener("input", handleFormInputChange);
                 setupDateDefaults();
                 setupCheckboxesBehavior();
-                fetchMapData(currentDate, twoWeeksAheadDate, ["all"]);
+                fetchMapData(new Date(currentDate - 1), twoWeeksAheadDate, ["all"]);
 
                 function initCameraMarkers(map) {
                     const cameraLayerGroup = L.layerGroup();
@@ -319,7 +319,7 @@
 
                 function fetchMapData(startDate, endDate, types) {
                     mapLayerGroup.clearLayers();
-                    const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+                    const apiUrl = `/api/projects?startDate=${startDate.toDateString()}&endDate=${endDate.toDateString()}&types=${types.join(",")}`;
                     console.log("Fetching data from:", apiUrl);
 
                     fetch(apiUrl)

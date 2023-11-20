@@ -142,7 +142,6 @@ router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
     try {
         const filters = [];
-        // Dates from query parameters are in ISO format
         const startDate = new Date(req.query.startDate);
         const endDate = new Date(req.query.endDate);
         
