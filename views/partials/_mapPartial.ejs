@@ -211,6 +211,7 @@
         </div>
 
         <script>
+    
             const activityIcons = {
                 fullHighway: "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
                 partialHighway: "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
@@ -253,7 +254,7 @@
                 const twoWeeksAheadDate = new Date();
                 twoWeeksAheadDate.setDate(twoWeeksAheadDate.getDate() + 14);
 
-                const apiKey = "AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"; // TODO: Ugh this is bad...
+                const apiKey = "<%= apiKey %>";
                 const map = L.map("map").setView([47.6407, -122.2971], 14);
 
                 L.gridLayer

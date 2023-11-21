@@ -159,19 +159,20 @@ app.get('/', async (req, res) => {
             closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
             currentClosures, 
             upcomingClosures,
-            messages: req.messages
+            messages: req.messages,
+            apiKey: process.env.GOOGLE_MAPS_KEY_PROD
         });
 
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('Internal Server Error');      
     }
 });
 
 
 //map Routes
 app.get('/program', (req, res) => {
-    res.render('program'); // assuming 'program' is the name of your view file
+    res.render('program'); 
 });
 
 // app.get('/montlake-project', (req, res) => {
