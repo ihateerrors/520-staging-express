@@ -355,8 +355,11 @@
                                 return;
                             }
 
-                            const formattedStartDate = moment(project.startDate).format("MM/DD/YYYY");
-                            const formattedEndDate = moment(project.endDate).format("MM/DD/YYYY");
+                            // This fixup is needed because we're storing iso dates
+                            const fixDate = (dateString) => dateString?.replace(/-/g, '\/').replace(/T.+/, ''); 
+
+                            const formattedStartDate = moment(fixDate(project.startDate)).format("MM/DD/YYYY");
+                            const formattedEndDate = moment(fixDate(project.endDate)).format("MM/DD/YYYY");
 
                             const timingFeaturesHTML = project.timingFeatures
                                 .map(
