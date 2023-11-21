@@ -1,0 +1,382 @@
+
+
+
+
+
+
+
+
+
+<script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // ... [Other code remains unchanged]
+
+    function handleFetchedData(data) {
+        if (data && data.length > 0) {
+            data.forEach(project => {
+                if (!project.mapData || !Array.isArray(project.mapData)) {
+                    console.warn(`Invalid mapData for project with ID ${project._id}`);
+                    return;
+                }
+                
+                let geoJSONData = null;
+                if (typeof project.mapData[1] === 'string') {
+                    try {
+                        geoJSONData = JSON.parse(project.mapData[1]);
+                    } catch (e) {
+                        console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                        return;
+                    }
+                }
+                if (!geoJSONData) {
+                    console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                    return;
+                }
+
+                const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+                const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+
+                const timingFeaturesHTML = project.timingFeatures.map(feature =>
+                    `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${feature}`
+                ).join(' ');
+
+                const activityTypeHTML = project.activityType.map(type =>
+                    `<img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">${type}`
+                ).join(' ');
+
+                let iconURL = null;
+                for (let i = 0; i < project.activityType.length; i++) {
+                    iconURL = activityIcons[project.activityType[i]];
+                    if (iconURL) break;
+                }
+
+                if (!iconURL) {
+                    console.warn(`No icon found for activity types: ${project.activityType.join(', ')}`);
+                    iconURL = "https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png";
+                }
+
+                const geoJSONLayer = L.geoJSON(geoJSONData, {
+                                }).bindPopup(
+                    `<strong>${project.title}</strong><br>Start: ${formattedStartDate}<br>End: ${formattedEndDate}<br>Timing Features: ${timingFeaturesHTML}<br>Activity Type: ${activityTypeHTML}`
+                ).addTo(mapLayerGroup);
+            });
+        }
+    }
+
+    // ... [Other code remains unchanged]
+
+    function setupFormSubmission() {
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const startDate = document.getElementById('start').value;
+            const endDate = document.getElementById('end').value;
+            const checkboxes = document.querySelectorAll('input[name="type"]:checked');
+
+            let types = [];
+            checkboxes.forEach(checkbox => {
+                types.push(checkbox.value);
+            });
+
+            if (document.getElementById('all').checked) {
+                types = [];
+            }
+
+            fetchMapData(startDate, endDate, types);
+        });
+    }
+});
+
+</script>
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  -->
+<!-- Leaflet CSS -->
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+
+<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+</head>
+<body>
+
+<!-- <div class="exp-map" style="width: 100%"> -->
+
+    <div class="exp-map" style="width: 100%">
+    <div class="container-fluid" style="display: block;">
+                         <div class="row">
+                        <!-- <div class="col-12 col-sm-12 col-lg-2 col-md-3 order-md-1 order-2"> -->
+                            <div class="col-lg-2 col-md-3 col-sm-12">
+                            <form class="mt-5">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label>Start Date</label>
+                                            <input type="date" class="form-control" style="font-size: 1em" id="start" />
+                                        </div>                                    </div>                
+                                    <div class="col-sm-6 col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label>End Date</label>
+                                            <input type="date" class="form-control" style="font-size: 1em" id="end" />
+                                        </div> </div> </div>                
+                                <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="all">
+                                        <label class="form-check-label" for="all">All</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="fullHighway">
+                                        <label class="form-check-label" for="fullHighway">Full highway closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="partialHighway">
+                                        <label class="form-check-label" for="partialHighway">Partial highway closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="streetLane">
+                                        <label class="form-check-label" for="streetLane">Street and lane closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="trail">
+                                        <label class="form-check-label" for="trail">Trail closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="ramp">
+                                        <label class="form-check-label" for="ramp">Ramp closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="highImpact">
+                                        <label class="form-check-label" for="highImpact">High-impact construction</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="cameras">
+                                        <label class="form-check-label" for="cameras">Cameras</label>
+                                    </div>
+                                </div>
+                                        
+                                <button type="submit" id="filterSubmit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63);
+                                margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button>
+                            </form>
+                        </div>
+                
+                        <div class="col-lg-10 col-sm-12 col-md-9">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                  
+        </div>
+
+
+        <script>
+            const map = L.map('map').setView([47.6407, -122.2971], 13);
+        L.gridLayer.googleMutant({
+            type: 'roadmap',
+            maxZoom: 20,
+            apiKey: 'AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk'
+        }).addTo(map);
+        const activityIcons = {
+            "Full highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+            "Partial highway closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+            "Street and lane closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+            "Ramp closure": "https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png",
+            "High-impact construction": "https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png",
+            "Trail closure": "https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png",
+            "Cameras": "https://sr520construction.blob.core.windows.net/520-uploads/icon_Camera.png"
+        };
+              const defaultColor = '#f4661a';
+        const defaultWidth = 8;            
+        function fetchMapData(startDate = '', endDate = '', types = []) {
+        const apiUrl = `/api/projects?startDate=${startDate}&endDate=${endDate}&types=${types.join(",")}`;
+        console.log('Fetching data from:', apiUrl);        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+                if (data && data.length > 0) {
+                    data.forEach(project => {
+                        if (!project.mapData || !Array.isArray(project.mapData)) {
+                            console.warn(`Invalid mapData for project with ID ${project._id}`);
+                            return;
+                        }                            
+                        let geoJSONData = null;
+                        if (typeof project.mapData[1] === 'string') {
+                            try {
+                                geoJSONData = JSON.parse(project.mapData[1]);
+                            } catch (e) {
+                                console.warn(`Failed to parse GeoJSON for project with ID ${project._id}:`, e);
+                                return;
+                            }
+                        }        
+                        if (!geoJSONData) {
+                            console.warn(`GeoJSON data is missing or invalid for project with ID ${project._id}`);
+                            return;
+                        }        
+                        const formattedStartDate = moment(project.startDate).format('MM/DD/YYYY');
+                        const formattedEndDate = moment(project.endDate).format('MM/DD/YYYY');
+                        const timingFeaturesHTML = project.timingFeatures.map(feature => `
+                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                            ${feature}
+                        `).join(' ');        
+                        const activityTypeHTML = project.activityType.map(type => `
+                            <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="Checked Mark" width="25" height="25">
+                            ${type}
+                        `).join(' ');      
+                        const popupContent = `
+                            <div class="popup-content">
+                                <h3>${project.activityName}</h3>
+                                <p><span style="font-weight: 600">Start:</span> ${formattedStartDate}<br>
+                                <span style="font-weight: 600">End:</span> ${formattedEndDate}<br>
+                                <span style="font-weight: 600">Time:</span> ${project.time}</p>
+                                <div class="timing-features">${timingFeaturesHTML}&nbsp;&nbsp;&nbsp;${activityTypeHTML} </div>                         
+                                <p>${project.description || "Not specified"}</p>
+                                <a href="/projects/${project._id}" class="greenBtn mt-3 mb-4" style="background-color: #243b3b; padding: 10px; color: #000; font-weight: 600; border-radius: 5px;" target="_blank">More information</a><br><br>
+                            </div>
+                        `;        
+                        const iconUrl = activityIcons[project.activityType[0]];
+                        if (!iconUrl) {
+                            console.warn(`No icon URL found for type: ${project.activityType[0]}`);
+                            return;
+                        }        
+                        const customIcon = L.icon({
+                            iconUrl: iconUrl,
+                            iconSize: [26, 26],
+                            popupAnchor: [0, -41]
+                        });
+                  L.geoJSON(geoJSONData, {  // Note the use of geoJSONData here
+                            style: function(feature) {
+                                return {
+                                    color: feature.properties.color || defaultColor,
+                                    weight: feature.properties.width || defaultWidth
+                                };
+                            },
+                            pointToLayer: function (feature, latlng) {
+                                return L.marker(latlng, { icon: customIcon });
+                            },
+                            onEachFeature: function (feature, layer) {
+                                layer.bindPopup(popupContent, {
+                                    autoPan: true,
+                                    autoPanPaddingTopLeft: L.point(10, 50),
+                                    autoPanPaddingBottomRight: L.point(10, 10)
+                                });
+                            }
+                        }).addTo(map);
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching map data:', error));
+    }     
+        fetchMapData();        
+    document.addEventListener("DOMContentLoaded", function() {
+       
+        var today = moment().format('YYYY-MM-DD');
+    
+              var twoWeeksLater = moment().add(14, 'days').format('YYYY-MM-DD');
+              document.getElementById('start').setAttribute('value', today);
+              document.getElementById('end').setAttribute('value', twoWeeksLater);
+    });
+                      const mapDataElement = document.getElementById('mapData');
+        if (mapDataElement && mapDataElement.value) {
+            try {
+                const geoJSONData = JSON.parse(mapDataElement.value);
+                          L.geoJSON(geoJSONData, {
+                    style: function(feature) {
+                        return {
+                            color: feature.properties.color || defaultColor,
+                            weight: feature.properties.width || defaultWidth
+                        };
+                    }
+                }).addTo(map);
+    
+            } catch (error) {
+                console.warn("Failed to parse mapData from form:", error);
+            }
+        }
+              let previousView = null;       
+        map.on('popupopen', function() {
+            previousView = {
+                center: map.getCenter(),
+                zoom: map.getZoom()
+            };
+        });        
+        map.on('popupclose', function() {
+            if (previousView) {
+                map.setView(previousView.center, previousView.zoom);
+            }
+        });  
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();        
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(checkbox => checkbox.value);
+             fetchMapData(startDate, endDate, types);
+        });        
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map</title>
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  -->
+<!-- Leaflet CSS -->
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+
+<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+<!-- Google Maps JavaScript API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
+<script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+</head>
+<body>
+
+<!-- <div class="exp-map" style="width: 100%"> -->
+
+    <div class="exp-map" style="width: 100%">
+    <div class="container-fluid" style="display: block;">
+                         <div class="row">
+                        <!-- <div class="col-12 col-sm-12 col-lg-2 col-md-3 order-md-1 order-2"> -->
+                            <div class="col-lg-2 col-md-3 col-sm-12">
+                            <form class="mt-5">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label>Start Date</label>
+                                            <input type="date" class="form-control" style="font-size: 1em" id="start" />
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-sm-6 col-md-12 mt-2">
+                                        <div class="form-group">
+                                            <label>End Date</label>
+                                            <input type="date" class="form-control" style="font-size: 1em" id="end" />
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class="form-group d-flex flex-column mt-4 mb-4" id="constructionType">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="all">
+                                        <label class="form-check-label" for="all">All</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="fullHighway">
+                                        <label class="form-check-label" for="fullHighway">Full highway closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="partialHighway">
+                                        <label class="form-check-label" for="partialHighway">Partial highway closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="streetLane">
+                                        <label class="form-check-label" for="streetLane">Street and lane closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="trail">
+                                        <label class="form-check-label" for="trail">Trail closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="ramp">
+                                        <label class="form-check-label" for="ramp">Ramp closures</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="highImpact">
+                                        <label class="form-check-label" for="highImpact">High-impact construction</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="cameras">
+                                        <label class="form-check-label" for="cameras">Cameras</label>
+                                    </div>
+                                </div>
+                                        
+                                <button type="submit" class="btn-success greenBtn" style="background-color: rgb(0, 76, 63);
+                                margin-bottom: 14px; align-self: center; border-radius: 5px;">Submit</button>
+                            </form>
+                        </div>
+                
+                        <div class="col-lg-10 col-sm-12 col-md-9">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+                  
+        </div>
+
+
+
+
+</body>
+</html>
+
+
