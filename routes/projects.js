@@ -271,7 +271,7 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
             return;
         }
 
-        const project = await Project.findOne({ projectId: projectId });
+        const project = await Project.findOne({ projectId: projectId }).lean().exec();
 
         if (!project) {
             res.status(404).send('Project not found');
@@ -285,7 +285,8 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
 
         res.json({
             slug: project.slug,
-            mapData: project.mapData
+            mapData: project.mapData,
+            activityType: project.activityType
         });
     } catch (error) {
         console.error(error);
