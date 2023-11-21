@@ -245,7 +245,7 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
         // Creating and saving the project
         const project = new Project(data);
         await project.save();
-        req.flash('success_msg', 'Construction event created successfully.');
+        res.status(201).json({ message: 'Project created successfully' });
     } catch (err) {
         console.error('Error:', err);
         

@@ -315,6 +315,7 @@ type="text/css" />
         }
 
         alertBox.textContent = message;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     const map = L.map('map').setView([47.6407, -122.2971], 15);
@@ -362,12 +363,11 @@ type="text/css" />
                 method: 'POST',
                 body: formData
             });
-            // Handle success
             if (response.ok) {
                 displayFormMessage("Construction event created successfully.", 'success');
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
-                }, 2000);
+                    location.assign('/dashboard');
+                }, 3000);
             } else {
                 const data = await response.json();
                 console.error("Error saving project:", data.error);
