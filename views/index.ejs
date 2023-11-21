@@ -313,6 +313,18 @@
                       </div>
                       <aside class="col-lg-3 col-md-4 col-sm-12">
                           <div class="sidebar-wrapper">
+                            <%
+                                getIconUrl = function(type) {
+                                    console.log(type);
+                                    if (type === 'trail') {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png';
+                                    } else if (type === 'highImpact') {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png';
+                                    } else {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png';
+                                    }
+                                }
+                            %>
                              
                                   <% if (typeof currentClosures !=='undefined' && currentClosures){ %>
                                     <h2 class="text-left wdot-dkgreen">Closures today</h2>
@@ -320,7 +332,8 @@
                                       <% currentClosures.forEach(closure=>{ %>
                                           <li class="closure-item">
                                               <span class="icon-box">
-                                                  <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
+                                                <% var iconUrl = getIconUrl(closure.activityType[0]); %>
+                                                  <img src="<%= iconUrl %>" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
                                               <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
@@ -334,7 +347,8 @@
                                       <% upcomingClosures.forEach(closure=>{ %>
                                           <li class="closure-item">
                                               <span class="icon-box">
-                                                  <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
+                                                <% var iconUrl = getIconUrl(closure.activityType[0]); %>
+                                                  <img src="<%= iconUrl %>" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
                                               <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
