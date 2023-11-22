@@ -163,7 +163,12 @@
                                 </dialog>      
                                 <div>
                                   <p class="pt-2"><strong>Contact Info</strong></p>
-                                  <p><strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> <br><strong>SR 520 Program information line:</strong>  <%= project.contact.message %></p>
+                                  <p>
+                                    <strong>Email:</strong> <a href="mailto:sr520bridge@wsdot.wa.gov">sr520bridge@wsdot.wa.gov</a> 
+                                    <br>
+                                    <strong><%= project.contact.id === 'general' ? 'SR 520 Program information line' : '24-hour construction hotline' %>:</strong>  
+                                    <%= project.contact.message %>
+                                  </p>
                                 </div>
                                 <div class="greenborder" style="display: flex;"> 
                                   <div id="map" width: 100%;></div>
