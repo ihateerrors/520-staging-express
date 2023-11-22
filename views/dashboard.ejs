@@ -52,7 +52,7 @@ type="text/css" />
 }
 
 /* Input styling */
-input[type="text"], input[type="date"], select {
+input[type="text"], input[type="date"], select, textarea {
     min-width: 80%;  /* Takes 80% width of its container for more space */
     border: 1px solid #ced4da;
     padding: 5px 12px;
@@ -217,10 +217,10 @@ strong {
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
         
                             <strong>Description:</strong>
-                            <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
+                            <textarea type="text" name="description" rows="4" disabled><%= closure.description || '' %></textarea>
           
                             <strong>Traffic Description:</strong>
-                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                            <textarea type="text" name="trafficDescription" rows="4" disabled><%= closure.trafficDescription || '' %></textarea>
 
                             <strong>Activity Type:</strong>
                             <div>
@@ -477,9 +477,10 @@ strong {
             editButton.addEventListener('click', () => {
                 console.log('Edit button clicked');
                 const allInputs = accordionItem.querySelectorAll('input');
-                const allSelect = accordionItem.querySelectorAll('select')
+                const allSelect = accordionItem.querySelectorAll('select');
+                const allTextArea = accordionItem.querySelectorAll('textarea');
 
-                const inputs = [...allInputs, ...allSelect];
+                const inputs = [...allInputs, ...allSelect, ...allTextArea];
                 // Toggle the input fields' disabled state
                 inputs.forEach(input => {
                     if (!imgElement.getAttribute('src') && input.name === 'delete-image') {
