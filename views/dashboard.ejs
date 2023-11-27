@@ -17,12 +17,14 @@ type="text/css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
 <script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
 <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <style>
 
@@ -82,9 +84,20 @@ strong {
 }
 
 /* Edit and Delete buttons spacing */
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn, .save-btn {
     margin-right: 10px;
     margin-top: 10px;
+}
+
+.save-btn {
+    display: inline-block;
+    background-color: #007b5f;
+    color: #ffffff;
+}
+
+.save-btn:hover {
+    background-color: #01614b;
+    color: #ffffff;
 }
 
 /* Improved font styling for accordion button */
@@ -198,35 +211,36 @@ strong {
                         </h2>
                         <div id="collapse<%= index %>" class="accordion-collapse collapse" aria-labelledby="heading<%= index %>" data-bs-parent="#closureAccordion">
                           <div class="accordion-body" style="font-size: 18px;">
-                            <form id="editForm">
+                            <form id="editForm-<%= closure.projectId %>">
                             <strong>Activity Name:</strong>
-                            <input type="text" name="activityName" value="<%= closure.activityName %>" disabled><br>
+                            <input type="text" name="activityName" data-name="form-toggle" value="<%= closure.activityName %>" disabled><br>
           
                          <div class="date-container">
                           <div class="date-item">
                               <strong>Start Date:</strong>
-                              <input type="date" name="startDate" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
+                              <input type="date" name="startDate" data-name="form-toggle" value="<%= closure.startDate.toISOString().split('T')[0] %>" disabled>
                           </div>
                       
                           <div class="date-item">
                               <strong>End Date:</strong>
-                              <input type="date" name="endDate" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
+                              <input type="date" name="endDate" data-name="form-toggle" value="<%= closure.endDate ? closure.endDate.toISOString().split('T')[0] : '' %>" disabled>
                           </div>
                       </div>
                                           <strong>Time:</strong>
-                            <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
+                            <input type="text" name="time" data-name="form-toggle" value="<%= closure.time || '' %>" disabled>
         
                             <strong>Description:</strong>
-                            <textarea type="text" name="description" rows="4" disabled><%= closure.description || '' %></textarea>
+                            <textarea type="text" name="description" data-name="form-toggle" rows="4" disabled><%= closure.description || '' %></textarea>
           
                             <strong>Traffic Description:</strong>
-                            <textarea type="text" name="trafficDescription" rows="4" disabled><%= closure.trafficDescription || '' %></textarea>
+                            <input type="hidden" data-name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                            <div id="trafficDescription-<%= closure.projectId %>" name="trafficDescription"></div>
 
                             <strong>Activity Type:</strong>
                             <div>
                                 <% activityTypes.forEach(type => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=type.id %>" disabled <% if (closure.activityType && closure.activityType.includes(type.id)) { %>checked<% } %> id="<%=type.id %>" name="activityType[]">
+                                        <input class="form-check-input" type="checkbox" value="<%=type.id %>" disabled <% if (closure.activityType && closure.activityType.includes(type.id)) { %>checked<% } %> id="<%=type.id %>" name="activityType[]" data-name="form-toggle">
                                         <label class="form-check-label" for="<%=type.id %>"><%=type.message %></label>
                                     </div>
                                 <% }); %>
@@ -235,7 +249,7 @@ strong {
                             <div>
                                 <% timingFeatures.forEach(feature => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=feature.id %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature.id)) { %>checked<% } %> id="<%=feature.id %>" name="timingFeatures[]">
+                                        <input class="form-check-input" type="checkbox" value="<%=feature.id %>" disabled <% if (closure.timingFeatures && closure.timingFeatures.includes(feature.id)) { %>checked<% } %> id="<%=feature.id %>" name="timingFeatures[]" data-name="form-toggle">
                                         <label class="form-check-label" for="<%=feature.id %>"><%=feature.message %></label>
                                     </div>
                                 <% }); %>
@@ -244,15 +258,11 @@ strong {
                             <div>
                                 <% impactTypes.forEach(impact => { %>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=impact.id %>" disabled <% if (closure.impactType && closure.impactType.includes(impact.id)) { %>checked<% } %> id="<%=impact.id %>" name="impactType[]">
+                                        <input class="form-check-input" type="checkbox" value="<%=impact.id %>" disabled <% if (closure.impactType && closure.impactType.includes(impact.id)) { %>checked<% } %> id="<%=impact.id %>" name="impactType[]" data-name="form-toggle">
                                         <label class="form-check-label" for="<%=impact.id %>"><%=impact.message %></label>
                                     </div>
                                 <% }); %>
                             </div>
-                                  
-                            <!-- const imgElement = accordionItem.querySelector(`#img${index}`);
-                            imgElement.src = data.imageUrl;
-                            imgElement.style.display = 'block';   -->
 
                             <strong>Image URL:</strong>
                                 <% if (closure.imageUrl) { %>                                 
@@ -264,13 +274,13 @@ strong {
                                 <% } %>
 
                                 <div>
-                                    <input type="file" name="image" value="<%= closure.imageUrl ?? '' %>" id="image" disabled>
+                                    <input type="file" name="image" data-name="form-toggle" value="<%= closure.imageUrl ?? '' %>" id="image" disabled>
                                     <p class="edit-image supportive-text">Add or replace image file; to clear a file selection, click "Choose File" then click "Cancel"</p>
                                     
-                                    <input type="button" name="delete-image" class="delete-image" disabled value="Delete File"/>
+                                    <input type="button" name="delete-image" data-name="form-toggle" class="delete-image" disabled value="Delete File"/>
                                     <p class="supportive-text">Permanently delete image; necessary to remove an image file previously saved to a closure</p>
 
-                                    <input type="text" name="imageAltText" value="<%= closure.imageAltText || '' %>" disabled>
+                                    <input type="text" name="imageAltText" data-name="form-toggle" value="<%= closure.imageAltText || '' %>" disabled>
                                     <p class="supportive-text">Alt text for the uploaded image</p>
                                 </div>
 
@@ -280,7 +290,7 @@ strong {
                                     
 
                                                       <strong>Location:</strong>
-                            <input type="text" class="mb-3" name="location" value="<%= closure.location || '' %>" disabled>
+                            <input type="text" class="mb-3" name="location" data-name="form-toggle" value="<%= closure.location || '' %>" disabled>
           
                             <strong>Map Data:</strong>
                             <div class="greenborder" style="display:flex;">
@@ -294,10 +304,10 @@ strong {
                             </select>
           
                             <strong>Post Date:</strong>
-                            <input type="date" name="postDate" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
+                            <input type="date" name="postDate" data-name="form-toggle" value="<%= closure.postDate.toISOString().split('T')[0] %>" disabled>
           
                             <strong>Remove Date:</strong>
-                            <input type="date" name="removeDate" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
+                            <input type="date" name="removeDate" data-name="form-toggle" value="<%= closure.removeDate ? closure.removeDate.toISOString().split('T')[0] : '' %>" disabled>
           
                             <strong>Contact:</strong>
                             <select id="contact" name="contact" disabled>
@@ -313,6 +323,7 @@ strong {
                             <p class="date"><%= closure.updatedAt.toISOString().split('T')[0] %></p>
           
                             <button type="button" class="btn btn-md btn-secondary edit-btn">Edit</button>
+                            <button type="submit" class="btn btn-md save-btn" disabled style="display: none;">Save</button>
                             <button type="button" class="btn btn-md btn-danger delete-btn">Delete</button>
                             </form>
                           </div>
@@ -445,6 +456,18 @@ strong {
         }
     };
 
+    const setupQuill = (id) => {
+        const quill = new Quill(`#${id}`, {
+            theme: 'snow',
+            readOnly: true
+        });
+        const content = JSON.parse(document.querySelector(`input[data-name="trafficDescription"]`).value);
+        if (content) {
+            quill.setContents(content);
+        }
+        return quill;
+    };
+
     ready(() => {
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
         dataInputs.forEach((input) => {
@@ -452,14 +475,19 @@ strong {
             const accordionButton = accordionItem.querySelector('.accordion-button');
             const editButton = accordionItem.querySelector('.edit-btn');
             const deleteButton = accordionItem.querySelector('.delete-btn');
+            const submitButton = accordionItem.querySelector('.save-btn');
 
             const id = input.getAttribute('data-id');
             const geoJSON = input.getAttribute('data-json');
             const mapContainer = document.getElementById(`map-${id}`);
             const { map, geoLayer } = setUpMap(mapContainer, geoJSON);
 
+            const trafficQuill = setupQuill(`trafficDescription-${id}`);
+
             const deleteImage = accordionItem.querySelector('.delete-image');
             const imgElement = accordionItem.querySelector(`#img-${id}`);
+
+            const form = accordionItem.querySelector(`form#editForm-${id}`);
 
             accordionButton.addEventListener('click', () => {
                 try {
@@ -467,65 +495,59 @@ strong {
                         console.warn('Map or bounds not found');
                         return;
                     }
+                    if (!trafficQuill){
+                        console.warn('Quill not found');
+                        return;
+                    }
                     map.invalidateSize();
                     map.fitBounds(geoLayer.getBounds());
+                    trafficQuill.enable();
                 } catch(e) {
-                    console.warn('Failed to fit map bounds:', e);
+                    console.warn('Failed to update accordion:', e);
                 }
             });
 
-            editButton.addEventListener('click', () => {
-                console.log('Edit button clicked');
-                const allInputs = accordionItem.querySelectorAll('input');
-                const allSelect = accordionItem.querySelectorAll('select');
-                const allTextArea = accordionItem.querySelectorAll('textarea');
+            const inputs = form.querySelectorAll('[data-name="form-toggle"]');
+            let teardownEditControls = null;
 
-                const inputs = [...allInputs, ...allSelect, ...allTextArea];
-                // Toggle the input fields' disabled state
+            editButton.addEventListener('click', () => {
+                // Set up the edit controls
+                if (map && !teardownEditControls) {
+                    teardownEditControls = setUpEditControls(map, geoLayer, input);
+                }
+                submitButton.style.display = 'inline-block';
+                submitButton.disabled = false;
+                editButton.style.display = 'none';
                 inputs.forEach(input => {
                     if (!imgElement.getAttribute('src') && input.name === 'delete-image') {
                         return;
                     }
                     input.disabled = !input.disabled
                 });
-                // Toggle button text between 'Edit' and 'Save'
-                let teardownEditControls = null;
-                if (editButton.innerText === 'Edit') {
-                    editButton.innerText = 'Save';
-                    if (map && !teardownEditControls) {
-                        teardownEditControls = setUpEditControls(map, geoLayer, input);
-                    }
-                } else {
-                    editButton.innerText = 'Edit';
-                    // Save logic with FormData
-                    if (teardownEditControls) {
-                        // Remove the edit controls from the map
-                        teardownEditControls();
-                    }
-                    const formData = new FormData();
-                    inputs.forEach(input => {
-                        if (input.type === 'file' && input.name === 'image') {
-                            if (input.files[0]) {
-                                formData.append('image', input.files[0]);
-                            }
-                        } else if (input.name === 'mapData') {
-                            formData.append('mapData', input.getAttribute('data-json'));
-                        } else if (input.name === 'activityType[]' || input.name === 'timingFeatures[]' || input.name === 'impactType[]') {
-                            if (input.checked) {
-                                formData.append(input.name, input.value);
-                            }
-                        } else {
-                            if (input.name === 'delete-image') {
-                                // for now we're making a separate request to delete the image, so we'll skip this input
-                                return;
-                            }
-                            formData.append(input.name, input.value);
-                        }
-                    });
-                    fetch(`/api/projects/${id}`, {
-                        method: 'PUT',
-                        body: formData
-                    })
+                trafficQuill.enable();
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                // Teardown the edit controls
+                if (teardownEditControls) {
+                    teardownEditControls();
+                }
+
+                const formData = new FormData(event.target);
+
+                const trafficDescriptionDelta = trafficQuill.getContents();
+                formData.set('trafficDescription', JSON.stringify(trafficDescriptionDelta));
+
+                for (const pair of formData.entries()) {
+                    console.log(`${pair[0]}, ${pair[1]}`);
+                }
+
+                fetch(`/api/projects/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                })
                     .then(response => response.json())
                     .then(data => {
                         const alertPlaceholder = document.getElementById('alertPlaceholder');
@@ -548,7 +570,6 @@ strong {
                         alertPlaceholder.innerHTML = '<div class="alert alert-danger" role="alert">An error occurred. Please try again.</div>';
                         setTimeout(() => alertPlaceholder.innerHTML = '', 5000);  // Remove the alert after 5 seconds
                     });
-                }
             });
 
             deleteButton.addEventListener('click', async () => {
