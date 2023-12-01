@@ -397,7 +397,7 @@
 									<p>
 										<span style="font-weight: 600; color: #007b5f;">CONTACT</span><br/>
 										Email: sr520bridge@wsdot.wa.gov<br/>
-										SR 520 Program information line: ${project.contact.message} 
+										${project.contact.id === 'general' ? 'SR 520 Program information line' : '24-hour construction hotline'}: ${project.contact.message} 
 									</p>
 								</div>
 							`;
