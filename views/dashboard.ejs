@@ -25,6 +25,13 @@ type="text/css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" crossorigin="anonymous"></script>
 
+<!-- Include Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Include Quill JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
 <style>
 
 .alert {
@@ -218,10 +225,13 @@ strong {
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
         
                             <strong>Description:</strong>
-                            <textarea type="text" name="description" rows="4" disabled><%= closure.description || '' %></textarea>
-          
+                            <div id="activityDescriptionEditor" style="height: 200px;"></div>
+                            <textarea id="activityDescription" name="description" rows="4" style="display: none;"><%= closure.description || '' %></textarea>
+
                             <strong>Traffic Description:</strong>
-                            <textarea type="text" name="trafficDescription" rows="4" disabled><%= closure.trafficDescription || '' %></textarea>
+                            <div id="trafficDescriptionEditor" style="height: 200px;"></div>
+                            <textarea id="trafficDescription" name="trafficDescription" rows="4" style="display: none;"><%= closure.trafficDescription || '' %></textarea>
+
 
                             <strong>Activity Type:</strong>
                             <div>
@@ -330,6 +340,15 @@ strong {
 <!-- END Form's HTML -->
 
 <script>
+    
+    var activityDescriptionQuill = new Quill('#activityDescriptionEditor', {
+            theme: 'snow'
+        });
+
+        var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
+            theme: 'snow'
+        });
+
     function ready(fn) {
         if (document.readyState !== 'loading') {
             fn();
