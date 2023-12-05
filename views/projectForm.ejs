@@ -10,7 +10,13 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/styles3.css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 
-    <!-- Leaflet and Leaflet.draw CDN -->
+<!-- Include Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Include Quill JavaScript -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<!-- Leaflet and Leaflet.draw CDN -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
@@ -139,16 +145,21 @@ type="text/css" />
         <label for="time" class="form-label">Time</label>
         <input type="text" class="form-control" id="time" name="time" placeholder="10:00 AM - 5:00 PM">
     </div>
-
+    
     <div class="mb-3" style="font-size: 18px;">
         <label for="description" class="form-label">Activity Description</label>
-        <textarea class="form-control" id="description" rows="4" name="description"></textarea>
+        <!-- Quill Editor Container for Activity Description -->
+        <div id="activityDescriptionEditor"></div>
+        <input type="hidden" name="description" id="activityDescription">
     </div>
-
+    
     <div class="mb-3" style="font-size: 18px;">
         <label for="trafficDescription" class="form-label">Traffic Description</label>
-        <textarea class="form-control" id="trafficDescription" rows="4" name="trafficDescription"></textarea>
+        <!-- Quill Editor Container for Traffic Description -->
+        <div id="trafficDescriptionEditor"></div>
+        <input type="hidden" name="trafficDescription" id="trafficDescription">
     </div>
+    
 
     <div class="mb-3" style="font-size: 18px">
         <p style="font-size: 20px; font-weight: 600;">Timing Features</p>
@@ -297,6 +308,31 @@ type="text/css" />
 </section>
 <!-- END Form's HTML -->
 <script>
+
+    var activityDescriptionQuill = new Quill('#activityDescriptionEditor', {
+            theme: 'snow'
+        });
+
+        var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
+            theme: 'snow'
+        });
+
+        // Listen to form submission
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get the HTML content from Quill editors
+            var activityDescriptionHTML = activityDescriptionQuill.root.innerHTML;
+            var trafficDescriptionHTML = trafficDescriptionQuill.root.innerHTML;
+
+            // Set the values of the hidden input fields
+            document.querySelector('#activityDescription').value = activityDescriptionHTML;
+            document.querySelector('#trafficDescription').value = trafficDescriptionHTML;
+
+            // Submit the form
+            this.submit();
+    });
+
     function displayFormMessage(message, type) {
         const errorMessageBox = document.getElementById('errorMessage');
         const successMessageBox = document.querySelector('.success-message');
