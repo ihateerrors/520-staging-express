@@ -619,11 +619,14 @@ footer {
   padding: 12px 24px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  border-bottom-left-radius: none !important;
-  border-bottom-right-radius: none !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
   position: relative;
   transform: skewX(-10deg);
   transition: all 0.3s;
+}
+button.parallelogram-link {
+    top: 1px;
 }
 
 .nav-rhombus {
@@ -689,8 +692,9 @@ footer {
 }
 
 .parallelogram-link:hover {
-  background-color: #1d3b1e;
+  background-color: #005151;
   color: #fff;
+  border-color: #005151;
 }
 .random {
   background-color: #c9313b;
@@ -928,12 +932,7 @@ padding-right: 14px; */
   margin: 0 0 0 6px;
 }
 #map2Button-new:hover {
-  border-color: #777c81;
   border-style: solid;
-  border-width: 1px 1px 5px;
-  border-color: #777c81;
-  border-style: solid;
-  border-width: 1px 1px 5px;
 }
 @media (max-width: 768px) {
   .container3 {
