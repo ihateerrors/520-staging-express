@@ -145,7 +145,7 @@ type="text/css" />
         <label for="time" class="form-label">Time</label>
         <input type="text" class="form-control" id="time" name="time" placeholder="10:00 AM - 5:00 PM">
     </div>
-    
+
     <div class="mb-3" style="font-size: 18px;">
         <label for="description" class="form-label">Activity Description</label>
         <!-- Quill Editor Container for Activity Description -->
@@ -310,27 +310,11 @@ type="text/css" />
 <script>
 
     var activityDescriptionQuill = new Quill('#activityDescriptionEditor', {
-            theme: 'snow'
-        });
+        theme: 'snow',
+    });
 
-        var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
-            theme: 'snow'
-        });
-
-        // Listen to form submission
-        document.querySelector('form').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            // Get the HTML content from Quill editors
-            var activityDescriptionHTML = activityDescriptionQuill.root.innerHTML;
-            var trafficDescriptionHTML = trafficDescriptionQuill.root.innerHTML;
-
-            // Set the values of the hidden input fields
-            document.querySelector('#activityDescription').value = activityDescriptionHTML;
-            document.querySelector('#trafficDescription').value = trafficDescriptionHTML;
-
-            // Submit the form
-            this.submit();
+    var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
+        theme: 'snow'
     });
 
     function displayFormMessage(message, type) {
