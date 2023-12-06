@@ -431,6 +431,7 @@ footer {
   padding-right: 0px;
   padding-top: 35px;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .footer .block-block-content {
@@ -551,6 +552,27 @@ footer {
   max-height: 500px; /* Fixed height */
   margin-bottom: 20px; /* Adjust as needed */
 }
+
+@media (max-width: 991px) {
+    .container-3card {
+        padding: 0px;
+    }
+
+    .container-3card > .container > .px-5 {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    .container-3card > .container .card {
+        margin: 20px auto !important;
+    }    
+}
+
+@media (max-width: 991px) {
+    .containernew {
+        min-height: 335px;
+    }
+}
+
 .card-montlake {
   background: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Adjust as desired */
