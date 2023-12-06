@@ -372,6 +372,13 @@ type="text/css" />
 
         // Extract form data
         const formData = new FormData(e.target);
+
+        // Get the content from Quill editors and set them as input values
+        const activityDescriptionContent = activityDescriptionQuill.root.innerHTML;
+        const trafficDescriptionContent = trafficDescriptionQuill.root.innerHTML;
+
+        formData.set('description', activityDescriptionContent);
+        formData.set('trafficDescription', trafficDescriptionContent);
     
         // Convert drawn items to geoJSON and add to the form data
         const drawnData = drawnItems.toGeoJSON();
