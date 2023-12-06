@@ -1024,7 +1024,11 @@ padding-right: 14px; */
 
 .navicon {
   float: left;
-  padding-top: 0.75em;
+  margin-top: 0.75em;
+  margin-left: 12px;
+  width: 89px;
+  height: 62px;
+  display: inline-block;
 }
 
 #nav2 {
