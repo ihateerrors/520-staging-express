@@ -29,13 +29,6 @@
         ></script>
 
         <style>
-            .toggle-icon {
-                display: none;
-                font-size: 24px;
-                cursor: pointer;
-                margin: 10px;
-            }
-
             .supportive-text {
                 font-size: 14px;
                 color: #666;
@@ -43,13 +36,33 @@
                 margin: 0;
             }
 
+            .filter-toggle {
+                display: none;
+                margin: 4px 0;
+                padding: 4px;
+            }
+
+            .filter-toggle__button {
+                background-color: #007b5f;
+                color: #fff;
+            }
+
+            .filter-toggle__button.collapsed {
+                background-color: #007b5f;
+                color: #fff;
+            }
+
+            .filter-toggle__button:hover,
+            .filter-toggle__button:focus {
+                color: #fff;
+            }
+
             /* Hide form and show toggle icon on smaller screen sizes */
             @media (max-width: 600px) {
-                form {
-                    display: none;
-                }
-                .toggle-icon {
-                    display: block;
+                .filter-toggle {
+                    display: flex;
+                    justify-content: flex-end;
+                    border-bottom: 1px solid #ccc;
                 }
                 .mapcontainer,
                 #map {
@@ -70,10 +83,21 @@
             <div class="container-fluid" style="display: block">
                 <div class="row">
                     <div class="col-lg-2 col-md-3 col-sm-12">
-                        <div class="toggle-icon">
-                            <i class="fas fa-bars"></i>
+                        <div class="filter-toggle">
+                            <button
+                                class="btn filter-toggle__button collapsed"
+                                type="button"
+                                data-toggle="collapse"
+                                data-target="#filterDropdown"
+                                aria-controls="filterDropdown"
+                                aria-expanded="false"
+                                aria-label="Toggle map filters"
+                            >
+                                <i class="fas fa-bars"></i>
+                            </button>
                         </div>
 
+                        <div id="filterDropdown" class="collapse navbar-collapse">
                         <form id="filterForm" class="mt-5">
                             <h4 class="mb-4">Filter</h4>
 
@@ -208,6 +232,7 @@
                                 Submit
                             </button> -->
                         </form>
+                        </div>
                     </div>
                     <div class="col-lg-10 col-sm-12 col-md-9">
                         <div id="map"></div>
