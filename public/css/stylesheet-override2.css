@@ -567,6 +567,10 @@ footer {
     }    
 }
 
+.containernew {
+    min-height: 340px;
+}
+
 @media (max-width: 991px) {
     .containernew {
         min-height: 335px;
