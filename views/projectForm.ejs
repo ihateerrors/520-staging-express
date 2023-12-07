@@ -309,14 +309,6 @@ type="text/css" />
 <!-- END Form's HTML -->
 <script>
 
-    var activityDescriptionQuill = new Quill('#activityDescriptionEditor', {
-        theme: 'snow',
-    });
-
-    var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
-        theme: 'snow'
-    });
-
     function displayFormMessage(message, type) {
         const errorMessageBox = document.getElementById('errorMessage');
         const successMessageBox = document.querySelector('.success-message');
@@ -372,6 +364,17 @@ type="text/css" />
 
         // Extract form data
         const formData = new FormData(e.target);
+
+
+        var activityDescriptionQuill = new Quill('#activityDescriptionEditor', {
+            theme: 'snow',
+            sanitize: false,
+        });
+
+        var trafficDescriptionQuill = new Quill('#trafficDescriptionEditor', {
+            theme: 'snow',
+            sanitize: false,
+        });
 
         // Get the content from Quill editors and set them as input values
         const activityDescriptionContent = activityDescriptionQuill.root.innerHTML;
