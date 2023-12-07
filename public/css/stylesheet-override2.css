@@ -1956,3 +1956,19 @@ div.flickr-carousel {
   grid-template-columns:  repeat(2, 30px 1fr);
   row-gap: 4px;
 }
+
+@media (max-width: 600px) {
+
+  .contact-header {
+    margin-bottom: 10px !important;
+  }
+
+  .contact-article > div {
+    margin: 0 -5px 0 -5px;
+  }
+
+  .writeus-box {
+    margin: -20px;
+  }
+
+}
