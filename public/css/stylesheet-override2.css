@@ -1972,3 +1972,26 @@ div.flickr-carousel {
   }
 
 }
+
+.bottom-btn {
+  display: inline-block;
+  background-color: #007b5f;
+  text-align: center;
+  color: white !important;
+  font-size: 20px;
+  text-decoration: none;
+  margin-top: 12px;
+  margin-left: 5px;
+  padding: 12px 20px;
+  border-radius: 5px;
+  border-bottom: 1px solid #007b5f;
+  transform: skewX(-10deg) !important;
+  transition: all 0.3s;
+}
+
+.bottom-btn:hover {
+  display: inline-block;
+  background-color: #1d3b1e;
+  color: #fff;
+  border-bottom: 1px solid #007b5f;
+}
