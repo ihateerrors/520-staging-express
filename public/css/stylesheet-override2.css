@@ -1972,3 +1972,7 @@ div.flickr-carousel {
   }
 
 }
+
+.bottom-btn {
+  border-radius: 5px !important;
+}
