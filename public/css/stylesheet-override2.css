@@ -1342,8 +1342,10 @@ a.button {
 }
 
 /* === Side bar === */
+.card-body h2,
 .card-body h3 {
   text-align: left;
+  margin: 0 0 0 0;
 }
 .card-body p {
   line-height: 1.6em;
