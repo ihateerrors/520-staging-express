@@ -107,7 +107,7 @@
                                           <% iconUrl = 'https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png'; %>
                                         <% } %>
                                         <li>
-                                          <img src="<%= iconUrl %>" style="height: 25px; width: 25px;"> 
+                                          <img src="<%= iconUrl %>" alt="check mark icon" style="height: 25px; width: 25px;"> 
                                           <%= type.message %>
                                         </li>
                                         <% }); %>
@@ -117,7 +117,7 @@
                                     <ul style="list-style-type: none; font-size: 18px;">
                                         <% project.timingFeatures.forEach(function(feature) { %>
                                             <li>
-                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="check mark icon" style="height: 25px; width: 25px;"> 
                                                 <%= feature.message %>
                                             </li>
                                         <% }); %>
@@ -127,7 +127,7 @@
                                     <ul style="list-style-type: none; font-size: 18px;">
                                         <% project.impactType.forEach(function(type) { %>
                                             <li>
-                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" style="height: 25px; width: 25px;"> 
+                                                <img src="https://sr520construction.blob.core.windows.net/520-uploads/checked_mark.png" alt="check mark icon" style="height: 25px; width: 25px;"> 
                                                 <%= type.message %>
                                             </li>
                                         <% }); %>
@@ -180,9 +180,9 @@
                             <div class="col-lg-3">
                               <!-- Card 1 -->
                                 <div class="closure-sidebar">                         
-                                    <h4 id="currentLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Closures today</strong></h4><br>
+                                    <h2 id="currentLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Closures today</strong></h2><br>
                                     <ul id="current" class="sidebarList"></ul> 
-                                    <h4 id="upcomingLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Upcoming closures</strong></h4><br>
+                                    <h2 id="upcomingLabel" class="wdot-dkgreen ml-3" style="visibility:hidden;"><strong>Upcoming closures</strong></h2><br>
                                     <ul id="upcoming" class="sidebarList"></ul>                                                     
                                     <br>
                                </div>                                        

@@ -99,26 +99,29 @@
 
                         <div id="filterDropdown" class="collapse navbar-collapse">
                         <form id="filterForm" class="mt-5">
-                            <h4 class="mb-4">Filter</h4>
+                            <h3 class="mb-4">Filter</h3>
 
                             <div class="form-group">
                                 <p class="supportive-text">Closures that fall within:</p>
                                 <div class="row">
                                     <div class="col-sm-6 col-md-12 mt-2">
                                         <div class="form-group">
-                                            <label>Start Date</label
-                                            ><input
+                                            <label for="">Start Date
+                                            <input
                                                 type="date"
                                                 class="form-control"
                                                 style="font-size: 1em"
                                                 id="start"
+                                                title="Start date"
                                             />
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-12 mt-2">
                                         <div class="form-group">
-                                            <label>End Date</label
-                                            ><input type="date" class="form-control" style="font-size: 1em" id="end" />
+                                            <label>End Date
+                                            <input type="date" title="End date" class="form-control" style="font-size: 1em" id="end" />
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -137,70 +140,93 @@
                                     />
                                     <label class="form-check-label" for="selectAll">All</label>
                                 </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="fullHighway"
-                                        name="activityType"
-                                        value="fullHighway"
-                                        checked
-                                    /><label class="form-check-label" for="fullHighway">Full highway closures</label>
-                                </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="partialHighway"
-                                        name="activityType"
-                                        value="partialHighway"
-                                        checked
-                                    /><label class="form-check-label" for="partialHighway"
-                                        >Partial highway closures</label
-                                    >
-                                </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="streetAndLane"
-                                        name="activityType"
-                                        value="streetAndLane"
-                                        checked
-                                    /><label class="form-check-label" for="streetAndLane"
-                                        >Street and lane closures</label
-                                    >
-                                </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="trail"
-                                        name="activityType"
-                                        value="trail"
-                                        checked
-                                    /><label class="form-check-label" for="trail">Trail closures</label>
-                                </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="ramp"
-                                        name="activityType"
-                                        value="ramp"
-                                        checked
-                                    /><label class="form-check-label" for="ramp">Ramp closures</label>
-                                </div>
-                                <div class="form-check">
-                                    <input
-                                        type="checkbox"
-                                        class="form-check-input"
-                                        id="highImpact"
-                                        name="activityType"
-                                        value="highImpact"
-                                        checked
-                                    /><label class="form-check-label" for="highImpact">High-impact construction</label>
-                                </div>
+                                <fieldset>
+                                    <legend style="display:none;">Full highway closures</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="fullHighway"
+                                            name="activityType"
+                                            value="fullHighway"
+                                            checked
+                                        /><label class="form-check-label" for="fullHighway">Full highway closures</label>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend style="display:none;">Partial highway closures</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="partialHighway"
+                                            name="activityType"
+                                            value="partialHighway"
+                                            checked
+                                        /><label class="form-check-label" for="partialHighway"
+                                            >Partial highway closures</label
+                                        >
+                                    </div>
+                                </fieldset>
+                                
+                                <fieldset>
+                                    <legend style="display:none;">Street and lane closures</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="streetAndLane"
+                                            name="activityType"
+                                            value="streetAndLane"
+                                            checked
+                                        /><label class="form-check-label" for="streetAndLane"
+                                            >Street and lane closures</label
+                                        >
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend style="display:none;">Trail closures</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="trail"
+                                            name="activityType"
+                                            value="trail"
+                                            checked
+                                        /><label class="form-check-label" for="trail">Trail closures</label>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend style="display:none;">Ramp closures</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="ramp"
+                                            name="activityType"
+                                            value="ramp"
+                                            checked
+                                        /><label class="form-check-label" for="ramp">Ramp closures</label>
+                                    </div>
+                                </fieldset>
+
+                                <fieldset>
+                                    <legend style="display:none;">High-impact construction</legend>
+                                    <div class="form-check">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            id="highImpact"
+                                            name="activityType"
+                                            value="highImpact"
+                                            checked
+                                        /><label class="form-check-label" for="highImpact">High-impact construction</label>
+                                    </div>
+                                </fieldset>
                             </div>
 
                             <div class="form-group d-flex flex-column mt-4 mb-4">
