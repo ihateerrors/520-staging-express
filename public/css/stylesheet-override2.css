@@ -1214,6 +1214,20 @@ li .nav-rhombus:hover {
   gap: 1rem;
 }
 
+.contact-h3 h2 {
+    font-size: 2.5rem;
+    line-height: 3.125rem;
+    font-weight: 700;
+    line-height: 3.125rem;
+}
+
+@media screen and (max-width: 1024px) {
+    .contact-h3 h2 {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+}
+
 .li-lead {
   font-weight: 600;
 }
