@@ -47,6 +47,16 @@
   float: left;
   margin-left: 3%;
  }
+ /* Override fixed position of the survey contact form  */
+ @media (max-width: 600px) {
+    .sg-survey .sg-body.sg-int-virtual-page .sg-footer, 
+    .sg-survey .sg-mobile-optimized .sg-footer {
+        position: relative !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+ }
+
 </style>
 </head>
 
