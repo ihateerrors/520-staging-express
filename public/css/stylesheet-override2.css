@@ -1567,6 +1567,19 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
+.closure-sidebar h2 {
+    font-size: 2.25rem;
+    line-height: 2.813rem;
+    font-weight: 700;
+}
+
+@media screen and (max-width: 1024px) {
+    .closure-sidebar h2 {
+        font-size: 1.8rem;
+        line-height: 2.25rem;    
+    }
+}
+
 .closure-item a {
   transform: skew(10deg);
   text-decoration: none !important;
