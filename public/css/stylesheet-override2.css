@@ -1984,6 +1984,7 @@ div.flickr-carousel {
   margin-left: 5px;
   padding: 12px 20px;
   border-radius: 5px;
+  border-bottom: 1px solid #007b5f;
   transform: skewX(-10deg) !important;
   transition: all 0.3s;
 }
