@@ -1094,11 +1094,6 @@ padding-right: 14px; */
 .project-materials-heading-paddig {
   padding-left: 10px;
 }
-@media screen and (max-width: 572px) {
-  .wdot-dkgreen {
-    padding-left: 20px;
-  }
-}
 
 footer .social-row a {
   border: none;
@@ -2029,6 +2024,8 @@ div.flickr-carousel {
   margin-left: 3%;
 }
 
-.wdot-dkgreen-h1 {
-  color: #007b5f;
+@media (max-width: 600px) {
+  .construction-subtitle {
+    display: none;
+  }
 }
