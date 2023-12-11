@@ -106,7 +106,7 @@ const ProjectSchema = new mongoose.Schema({
     },
     removeDate: {
         type: Date,
-        default: null  // If no date is provided, null is set by default
+        required: true
     },
     contact: {
         type: String,
