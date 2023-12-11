@@ -759,7 +759,7 @@ button.parallelogram-link {
     height: 450px !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) { /* Begin styles to drastically minimize the content and size of popups  */
 
     .leaflet-popup-content {
         width: 260px !important;
@@ -770,6 +770,31 @@ button.parallelogram-link {
         max-width: 260px;
         height: 160px !important;
     }
+    
+    .leaflet-popup-content h3 {
+        padding: 30px 15px 0px 15px;
+        font-size: 18px !important;
+        line-height: 22px !important;
+    }
+
+    .leaflet-popup-content p {
+        padding: 0px 15px;
+    }
+
+    .leaflet-popup-content .timing-features,
+    .leaflet-popup-content .popup-description,
+    .leaflet-popup-content .popup-contact {
+        display: none;
+    }
+
+    .leaflet-popup-content a.popup-button {
+        margin: 0px 15px;
+        display: inline-block;
+    }
+
+    /* .leaflet-popup-content-wrapper {
+        padding: 15px;
+    } */
 }
 
 .container3 {
