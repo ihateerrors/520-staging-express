@@ -1120,11 +1120,6 @@ padding-right: 14px; */
 .project-materials-heading-paddig {
   padding-left: 10px;
 }
-@media screen and (max-width: 572px) {
-  .wdot-dkgreen {
-    padding-left: 20px;
-  }
-}
 
 footer .social-row a {
   border: none;
@@ -1946,7 +1941,6 @@ div.flickr-carousel {
 
 @media (width <= 600px) {
   .blockhead {
-    /* display: none; */
     margin-left: 10px !important;
     margin-right: 1rem;
   }
@@ -2049,4 +2043,15 @@ div.flickr-carousel {
   background-color: #005151;
   color: #fff;
   border-bottom: 1px solid #005151;
+}
+
+.construction-info {
+  display: block; 
+  margin-left: 3%;
+}
+
+@media (max-width: 600px) {
+  .construction-subtitle {
+    display: none;
+  }
 }
