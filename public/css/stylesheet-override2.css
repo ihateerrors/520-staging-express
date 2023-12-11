@@ -456,6 +456,15 @@ footer {
   text-decoration: none !important;
 }
 
+@media (max-width: 991px) {
+    .footer .social-row a {
+        margin: 0 18px;
+    }
+    .social-row.d-flex {
+        justify-content: center;
+    }
+}
+
 .footer .social-row a:hover {
   text-decoration: underline;
   color: #99cabf;
@@ -744,6 +753,23 @@ button.parallelogram-link {
   width: 100%;
   padding: 10px;
   font-size: 16px;
+}
+
+.leaflet-popup-content iframe {
+    height: 450px !important;
+}
+
+@media (max-width: 768px) {
+
+    .leaflet-popup-content {
+        width: 260px !important;
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+    .leaflet-popup-content iframe {
+        max-width: 260px;
+        height: 160px !important;
+    }
 }
 
 .container3 {
