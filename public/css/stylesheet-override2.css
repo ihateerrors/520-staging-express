@@ -1920,7 +1920,6 @@ div.flickr-carousel {
 
 @media (width <= 600px) {
   .blockhead {
-    /* display: none; */
     margin-left: 10px !important;
     margin-right: 1rem;
   }
@@ -2023,4 +2022,13 @@ div.flickr-carousel {
   background-color: #005151;
   color: #fff;
   border-bottom: 1px solid #005151;
+}
+
+.construction-info {
+  display: block; 
+  margin-left: 3%;
+}
+
+.wdot-dkgreen-h1 {
+  color: #007b5f;
 }
