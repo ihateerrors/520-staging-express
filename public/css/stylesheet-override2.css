@@ -2102,11 +2102,15 @@ div.flickr-carousel {
 
 .construction-info {
   display: block; 
-  margin-left: 3%;
 }
 
+
+
 @media (max-width: 600px) {
-  .construction-subtitle {
-    display: none;
-  }
+    .construction-info h1 {
+        line-height: 30px;
+    }
+    .construction-subtitle {
+        display: none;
+    }
 }
