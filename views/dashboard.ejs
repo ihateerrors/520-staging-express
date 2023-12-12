@@ -446,20 +446,20 @@ strong {
         }
     };
 
-    function deleteExpiredClosures() {
-        const currentDate = new Date(); 
-        const banners = document.querySelectorAll('.accordion-item');
+    // function deleteExpiredClosures() {
+    //     const currentDate = new Date(); 
+    //     const banners = document.querySelectorAll('.accordion-item');
 
-        banners.forEach((banner) => {
-            const removeDateInput = banner.querySelector('input[name="removeDate"]');
-            if (removeDateInput) {
-                const removeDate = new Date(removeDateInput.value);
-                if (removeDate < currentDate) {
-                    banner.remove();
-                }
-            }
-        });
-    }
+    //     banners.forEach((banner) => {
+    //         const removeDateInput = banner.querySelector('input[name="removeDate"]');
+    //         if (removeDateInput) {
+    //             const removeDate = new Date(removeDateInput.value);
+    //             if (removeDate < currentDate) {
+    //                 banner.remove();
+    //             }
+    //         }
+    //     });
+    // }
 
     ready(() => {
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
@@ -608,8 +608,8 @@ strong {
             })
         });
 
-        deleteExpiredClosures();
-        setInterval(deleteExpiredClosures, 60000);
+        // deleteExpiredClosures();
+        // setInterval(deleteExpiredClosures, 60000);
     });
 
 </script>
