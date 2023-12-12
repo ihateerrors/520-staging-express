@@ -8,6 +8,11 @@ body {
   overflow-x: hidden;
 }
 
+main {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
 .btn.search-form__submit {
   background: #97d700;
   border-bottom: 1px solid #6699ee;
