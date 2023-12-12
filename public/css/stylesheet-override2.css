@@ -184,6 +184,13 @@ padding-right: 14px; */
   margin-bottom: 20px;
 }
 
+@media (max-width: 635px) {
+    .container5 {
+        padding-left: 0px;
+        padding-right: 5px;
+    }
+}
+
 .container6 {
   padding-left: 5%;
   padding-right: 5%;
@@ -1074,6 +1081,7 @@ padding-right: 14px; */
     .topnav2 {
         padding-left: 0;
         margin-left: 10px;
+        padding-right: 10px;
     }
 }
 
@@ -1137,6 +1145,8 @@ padding-right: 14px; */
     margin: 23px 0px 20px 20px;
     width: 30px;
     height: 30px;
+    background-color: #007b5f;
+    color: #fff;
 }
 
 #navbar button.navbar-toggler.btn.filter-toggle__button .fa-bars {
@@ -1265,6 +1275,7 @@ li .nav-rhombus:hover {
   }
   h1 {
     font-size: 18px;
+    line-height: 30px !important;
   }
 }
 
