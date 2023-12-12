@@ -66,7 +66,7 @@
 }
 
 .orange-banner h2 {
-    margin-left: 8%;
+    margin-left: 5%;
     margin-right: 5%;
     /* width: 100%; */
     font-size: 1.4em;
@@ -75,8 +75,16 @@
     margin-top: 1.5rem;
 }
 .orange-banner p {
-    margin-left: 8%;
-    margin-right: 4%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+@media (max-width: 769px) {
+    .orange-banner h2,
+    .orange-banner p  {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 }
 
 
@@ -169,7 +177,8 @@
 
 @media (max-width: 635px) {
   #indexh2 {
-    display:block
+    display:block;
+    padding-bottom: 15px;
   }
   .sidebar-wrapper {
     margin: 1.5em;
@@ -283,15 +292,15 @@
                   <div class="construction-info">
                       <h1 class="wdot-dkgreen">SR 520 Construction Corner</h1>
                       <p class="construction-subtitle"><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
-                      <p>Want to know what SR 520 construction activities are underway or coming soon? You've come to the right place. The map below allows you to search by date, activity or location for detailed information about current or upcoming construction related to the SR 520 Program.</p>
+                      <p>Want to know about current or upcoming SR 520 construction closures and activities? You’ve come to the right place. Use the interactive map below to filter by date range, location, and closure type to find detailed information as it is available.</p>
                   </div>
               </div>
               <div id="construction-map">
                   <div class="row">
                       <div class="col-lg-9 col-md-8 col-sm-12 col-xsm-12">
-                        <h2 id="indexh2" class="wdot-dkgreen">SR 520 Construction Map</h2>
+                        <h2 id="indexh2" class="wdot-dkgreen">Construction map</h2>
                           <div class="togglerow">
-                              <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
+                              <button id="map1Button" class="parallelogram-link map-tab" role="tab">Construction map</button>
                               <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; font-size: 18px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;"] role="link" target="_blank">WSDOT Travel Map</a>
                           </div>
                           <div class="mapcontainer">

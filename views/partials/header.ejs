@@ -45,6 +45,13 @@
         margin-left: 8% !important;
         /* display: none !important; */
     }
+
+    @media (max-width: 635px) {
+        .navicon {
+            margin-top: 15px !important;
+            margin-left: 0px !important;
+        }
+    }
  .vanishing520  {
         display: inline-block;
   font-size: 1.4em; font-weight: 600; color: #000;
@@ -140,7 +147,7 @@
         role="nav"
       >
  
-        <button
+        <!-- <button
           class="navbar-toggler"
           type="button"
           data-toggle="collapse"
@@ -150,7 +157,18 @@
           aria-label="Toggle navigation"
           style="margin-top: 25px; background-color: #97d700; color: #fff"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span class="btn filter-toggle__button collapsed"></span>
+        </button> -->
+
+        <button class="navbar-toggler btn filter-toggle__button collapsed" 
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            >
+            <i class="fas fa-bars"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
