@@ -446,7 +446,7 @@ strong {
         }
     };
 
-    function deleteExpiredBanners() {
+    function deleteExpiredClosures() {
         const currentDate = new Date(); 
         const banners = document.querySelectorAll('.accordion-item');
 
@@ -608,63 +608,8 @@ strong {
             })
         });
 
-        // function deleteExpiredBanners() {
-
-        //     console.log('deleteExpiredBanners function called');
-
-        //     const closures = document.querySelectorAll('.accordion-item');
-        //     const currentDate = new Date();
-
-        //     closures.forEach((closure) => {
-        //         const removeDateInput = closure.querySelector('input[name="removeDate"]');
-        //         const bannerContentSelect = closure.querySelector('#bannerContent');
-
-        //         if (removeDateInput && bannerContentSelect) {
-        //             const removeDate = new Date(removeDateInput.value);
-
-        //             if (removeDate < currentDate) {
-        
-        //                 bannerContentSelect.value = 'no';
-                        
-        //             }
-        //         }
-        //     });
-        // }
-
-        // async function deleteExpiredBanners() {
-
-        //     console.log('deleteExpiredBanners function called');
-
-        //     const closures = document.querySelectorAll('.accordion-item');
-        //     const currentDate = new Date();
-
-        //     closures.forEach(async (closure) => {
-        //         const removeDateInput = closure.querySelector('input[name="removeDate"]');
-        //         const bannerContentSelect = closure.querySelector('#bannerContent');
-
-        //         if (removeDateInput && bannerContentSelect) {
-        //             const removeDate = new Date(removeDateInput.value);
-
-        //             if (removeDate < currentDate && bannerContentSelect.value === 'yes') {
-        //                 try {
-        //                     const projectId = closure.querySelector('input[name="mapData"]').getAttribute('data-id');
-        //                     const response = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-
-        //                     if (response.ok) {
-        //                         bannerContentSelect.value = 'no';
-        //                     } else {
-        //                         const data = await response.json();
-        //                         console.error('Error deleting banner: ' + data.error);
-        //                     }
-        //                 } catch (err) {
-        //                     console.error('Error deleting banner:', err);
-        //                 }
-        //             }
-        //         }
-        //     });
-        // }
-        deleteExpiredBanners();
-        setInterval(deleteExpiredBanners, 60000);
+        deleteExpiredClosures();
+        setInterval(deleteExpiredClosures, 60000);
     });
 
 </script>
