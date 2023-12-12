@@ -446,6 +446,21 @@ strong {
         }
     };
 
+    function deleteExpiredBanners() {
+        const currentDate = new Date(); 
+        const banners = document.querySelectorAll('.accordion-item');
+
+        banners.forEach((banner) => {
+            const removeDateInput = banner.querySelector('input[name="removeDate"]');
+            if (removeDateInput) {
+                const removeDate = new Date(removeDateInput.value);
+                if (removeDate < currentDate) {
+                    banner.remove();
+                }
+            }
+        });
+    }
+
     ready(() => {
         const dataInputs = document.querySelectorAll('input[type="hidden"][name="mapData"]');
         dataInputs.forEach((input) => {
@@ -593,28 +608,28 @@ strong {
             })
         });
 
-        function deleteExpiredBanners() {
+        // function deleteExpiredBanners() {
 
-            console.log('deleteExpiredBanners function called');
+        //     console.log('deleteExpiredBanners function called');
 
-            const closures = document.querySelectorAll('.accordion-item');
-            const currentDate = new Date();
+        //     const closures = document.querySelectorAll('.accordion-item');
+        //     const currentDate = new Date();
 
-            closures.forEach((closure) => {
-                const removeDateInput = closure.querySelector('input[name="removeDate"]');
-                const bannerContentSelect = closure.querySelector('#bannerContent');
+        //     closures.forEach((closure) => {
+        //         const removeDateInput = closure.querySelector('input[name="removeDate"]');
+        //         const bannerContentSelect = closure.querySelector('#bannerContent');
 
-                if (removeDateInput && bannerContentSelect) {
-                    const removeDate = new Date(removeDateInput.value);
+        //         if (removeDateInput && bannerContentSelect) {
+        //             const removeDate = new Date(removeDateInput.value);
 
-                    if (removeDate < currentDate) {
+        //             if (removeDate < currentDate) {
         
-                        bannerContentSelect.value = 'no';
+        //                 bannerContentSelect.value = 'no';
                         
-                    }
-                }
-            });
-        }
+        //             }
+        //         }
+        //     });
+        // }
 
         // async function deleteExpiredBanners() {
 
