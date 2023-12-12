@@ -400,11 +400,6 @@ border-color: #777c81;
 border-style: solid;
 border-width: 1px 1px 5px;
 }
-@media (width <= 700px) {
-      .container3 {
-        display: none;
-      }
-}
 
 dialog {
 z-index: 10;
@@ -959,11 +954,6 @@ padding: 24px;
 border-color: #777c81;
 border-style: solid;
 border-width: 1px 1px 5px;
-}
-@media (max-width: 768px) {
-    .container3 {
-      display: none;
-    }
 }
 
 dialog {
@@ -2205,9 +2195,6 @@ input[type="submit"] {
 }
 
 @media (width <= 700px) {
-  .container3 {
-    display: none;
-  }
 
   .scrollable-popup {
     font-size: 14px;

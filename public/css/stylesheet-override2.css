@@ -1018,7 +1018,7 @@ padding-right: 14px; */
 }
 @media (max-width: 768px) {
   .container3 {
-    display: none;
+    float: left;
   }
 }
 
@@ -1067,6 +1067,14 @@ padding-right: 14px; */
   text-decoration: none !important;
   list-style-type: none !important;
   font-weight: 600;
+}
+
+@media (max-width: 700px) {
+
+    .topnav2 {
+        padding-left: 0;
+        margin-left: 10px;
+    }
 }
 
 .topnav2 li a {
@@ -1588,10 +1596,6 @@ input[type="submit"] {
 }
 
 @media (width <= 700px) {
-  .container3 {
-    display: none;
-  }
-
   .scrollable-popup {
     font-size: 14px;
   }
@@ -1954,9 +1958,6 @@ div.flickr-carousel {
 
 
 @media (width <= 700px) {
-  .container3 {
-    display: none;
-  }
   #map {
     margin-left: 5px;
   }
