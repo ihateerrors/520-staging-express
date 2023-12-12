@@ -592,6 +592,30 @@ strong {
                 }
             })
         });
+
+        function deleteExpiredBanners() {
+            const closures = document.querySelectorAll('.accordion-item');
+            const currentDate = new Date();
+
+            closures.forEach((closure) => {
+                const removeDateInput = closure.querySelector('input[name="removeDate"]');
+                const bannerContentSelect = closure.querySelector('#bannerContent');
+
+                if (removeDateInput && bannerContentSelect) {
+                    const removeDate = new Date(removeDateInput.value);
+
+                    if (removeDate < currentDate) {
+                        bannerContentSelect.value = 'no';
+
+                        const editButton = closure.querySelector('.edit-btn');
+                        if (editButton) {
+                            editButton.click();
+                        }
+                    }
+                }
+            });
+        }
+        setInterval(deleteExpiredBanners, 60000);
     });
 </script>
 
