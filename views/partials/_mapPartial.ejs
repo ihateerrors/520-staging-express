@@ -39,7 +39,7 @@
             .filter-toggle {
                 display: none;
                 margin: 4px 0;
-                padding: 4px;
+                padding: 14px 20px 14px 20px;
             }
 
             .filter-toggle__button {
@@ -57,13 +57,45 @@
                 color: #fff;
             }
 
+            .filter-toggle button.btn.filter-toggle__button .fa-bars:before {
+                content: "X";
+            }
+
+            .filter-toggle button.btn.filter-toggle__button.collapsed .fa-bars:before {
+                content: "\f0c9";
+            }
+
+            h3.filter-title {
+                position: relative;
+                display: inline-block;
+                padding: 25px 0px 0px 15px;
+            }
+
             /* Hide form and show toggle icon on smaller screen sizes */
             @media (max-width: 600px) {
+
+                h3.filter-title {
+                    padding: 15px;
+                }
+
+                .filter-row {
+                    border-bottom: 1px solid #ccc;
+                }
+
                 .filter-toggle {
                     display: flex;
                     justify-content: flex-end;
-                    border-bottom: 1px solid #ccc;
+                    float: right;
                 }
+
+                #filterForm .col-sm-6 {
+                    width: 150px;
+                }
+
+                form#filterForm {
+                    margin-top: 0px !important;
+                }
+
                 .mapcontainer,
                 #map {
                     min-width: 90vw;
@@ -82,7 +114,10 @@
         <div class="exp-map" style="width: 100%">
             <div class="container-fluid" style="display: block">
                 <div class="row">
-                    <div class="col-lg-2 col-md-3 col-sm-12">
+                    <div class="filter-row col-lg-2 col-md-3 col-sm-12">
+                        
+                        <h3 class="filter-title">Filter</h3>
+
                         <div class="filter-toggle">
                             <button
                                 class="btn filter-toggle__button collapsed"
@@ -99,7 +134,7 @@
 
                         <div id="filterDropdown" class="collapse navbar-collapse">
                         <form id="filterForm" class="mt-5">
-                            <h3 class="mb-4">Filter</h3>
+                            
 
                             <div class="form-group">
                                 <p class="supportive-text">Closures that fall within:</p>
@@ -243,20 +278,6 @@
                                     <label class="form-check-label" for="cameras">Cameras</label>
                                 </div>
                             </div>
-
-                            <!-- <button // TODO: Kill once I get signoff on the new design
-                                type="submit"
-                                id="filterSubmit"
-                                class="btn-success greenBtn"
-                                style="
-                                    background-color: rgb(0, 76, 63);
-                                    margin-bottom: 14px;
-                                    align-self: center;
-                                    border-radius: 5px;
-                                "
-                            >
-                                Submit
-                            </button> -->
                         </form>
                         </div>
                     </div>
