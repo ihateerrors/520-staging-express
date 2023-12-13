@@ -66,11 +66,9 @@ const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = '520-uploads';
 
-const dbConnectionString = process.env.DB_API_KEY;
 
-if (!dbConnectionString) {
-    throw new Error('Database connection string is not set');
-}
+const apiKey = process.env.DB_API_KEY;
+const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
 
 const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
 const blobServiceClient = new BlobServiceClient(
