@@ -2,13 +2,19 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8" />
-<!-- 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}; gtag("js", new Date()); gtag("set", "developer_id.dMDhkMT", true); gtag("config", "UA-970887-21", {"groups": "default", "anonymize_ip": true, "page_placeholder": "PLACEHOLDER_page_path"});</script> -->
-  <link rel="canonical" href="#" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D4VJ7RQS01"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        
+        gtag('config', 'G-D4VJ7RQS01');
+    </script>  
+        <meta charset="utf-8" />
+<link rel="canonical" href="#" />
   <meta name="description"
-    content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
+    content="The go-to source for information on SR 520 construction and closures." />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="img/dot.ico" type="image/vnd.microsoft.icon" />
@@ -66,7 +72,7 @@
 }
 
 .orange-banner h2 {
-    margin-left: 8%;
+    margin-left: 5%;
     margin-right: 5%;
     /* width: 100%; */
     font-size: 1.4em;
@@ -75,8 +81,16 @@
     margin-top: 1.5rem;
 }
 .orange-banner p {
-    margin-left: 8%;
-    margin-right: 4%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+@media (max-width: 769px) {
+    .orange-banner h2,
+    .orange-banner p  {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 }
 
 
@@ -158,9 +172,19 @@
 
 }
 
+.header-container, .nav-container {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+}
+
+.topnav2 {
+    padding-right: 41px !important;
+}
+
 @media (max-width: 635px) {
   #indexh2 {
-    display:block
+    display:block;
+    padding-bottom: 15px;
   }
   .sidebar-wrapper {
     margin: 1.5em;
@@ -228,28 +252,15 @@
         padding-left: 2px !important;
         padding-left: 2px !important;
     }
-}    .toggle-icon {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    margin: 10px;
 }
 
-/* Hide form and show toggle icon on smaller screen sizes */
-@media (max-width: 600px) {
-    form {
-        display: none;
-    }
-    .toggle-icon {
-        display: block;
-    }
-    .mapcontainer, #map {
-     min-width: 90vw;
-     margin-left: 5px;
-     margin-right: 5px;
-     padding-left: 1px;
-     padding-right: 1px;
-    }
+.card-body h3 {
+    padding-top: 6px;
+    padding-bottom: 5px;
+}
+
+.containernew {
+    min-height: 329px !important;
 }
 </style>
 
@@ -268,7 +279,7 @@
               <div class="orange-banner" aria-live="polite">
                   <% if (project?.bannerContent==='yes'){ %>
                       <h2 class="mt-4">ALERT: <%= project.activityName %></h2>
-                      <p><a href="/projects/<%=project.slug %>" aria-label="View details for <%= project.activityName %>">View Details</a></p>
+                      <p><a href="/projects/<%=project.slug %>" aria-label="View details for <%= project.activityName %>">View details</a></p>
                   <% } else {
                       console.log("No banner item")
                   } %>
@@ -284,18 +295,19 @@
       <section id="map-shrink" class="container4">
           <div id="wholecontain" class="container-fluid">
               <div class="row">
-                  <div class="blockhead">
+                  <div class="construction-info">
                       <h1 class="wdot-dkgreen">SR 520 Construction Corner</h1>
-                      <p><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
+                      <p class="construction-subtitle"><strong>The go-to source for information on SR 520 construction and closures.</strong></p>
+                      <p>Want to know about current or upcoming SR 520 construction closures and activities? You’ve come to the right place. Use the interactive map below to filter by date range, location, and closure type to find detailed information as it is available.</p>
                   </div>
               </div>
               <div id="construction-map">
                   <div class="row">
                       <div class="col-lg-9 col-md-8 col-sm-12 col-xsm-12">
-                        <h2 id="indexh2" class="wdot-dkgreen">SR 520 Construction Map</h2>
+                        <h2 id="indexh2" class="wdot-dkgreen">Construction map</h2>
                           <div class="togglerow">
-                              <button id="map1Button" class="parallelogram-link map-tab" role="tab">SR 520 Construction Map</button>
-                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; font-size: 18px; border-bottom-left-radius: none; border-bottom-right-radius: none;"] role="link" target="_blank">WSDOT Travel Map</a>
+                              <button id="map1Button" class="parallelogram-link map-tab" role="tab">Construction map</button>
+                              <a href="https://wsdot.com/Travel/Real-time/Map/?layers=traffic-flow%2Calert&base=wsdot&extent=-122.58508585031451%2C47.50939388657843%2C-121.92590616281541%2C47.701521318421136&fromLink=true" id="map2Button-new" class="parallelogram-link" style="padding-left: 14px; padding-right: 14px; font-size: 18px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;"] role="link" target="_blank">WSDOT Travel Map</a>
                           </div>
                           <div class="mapcontainer">
                               <div id="map1">
@@ -313,6 +325,17 @@
                       </div>
                       <aside class="col-lg-3 col-md-4 col-sm-12">
                           <div class="sidebar-wrapper">
+                            <%
+                                getIconUrl = function(type) {
+                                    if (type === 'trail') {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/trail_closure.png';
+                                    } else if (type === 'highImpact') {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/high_impact_construction.png';
+                                    } else {
+                                        return 'https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png';
+                                    }
+                                }
+                            %>
                              
                                   <% if (typeof currentClosures !=='undefined' && currentClosures){ %>
                                     <h2 class="text-left wdot-dkgreen">Closures today</h2>
@@ -320,7 +343,8 @@
                                       <% currentClosures.forEach(closure=>{ %>
                                           <li class="closure-item">
                                               <span class="icon-box">
-                                                  <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
+                                                <% var iconUrl = getIconUrl(closure.activityType[0]); %>
+                                                  <img src="<%= iconUrl %>" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
                                               <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
@@ -334,7 +358,8 @@
                                       <% upcomingClosures.forEach(closure=>{ %>
                                           <li class="closure-item">
                                               <span class="icon-box">
-                                                  <img src="https://sr520construction.blob.core.windows.net/520-uploads/whitedash-onred.png" class="icon-img" alt="">
+                                                <% var iconUrl = getIconUrl(closure.activityType[0]); %>
+                                                  <img src="<%= iconUrl %>" class="icon-img" alt="">
                                               </span>&nbsp;&nbsp;
                                               <a href="/projects/<%=closure.slug %>"><%=closure.activityName %></a>
                                           </li>
@@ -400,7 +425,6 @@
       });
 
         </script> -->
-
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>

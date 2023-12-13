@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D4VJ7RQS01"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D4VJ7RQS01');
+</script>
+
   <meta charset="utf-8" />
   <title>SR 520 Construction Dashboard </title>
 
@@ -15,9 +26,10 @@ type="text/css" />
 <link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-<script src="https://unpkg.com/leaflet@latest/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"></script>
 <script src="https://unpkg.com/leaflet.gridlayer.googlemutant@latest/dist/Leaflet.GoogleMutant.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
@@ -52,7 +64,7 @@ type="text/css" />
 }
 
 /* Input styling */
-input[type="text"], input[type="date"], select {
+input[type="text"], input[type="date"], select, textarea {
     min-width: 80%;  /* Takes 80% width of its container for more space */
     border: 1px solid #ced4da;
     padding: 5px 12px;
@@ -167,8 +179,8 @@ strong {
             <a href="/projectForm" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
                 Enter a new closure
             </a>      &nbsp;&nbsp;&nbsp; <a href="/pdf-upload" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Upload Files</a> &nbsp;&nbsp;&nbsp; <a href="#past-closures" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;"> View Closures</a>
-              
-            </a>  <br><br>
+            &nbsp;&nbsp;&nbsp;<a href="/" target="_blank" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">Construction Corner</a>
+        <br><br>
         </div>
         <!-- <div id="past-closures"></div> -->
 
@@ -217,10 +229,10 @@ strong {
                             <input type="text" name="time" value="<%= closure.time || '' %>" disabled>
         
                             <strong>Description:</strong>
-                            <input type="text" name="description" value="<%= closure.description || '' %>" disabled>
+                            <textarea type="text" name="description" rows="4" disabled><%= closure.description || '' %></textarea>
           
                             <strong>Traffic Description:</strong>
-                            <input type="text" name="trafficDescription" value="<%= closure.trafficDescription || '' %>" disabled>
+                            <textarea type="text" name="trafficDescription" rows="4" disabled><%= closure.trafficDescription || '' %></textarea>
 
                             <strong>Activity Type:</strong>
                             <div>
@@ -269,6 +281,9 @@ strong {
                                     
                                     <input type="button" name="delete-image" class="delete-image" disabled value="Delete File"/>
                                     <p class="supportive-text">Permanently delete image; necessary to remove an image file previously saved to a closure</p>
+
+                                    <input type="text" name="imageAltText" value="<%= closure.imageAltText || '' %>" disabled>
+                                    <p class="supportive-text">Alt text for the uploaded image</p>
                                 </div>
 
 
@@ -474,9 +489,10 @@ strong {
             editButton.addEventListener('click', () => {
                 console.log('Edit button clicked');
                 const allInputs = accordionItem.querySelectorAll('input');
-                const allSelect = accordionItem.querySelectorAll('select')
+                const allSelect = accordionItem.querySelectorAll('select');
+                const allTextArea = accordionItem.querySelectorAll('textarea');
 
-                const inputs = [...allInputs, ...allSelect];
+                const inputs = [...allInputs, ...allSelect, ...allTextArea];
                 // Toggle the input fields' disabled state
                 inputs.forEach(input => {
                     if (!imgElement.getAttribute('src') && input.name === 'delete-image') {
@@ -511,6 +527,10 @@ strong {
                                 formData.append(input.name, input.value);
                             }
                         } else {
+                            if (input.name === 'delete-image') {
+                                // for now we're making a separate request to delete the image, so we'll skip this input
+                                return;
+                            }
                             formData.append(input.name, input.value);
                         }
                     });
@@ -583,7 +603,9 @@ strong {
                 }
             })
         });
+
     });
+
 </script>
 
     </body>

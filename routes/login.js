@@ -39,7 +39,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/dashboard', ensureAuthenticated, async (req, res) => {
     try {
-        const closures = await Project.find({}); // Fetch all entries
+        const closures = await Project.find({}).lean().sort({ createdAt: -1 }).exec(); // Fetch all entries
         const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
         const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
         const impactTypeEnums = Project.schema.path('impactType').caster.enumValues;

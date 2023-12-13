@@ -2,13 +2,21 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8" />
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D4VJ7RQS01"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', 'G-D4VJ7RQS01');
+  </script>  
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-970887-21"></script>
-  <script>window.dataLayer = window.dataLayer || []; function gtag() {dataLayer.push(arguments)}; gtag("js", new Date()); gtag("set", "developer_id.dMDhkMT", true); gtag("config", "UA-970887-21", {"groups": "default", "anonymize_ip": true, "page_placeholder": "PLACEHOLDER_page_path"});</script>
-  <link rel="canonical" href="#" />
+<meta charset="utf-8" />
+<link rel="canonical" href="#" />
   <meta name="description"
-    content="View current major projects, which are investments we make with local partners to address safety, congestion, mobility for all users and/or fish passage responsibilities." />
+    content="The go-to source for information on SR 520 construction and closures." />
 
   <meta name="MobileOptimized" content="width" />
   <meta name="HandheldFriendly" content="true" />
@@ -25,6 +33,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
    <link rel="stylesheet" media="all" href="/css/styles2.css" />
   <link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" media="all" href="/css/styles2.css" />
   <!-- <link rel="stylesheet" media="all" href="/css/styles3.css" /> -->
   <link rel="stylesheet" media="all"
   href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&amp;display=swap" />
@@ -45,6 +55,16 @@
   float: left;
   margin-left: 3%;
  }
+ /* Override fixed position of the survey contact form  */
+ @media (max-width: 600px) {
+    .sg-survey .sg-body.sg-int-virtual-page .sg-footer, 
+    .sg-survey .sg-mobile-optimized .sg-footer {
+        position: relative !important;
+        background: none !important;
+        box-shadow: none !important;
+    }
+ }
+
 </style>
 </head>
 
@@ -58,14 +78,15 @@
 
             <div class="container-fluid">   
               
-              <h1>Contact us</h1>
+              <h1 class="contact-header">Contact us</h1>
 
               <div class="row">
                 <div class="col-lg-10 col-sm-12">
                     <!-- <div class="col-md-8 col-left"> -->
                         <div class="contact-article">
                           <span class="contact-h3">
-                            <i class="fa fa-solid fa-2xl fa-phone"></i><h3>Call us</h3>
+                            <i class="fa fa-solid fa-2xl fa-phone"></i>
+                            <h2>Call us</h2>
                           </span>
                           <div>
                             <p>
@@ -82,7 +103,7 @@
                         <div class="contact-article">
                           <span class="contact-h3">
                             <i class="fa fa-solid fa-pencil fa-2xl"></i>                                
-                            <h3>Write us</h3>
+                            <h2>Write us</h2>
                           </span>
                           <!-- <div class="comment-form-container"> -->
                             <div style="margin-top: -25px;">
@@ -102,7 +123,7 @@
                         <div class="contact-article">
                           <span class="contact-h3">
                             <i class="fa fa-2xl fa-envelope"></i>
-                            <h3>Email us</h3>
+                            <h2>Email us</h2>
                           </span>
                           <div>
                             <ul class="contact-list">
@@ -132,6 +153,7 @@
                           <div>
                             <ul class="contact-list social-media-list list-unstyled">
                               <li><i class="fa fa-md fa-twitter"></i><a target="_blank" href="https://twitter.com/wsdot_520">Twitter</a></li>
+                              <li><i class="fa fa-md fa-instagram"></i><a target="_blank" href="https://www.instagram.com/wsdot/">Instagram</a></li>
                               <li><i class="fa fa-md fa-youtube"></i><a target="_blank" href="https://www.youtube.com/playlist?list=PLEvVhy_eoUuDlR31tXgXNYbNKFhZ5k0p_">YouTube</a></li>
                               <li><i class="fa fa-md fa-flickr"></i><a target="_blank" href="https://www.flickr.com/photos/wsdot/collections/72157626070884650/">Flickr</a></li>
                               <li> <i class="fa-brands fa-tiktok" style="color: darkgreen"></i><a target="_blank" href="https://www.tiktok.com/@washingtonstatedot?lang=en">TikTok</a></li>
@@ -160,7 +182,7 @@
                                 <a
                                 href="https://public.govdelivery.com/accounts/WADOT/subscriber/new?topic_id=WADOT_68"
                                 class="btn btn-primary parallelogram-link-sm mt-3" target="_blank"
-                                >SR 520 Bridge Replacement and HOV Program News sign-up</a
+                                >Program News sign-up</a
                               >  </p>
                             <!-- </span> -->
                                 <p>Periodic updates on the entire program. Includes information on highway closures, construction milestones, and upcoming major public meetings.</p>
@@ -215,9 +237,8 @@
 
 <!-- ### End footer ### -->  
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
-  integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 
 <!-- <script
   type="text/javascript">window.NREUM || (NREUM = {}); NREUM.info = {"beacon": "bam.nr-data.net", "licenseKey": "NRJS-a8107692ea83444c1a2", "applicationID": "858811128", "transactionName": "NVQHN0UEXhJUBkxQWgweJABDDF8PGiFKTEUDXTkNWAFVPXYKVk1HDV0JBkU5fg5RAG5QUBVyCg1DF18NWQBKFAsUWAAU", "queueTime": 0, "applicationTime": 477, "atts": "GRMEQQ0eTRw=", "errorBeacon": "bam.nr-data.net", "agent": ""}</script> -->

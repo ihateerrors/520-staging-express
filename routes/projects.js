@@ -8,8 +8,6 @@ const formatDate = require('../utils/dateHelpers');
 const ensureAuthenticated = require('../middlewares/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-// const propertiesReader = require('properties-reader');
-// const messages = propertiesReader('message.properties');
 
 const validateProjectIdFromRequest = (projectId) => projectId && typeof projectId === 'string' && projectId.length === 10;
 
@@ -98,36 +96,37 @@ router.get('/projects/:slug', async (req, res) => {
             return;
         }
 
-        const project = await Project.findOne({ slug: slug });
+        const project = await Project.findOne({ slug: slug }).lean().exec();
 
         if (!project) {
             res.status(404).send('Project not found');
             return;
         }
 
-        const activityTypeEnums = Project.schema.path('activityType').caster.enumValues;
-        const timingFeatureEnums = Project.schema.path('timingFeatures').caster.enumValues;
         const messages = req.messages;
 
-        const activityType = activityTypeEnums.map((activityType) => { // TODO:  Not great to be rounding these up ever time, fix when there's time
-            const key = `activityType.${activityType}`;
+        const activityType = project.activityType.map((type) => {
+            const key = `activityType.${type}`;
             const message = messages.get(key);
-            return { id: activityType, message: message };
+            return { id: type, message: message };
         });
-
-        const timingFeatures = timingFeatureEnums.map((timingFeature) => {
-            const key = `timingFeature.${timingFeature}`;
+        const timingFeatures = project.timingFeatures.map((feature) => {
+            const key = `timingFeature.${feature}`;
             const message = messages.get(key);
-            return { id: timingFeature, message: message };
+            return { id: feature, message: message };
         });
-
-        const contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
+        const impactType = project.impactType.map((impact) => {
+            const key = `impactType.${impact}`;
+            const message = messages.get(key);
+            return { id: impact, message: message };
+        });
 
         const projectData = {
-            ...project.toObject(),
-            contact,
+            ...project,
             activityType,
-            timingFeatures
+            timingFeatures,
+            impactType,
+            contact: { id: project.contact, message: messages.get(`contact.${project.contact}`) }
         };
 
         res.render('projectDetails', { project: projectData, formatDate });
@@ -143,7 +142,6 @@ router.get('/api/projects', async (req, res) => {
     console.log("Entered /api/projects route");
     try {
         const filters = [];
-        // Dates from query parameters are in ISO format
         const startDate = new Date(req.query.startDate);
         const endDate = new Date(req.query.endDate);
         
@@ -180,11 +178,7 @@ router.get('/api/projects', async (req, res) => {
             }
         }
 
-        // if (req.query.cameras) {
-		// 	filters.cameras = req.query.cameras === "true";
-		// }
-
-        const projects = await Project.find({ $and: filters }).lean().exec();
+        const projects = !req.query.types ? [] : await Project.find({ $and: filters }).lean().exec();
         const messages = req.messages;
 
         projects.forEach((project) => {
@@ -197,6 +191,11 @@ router.get('/api/projects', async (req, res) => {
                 const key = `timingFeature.${feature}`;
                 const message = messages.get(key);
                 return { id: feature, message: message };
+            });
+            project.impactType = project.impactType.map((impact) => {
+                const key = `impactType.${impact}`;
+                const message = messages.get(key);
+                return { id: impact, message: message };
             });
             project.contact = { id: project.contact, message: messages.get(`contact.${project.contact}`) };
         });
@@ -246,8 +245,7 @@ router.post('/api/projects', upload.single('file'), async (req, res) => {
         // Creating and saving the project
         const project = new Project(data);
         await project.save();
-        req.flash('success_msg', 'Construction event created successfully.');
-        res.redirect('/dashboard');
+        res.status(201).json({ message: 'Project created successfully' });
     } catch (err) {
         console.error('Error:', err);
         
@@ -273,7 +271,7 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
             return;
         }
 
-        const project = await Project.findOne({ projectId: projectId });
+        const project = await Project.findOne({ projectId: projectId }).lean().exec();
 
         if (!project) {
             res.status(404).send('Project not found');
@@ -287,7 +285,8 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
 
         res.json({
             slug: project.slug,
-            mapData: project.mapData
+            mapData: project.mapData,
+            activityType: project.activityType
         });
     } catch (error) {
         console.error(error);

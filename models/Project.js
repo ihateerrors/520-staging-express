@@ -70,6 +70,10 @@ const ProjectSchema = new mongoose.Schema({
         type: String,  // saves to Azure database which generates the URL stored in MongoDB
         required: false
     },
+    imageAltText: {
+        type: String,
+        required: false
+    },
     location: {
         type: String,
         required: false

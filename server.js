@@ -145,12 +145,12 @@ app.get('/', async (req, res) => {
         const currentClosures = await Project.find({
             startDate: { $lte: today },
             endDate: { $gte: today }
-        }).sort({ postDate: -1 });
+        }).lean().sort({ postDate: -1 }).exec();
 
         // Get upcoming closures
         const upcomingClosures = await Project.find({
             startDate: { $gt: today }
-        }).sort({ postDate: -1 });
+        }).lean().sort({ postDate: -1 }).exec();
 
         res.render('index', {
             title: '520 Construction Corner',
