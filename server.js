@@ -166,7 +166,11 @@ app.get('/events', async (req, res) => {
     }
 });
 
-mongoose.connect(dbConnectionString, { 
+const apiKey = process.env.DB_API_KEY;
+const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
+
+
+mongoose.connect(uri, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 });
