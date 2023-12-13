@@ -1646,6 +1646,18 @@ input[type="submit"] {
   margin-right: 5px; /* Adjust this value to increase or decrease spacing */
 }
 
+@media (width <= 700px) {
+    .sidebar-cards.row {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+
+    .sidebar-cards .col {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+}
+
 .closure-item {
   display: flex;
   align-items: center;
