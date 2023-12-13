@@ -334,7 +334,7 @@
                 const twoWeeksAheadDate = new Date();
                 twoWeeksAheadDate.setDate(twoWeeksAheadDate.getDate() + 14);
 
-                const apiKey = "AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk"; // TODO: Ugh this is bad...
+                const apiKey = "AIzaSyCUt0Sdti_Aderhux8JNiFR-6ClvNIb7Gk";
                 const map = L.map("map").setView([47.6407, -122.2971], 14);
 
                 L.gridLayer
@@ -405,7 +405,6 @@
                 }
 
                 function handleFetchedData(data) {
-                    console.log("Data received:", data);
                     if (data && Array.isArray(data)) {
                         data.forEach((project) => {
                             if (!project.mapData || typeof project.mapData !== "string") {

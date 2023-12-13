@@ -66,6 +66,12 @@ const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
 const containerName = '520-uploads';
 
+const dbConnectionString = process.env.DB_API_KEY;
+
+if (!dbConnectionString) {
+    throw new Error('Database connection string is not set');
+}
+
 const sharedKeyCredential = new StorageSharedKeyCredential(accountName, accountKey);
 const blobServiceClient = new BlobServiceClient(
   `https://${accountName}.blob.core.windows.net`,
@@ -97,42 +103,6 @@ passport.deserializeUser(async (id, done) => {
     const user = await User.findById(id);
     done(null, user);
 });
-
-
-
-// app.get('/', async (req, res) => {
-//     try {
-//         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
-//         const allClosures = await Project.find({}).sort({ postDate: -1 });
-
-//         const today = new Date();
-//         today.setHours(0, 0, 0, 0);  // set to start of the day
-
-//         const currentClosures = allClosures.filter(closure => {
-//             const startDate = new Date(closure.startDate);
-//             const endDate = new Date(closure.endDate);
-//             return startDate <= today && today <= endDate;
-//         });
-
-//         const upcomingClosures = allClosures.filter(closure => {
-//             const startDate = new Date(closure.startDate);
-//             return startDate > today;
-//         });
-
-//         res.render('index', {
-//             title: '520 Construction Corner',
-//             header: 'Welcome to the 520 Construction Corner!',
-//             project,
-//             closures: allClosures, 
-//             currentClosures, 
-//             upcomingClosures
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
 
 app.get('/', async (req, res) => {
     try {
@@ -174,14 +144,6 @@ app.get('/program', (req, res) => {
     res.render('program'); // assuming 'program' is the name of your view file
 });
 
-// app.get('/montlake-project', (req, res) => {
-//     res.render('montlake-project');
-// });
-
-// app.get('/i5-connection-project', (req, res) => {
-//     res.render('i5-connection-project');
-// });
-
 app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');
 });
@@ -206,13 +168,7 @@ app.get('/events', async (req, res) => {
     }
 });
 
-
-// Connect to MongoDB
-const apiKey = process.env.DB_API_KEY;
-const uri = `mongodb+srv://mkennedy:${apiKey}@cluster0.p0czhw3.mongodb.net/?retryWrites=true&w=majority`;
-
-
-mongoose.connect(uri, { 
+mongoose.connect(dbConnectionString, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 });
