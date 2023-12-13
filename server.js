@@ -104,6 +104,8 @@ passport.deserializeUser(async (id, done) => {
     done(null, user);
 });
 
+
+
 app.get('/', async (req, res) => {
     try {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
@@ -115,12 +117,12 @@ app.get('/', async (req, res) => {
         const currentClosures = await Project.find({
             startDate: { $lte: today },
             endDate: { $gte: today }
-        }).lean().sort({ postDate: -1 }).exec();
+        }).sort({ postDate: -1 });
 
         // Get upcoming closures
         const upcomingClosures = await Project.find({
             startDate: { $gt: today }
-        }).lean().sort({ postDate: -1 }).exec();
+        }).sort({ postDate: -1 });
 
         res.render('index', {
             title: '520 Construction Corner',
@@ -141,8 +143,16 @@ app.get('/', async (req, res) => {
 
 //map Routes
 app.get('/program', (req, res) => {
-    res.render('program'); // assuming 'program' is the name of your view file
+    res.render('program'); 
 });
+
+// app.get('/montlake-project', (req, res) => {
+//     res.render('montlake-project');
+// });
+
+// app.get('/i5-connection-project', (req, res) => {
+//     res.render('i5-connection-project');
+// });
 
 app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');
@@ -167,6 +177,8 @@ app.get('/events', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+
+
 
 mongoose.connect(dbConnectionString, { 
     useNewUrlParser: true, 
