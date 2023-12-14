@@ -1043,7 +1043,9 @@ padding-right: 14px; */
 
 @media (max-width: 635px) {
     #map3Button-new {
-        display: inline-block;
+        display: block;
+        margin: 0 auto;
+        width: auto;
     }
 }
 
