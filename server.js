@@ -158,6 +158,19 @@ app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');
 });
 
+// Define redirects for specific paths
+app.get('/FutureConstructionProjects', (req, res) => {
+    res.redirect('https://sr520construction.com/');
+});
+
+app.get('/ManagingConstructionEffects', (req, res) => {
+    res.redirect('https://sr520construction.com/');
+});
+
+app.get('/ConstructionMap', (req, res) => {
+    res.redirect('https://sr520construction.com/');
+});
+
 app.get('/contact', async (req, res) => {
     try {
         const closuresData = await fetchRecentClosures();
