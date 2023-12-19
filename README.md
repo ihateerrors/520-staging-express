@@ -17,7 +17,7 @@ This is an express application using mongo db hosted on Azure.
 new-branch > stage > prod
 
 ## Deployment
-- Any merge or push to the stage branch will trigger deployment to staging
-- Any merge or push to the prod branch will trigger deployment to production
-- You will need team member approval to merge to prod
-- Staging and production have separate databases
+- Any merge or push to the stage branch will trigger deployment to staging.
+- Any merge or push to the prod branch will trigger deployment to production.
+- You will need team member approval to merge to prod and stage, PRs to each are allowed.
+- Staging and production have separate databases.
