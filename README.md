@@ -14,7 +14,6 @@ This is an express application using mongo db hosted on Azure.
 - run 'node server.js'
 
 ## Branching
-### 'main-new' is no longer to be used since launch
 new-branch > stage > prod
 
 ## Deployment
