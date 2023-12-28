@@ -1111,6 +1111,13 @@ padding-right: 14px; */
     }
 }
 
+@media (max-width: 450px) {
+
+    .topnav2 {
+        flex: none;
+    }
+}
+
 .topnav2 li a {
   text-decoration: none !important;
   font-weight: 500;
