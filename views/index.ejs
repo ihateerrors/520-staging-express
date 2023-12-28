@@ -85,6 +85,12 @@
     margin-right: 5%;
 }
 
+.banner-wrap {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
 @media (max-width: 769px) {
     .orange-banner h2,
     .orange-banner p  {
@@ -272,26 +278,24 @@
   <a href="#main-content" class="sr-only">Skip to main content</a>
   <%- include('partials/header') %>
 
+  <div id="alert-banner-top">
+    <div class="row">
+        <div class="orange-banner" aria-live="polite">
+            <div class="banner-wrap">
+                <% if (project?.bannerContent==='yes'){ %>
+                    <h2 class="mt-4">ALERT: <%= project.activityName %></h2>
+                    <p><a href="/projects/<%=project.slug %>" aria-label="View details for <%= project.activityName %>">View details</a></p>
+                <% } else {
+                    console.log("No banner item")
+                } %>
+            </div>
+        </div>
+    </div>
+</div>
+
   <main id="main-content">
   
-      <div id="alert-banner-top" class="container-fluid">
-          <div class="row">
-              <div class="orange-banner" aria-live="polite">
-                  <% if (project?.bannerContent==='yes'){ %>
-                      <h2 class="mt-4">ALERT: <%= project.activityName %></h2>
-                      <p><a href="/projects/<%=project.slug %>" aria-label="View details for <%= project.activityName %>">View details</a></p>
-                  <% } else {
-                      console.log("No banner item")
-                  } %>
-                  <!-- <% if (project) { %>
-                  
-                        <h2 class="mt-3 alert-header">ALERT: <%= project.activityName %></h2>
-                        <p style="font-size: 1.8rem"><a href="/projects/<%= project._id %>" aria-label="View details for <%= project.activityName %>">View details</a></p>
-                    </div>
-                <% } %> -->
-              </div>
-          </div>
-      </div>
+      
       <section id="map-shrink" class="container4">
           <div id="wholecontain" class="container-fluid">
               <div class="row">
