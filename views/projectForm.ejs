@@ -117,6 +117,10 @@ type="text/css" />
  
   <form action="/api/projects" method="post" enctype="multipart/form-data" style="font-size: 18px;" onsubmit="return handleSubmit()">
     <div class="mb-3">
+
+        <label for="activitySlug" class="form-label">URL:</label>
+        <input type="text" class="form-control" id="activitySlug" name="activitySlug" required><br/>
+
         <label for="activityName" class="form-label">Construction Activity Title</label>
         <input type="text" class="form-control" id="activityName" name="activityName" required>
     </div>
