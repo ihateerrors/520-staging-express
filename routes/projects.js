@@ -99,7 +99,7 @@ router.get('/projects/:slug', async (req, res) => {
         const project = await Project.findOne({ slug: slug }).lean().exec();
 
         if (!project) {
-            res.status(404).send('Project not found');
+            res.status(404).send('Project not found. Go back to <a href="/">home.</a>');
             return;
         }
 
@@ -274,7 +274,7 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
         const project = await Project.findOne({ projectId: projectId }).lean().exec();
 
         if (!project) {
-            res.status(404).send('Project not found');
+            res.status(404).send('Project not found. Go back to <a href="/">home.</a>');
             return;
         }
 
