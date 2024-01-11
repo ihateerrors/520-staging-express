@@ -171,10 +171,6 @@ app.get('/ConstructionMap', (req, res) => {
     res.redirect('https://sr520construction.com/');
 });
 
-app.get('/projects/sidewalk-on-the-west-side-of-montlake-blvd-between-lake-washington-blvd-and-roanoke-st-closed-jan-2-31', (req, res) => {
-    res.redirect('https://sr520construction.com/projects/sidewalk-on-the-west-side-of-montlake-blvd-between-lake-washington-blvd-and-roanoke-st-closed-jan-2-12');
-});
-
 app.get('/contact', async (req, res) => {
     try {
         const closuresData = await fetchRecentClosures();
