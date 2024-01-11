@@ -99,7 +99,7 @@ router.get('/projects/:slug', async (req, res) => {
         const project = await Project.findOne({ slug: slug }).lean().exec();
 
         if (!project) {
-            res.status(404).send('Project not found');
+            res.status(404).send('Project not found. If you are looking for a closure, it may have expired or been updated. Go back to <a href="/">home</a> for the latest updates.');
             return;
         }
 
@@ -274,7 +274,7 @@ router.get('/api/projects/:projectId/mapData', async (req, res) => {
         const project = await Project.findOne({ projectId: projectId }).lean().exec();
 
         if (!project) {
-            res.status(404).send('Project not found');
+            res.status(404).send('Project not found. If you are looking for a closure, it may have expired or been updated. Go back to <a href="/">home</a> for the latest updates.');
             return;
         }
 
