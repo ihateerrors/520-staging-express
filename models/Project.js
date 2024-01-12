@@ -132,7 +132,7 @@ const ProjectSchema = new mongoose.Schema({
 
 ProjectSchema.pre('validate', async function(next) {
     // Generate a slug from the title
-    const originalSlug = slugify(this.activitySlug, { lower: false, strict: true });
+    const originalSlug = slugify(this.activitySlug, { lower: true, strict: true });
     // Check if the generated slug already exists in the database
     let count = 1;
     let slug = originalSlug;
