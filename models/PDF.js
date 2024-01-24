@@ -9,6 +9,10 @@ const pdfSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    newsletterLink: {
+        type: String,
+        default: null
+    },
     // ... any other fields you'd like to associate with the PDFs
 });
 
