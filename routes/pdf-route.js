@@ -39,7 +39,7 @@ router.get('/i5-connection-project', async (req, res) => {
 });
 
 // Handle PDF uploads
-router.post('/pdf-upload', upload.fields([{ name: 'montlakeNoiseReport' }, { name: 'i5NoiseReport' }]), async (req, res) => {
+router.post('/pdf-upload', upload.fields([{ name: 'montlakeNoiseReport' }, { name: 'i5NoiseReport' }, { name: 'newsletterLink' }]), async (req, res) => {
     try {
         let montlakeNoiseReportUrl, i5NoiseReportUrl;
 
@@ -55,7 +55,8 @@ router.post('/pdf-upload', upload.fields([{ name: 'montlakeNoiseReport' }, { nam
 
         const pdfData = new PDF({
             montlakeNoiseReportUrl,
-            i5NoiseReportUrl
+            i5NoiseReportUrl,
+            newsletterLink
         });
 
         await pdfData.save();
@@ -66,7 +67,7 @@ router.post('/pdf-upload', upload.fields([{ name: 'montlakeNoiseReport' }, { nam
         req.flash('error_msg', 'There was an error uploading the PDFs.');
         res.redirect('/pdf-upload');
     }
-});
+})
 
 router.get('/api/pdfs', async (req, res) => {
     try {
