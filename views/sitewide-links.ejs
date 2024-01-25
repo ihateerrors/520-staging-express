@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <title>SR 520 Construction | Sitewide Links </title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> 
+<link rel="stylesheet" media="all" href="/css/styles3.css" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+  </head>
+  <body>
+    <header id="header" style="width: 100vw">
+        <div class="container-fluid header-container">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="headerflex">
+                <a
+                  class="logo"
+                  href="https://wsdot.wa.gov/"
+                  title="Home"
+                  rel="home"
+                  rel="noreferrer"
+                >
+                  <img
+                    src="https://sr520construction.blob.core.windows.net/520-uploads/wsdot-logo-white.svg"
+                    alt="Home"
+                    loading="lazy"
+                    style="float: left; position: sticky; text-decoration: none"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="container3">
+                <ul class="topnav2" style="float: right">
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a
+                      class="nodec"
+                      href="https://wsdot.wa.gov/construction-planning/major-projects/sr-520-bridge-replacement-and-hov-program"
+                      >SR 520 Program</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/news/">News</a
+                    >&nbsp;&nbsp;&nbsp;&nbsp;
+                  </li>
+                  <li class="nodec" style="font-weight: 600; font-size: 16px">
+                    <a class="nodec" href="https://www.wsdot.wa.gov/goodtogo/"
+                      ><em>Good To Go!</em></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="confirmation-box">
+        <% if (locals.success_msg) { %>
+            <div class="alert alert-success">
+                <%= locals.success_msg %>
+            </div>
+        <% } %>
+    
+        <% if (locals.error_msg) { %>
+            <div class="alert alert-danger">
+                <%= locals.error_msg %>
+            </div>
+        <% } %>
+    </div>
+      <div class="container">
+
+        <section class="form-area mt-5 ml-5 mr-5">
+            <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
+               
+                
+                <p><strong></strong></p>
+                <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
+                  Return to Dashboard
+                </a><br><br>
+          <p></p> 
+          <p><b>Files must be PDFs</b></p>
+          
+     
+            <form action="/sitewide-links" method="post">
+                <label>Newsletter Links:</label>
+                <input type="text" name="newsletters"><br><br>
+                <input type="submit">
+            </form>
+            
+        </div>
+ 
+        </section>
+    </div>
+    
+    
+  </body>
+</html>
+
