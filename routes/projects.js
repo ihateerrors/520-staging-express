@@ -15,6 +15,10 @@ router.get('/pdf-upload', (req, res) => {
     res.render('pdf-upload');
 });
 
+router.get('/sitewide-links', (req, res) => {
+    res.render('sitewide-links');
+});
+
 // Handle PDF uploads
 router.post('/upload-pdf', upload.fields([{ name: 'montlakeNoiseReport' }, { name: 'i5NoiseReport' }]), async (req, res) => {
     if (req.files.montlakeNoiseReport) {
