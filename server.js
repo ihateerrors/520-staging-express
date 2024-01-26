@@ -25,6 +25,7 @@ const registerRoutes = require('./routes/register');
 const latestBannerProjectRoute = require('./routes/latest-banner-project');
 const projectRoutes = require('./routes/projects');
 const closureRoutes = require('./routes/closureRoutes');
+const newsletterRoutes = require('./routes/newsletterRoutes'); 
 
 // Middleware setup
 
@@ -60,6 +61,7 @@ app.use(loginRoutes);
 app.use(latestBannerProjectRoute);
 app.use(pdfRoutes);
 app.use(closureRoutes);
+app.use(newsletterRoutes);
 
 
 const accountName = 'sr520construction';

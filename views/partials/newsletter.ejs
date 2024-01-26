@@ -1,0 +1,57 @@
+
+
+<!-- Model start -->
+
+const mongoose = require('mongoose');
+
+const newsletterLinkSchema = new mongoose.Schema({
+    url: {
+        type: String,
+        required: true
+    }
+});
+
+const NewsletterLink = mongoose.model('NewsletterLink', newsletterLinkSchema);
+
+module.exports = NewsletterLink;
+
+<!-- Model end -->
+
+<!-- Start route -->
+<script> 
+const express = require('express');
+const router = express.Router();
+const NewsletterLink = require('../models/NewsletterLink');
+
+// Route to update the newsletter link
+router.post('/update-newsletter-link', async (req, res) => {
+    try {
+        // Assuming you'll always have one document to hold the link
+        const linkObj = await NewsletterLink.findOne({});
+        if (linkObj) {
+            linkObj.url = req.body.url;
+            await linkObj.save();
+        } else {
+            // If it doesn't exist, create a new one
+            const newLink = new NewsletterLink({ url: req.body.url });
+            await newLink.save();
+        }
+        res.redirect('/dashboard'); // Or wherever you wish to redirect
+    } catch (error) {
+        console.error('Error updating newsletter link:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+module.exports = router;
+
+</script>
+
+
+<!-- for view -->
+<% if (newsletterLink) { %>
+    <a href="<%= newsletterLink.url %>">View our latest newsletter</a>
+<% } else { %>
+    <p> </p>
+<% } %>
+

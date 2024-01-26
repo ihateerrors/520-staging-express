@@ -118,6 +118,15 @@
                     >.</em
                   >
                 </p>
+               <!-- This is the bit that renders the newsletter link from the form in the dashboard ... -->
+                <% if (newsletterLink) { %>
+                  <div class="newsletter-section">
+                    <a href="<%= newsletterLink %>" target="_blank">Read our latest newsletter</a>                 
+                  </div>
+              <% } else { %>
+                  <p> </p>
+              <% } %>
+                  
                 <p class="card-subtext" style="font-size: 15px">
                   To sign up for one or both of our email newsletters, click the
                   buttons below and enter your email address. You can
