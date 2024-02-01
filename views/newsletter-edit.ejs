@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <title>SR 520 Construction | Newsletter Edit Field </title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> 
+<link rel="stylesheet" media="all" href="/css/styles3.css" />
+<link rel="stylesheet" media="all" href="/css/stylesheet-override2.css" />
+  </head>
+  <body>
+
+    <div class="confirmation-box">
+      <% if (locals.success_msg) { %>
+      <div class="alert alert-success">
+        <%= locals.success_msg %>
+      </div>
+      <% } %>
+
+      <% if (locals.error_msg) { %>
+      <div class="alert alert-danger">
+        <%= locals.error_msg %>
+      </div>
+      <% } %>
+    </div>
+    <div class="container">
+
+      <section class="form-area mt-5 ml-5 mr-5">
+        <div class="blockhead navwrap" style="display: block; margin: 3%;">
+
+
+          <p><strong></strong></p>
+          <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            Return to Dashboard
+          </a><br><br>
+          <p></p>
+          <p><b>Edit Weekly Newsletter URL</b></p>
+
+          <form action="/update-newsletter-link" method="post">
+            <div>
+              <label for="newsletterUrl">Newsletter URL:</label>
+              <input type="url" id="newsletterUrl" name="url" style="border-radius: 5px; min-width: 150px;color: #007b5f;" placeholder="Enter new newsletter URL" required>
+            </div>
+            <button type="submit" class="btn btn-outline-success btn-lg mt-3">Update Link</button>
+          </form>
+
+        </div>
+
+      </section>
+    </div>
+        
+  </body>
+</html>
+

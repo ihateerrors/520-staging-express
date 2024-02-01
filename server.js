@@ -13,6 +13,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage(); // Use memory storage to handle the file in a buffer
 const upload = multer({ storage: storage });
 const Project = require('./models/Project');
+const NewsletterLink = require('./models/NewsletterLink');
 const { fetchRecentClosures } = require('./routes/projects');
 const { StorageSharedKeyCredential, BlobServiceClient } = require("@azure/storage-blob");
 const pdfRoutes = require('./routes/pdf-route'); // Path may vary based on your directory structure
@@ -49,11 +50,9 @@ app.use(session({
     cookie: { secure: false } 
 }));
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
 
 app.use(projectRoutes.router);
 app.use(registerRoutes);
@@ -62,7 +61,6 @@ app.use(latestBannerProjectRoute);
 app.use(pdfRoutes);
 app.use(closureRoutes);
 app.use(newsletterRoutes);
-
 
 const accountName = 'sr520construction';
 const accountKey = process.env.AZURE_STORAGE_ACCOUNT_KEY;
@@ -110,6 +108,8 @@ passport.deserializeUser(async (id, done) => {
 
 app.get('/', async (req, res) => {
     try {
+        const newsletterLinkObj = await NewsletterLink.findOne({});
+        const newsletterLink = newsletterLinkObj ? newsletterLinkObj.url : null;
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
 
         const today = new Date();
@@ -133,7 +133,8 @@ app.get('/', async (req, res) => {
             closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
             currentClosures, 
             upcomingClosures,
-            messages: req.messages
+            messages: req.messages,
+            newsletterLink
         });
 
     } catch (error) {
@@ -147,14 +148,6 @@ app.get('/', async (req, res) => {
 app.get('/program', (req, res) => {
     res.render('program'); 
 });
-
-// app.get('/montlake-project', (req, res) => {
-//     res.render('montlake-project');
-// });
-
-// app.get('/i5-connection-project', (req, res) => {
-//     res.render('i5-connection-project');
-// });
 
 app.get('/portage-bay-project', (req, res) => {
     res.render('portage-bay-project');
@@ -193,8 +186,6 @@ app.get('/events', async (req, res) => {
     }
 });
 
-
-
 mongoose.connect(dbConnectionString, { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
@@ -212,3 +203,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

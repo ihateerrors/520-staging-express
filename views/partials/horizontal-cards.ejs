@@ -109,7 +109,7 @@
                   ></i>
                 </div>
                 <p></p>
-                <p>
+                <!-- <p>
                   <em
                     >Read our latest
                     <a target="_blank"
@@ -117,21 +117,21 @@
                       >Rest of the West News</a
                     >.</em
                   >
-                </p>
+                </p> -->
                <!-- This is the bit that renders the newsletter link from the form in the dashboard ... -->
                 <% if (newsletterLink) { %>
                   <div class="newsletter-section">
-                    <a href="<%= newsletterLink %>" target="_blank">Read our latest newsletter</a>                 
+                    Read our latest <a href="<%= newsletterLink %>" target="_blank">Rest of the West News</a>                 
                   </div>
               <% } else { %>
                   <p> </p>
               <% } %>
                   
+
                 <p class="card-subtext" style="font-size: 15px">
                   To sign up for one or both of our email newsletters, click the
                   buttons below and enter your email address. You can
-                  <a
-                    href="https://public.govdelivery.com/accounts/WADOT/subscriber/new"
+                  <a href="https://public.govdelivery.com/accounts/WADOT/subscriber/new"
                   >
                     access your subscription preferences</a>
                   at any time.
