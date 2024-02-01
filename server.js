@@ -144,15 +144,6 @@ app.get('/', async (req, res) => {
 });
 
 
-//map Routes
-app.get('/program', (req, res) => {
-    res.render('program'); 
-});
-
-app.get('/portage-bay-project', (req, res) => {
-    res.render('portage-bay-project');
-});
-
 // Define redirects for specific paths
 app.get('/FutureConstructionProjects', (req, res) => {
     res.redirect('https://sr520construction.com/');
@@ -166,25 +157,56 @@ app.get('/ConstructionMap', (req, res) => {
     res.redirect('https://sr520construction.com/');
 });
 
-app.get('/contact', async (req, res) => {
-    try {
-        const closuresData = await fetchRecentClosures();
-        res.render('contact', { closures: closuresData });
-    } catch (error) {
-        console.error("Error in /contact route:", error);
-        res.status(500).send("Server error");
-    }
-});
+// This is the new function to render the static pages but to ensure that the latest newsletter URL is captured
 
-app.get('/events', async (req, res) => {
+async function getNewsletterLink() {
+    const newsletterLinkObj = await NewsletterLink.findOne({});
+    return newsletterLinkObj ? newsletterLinkObj.url : null;
+  }
+  
+  app.get('/program', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    res.render('program', { newsletterLink });
+  });
+  
+  app.get('/portage-bay-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    res.render('portage-bay-project', { newsletterLink });
+  });
+  
+  app.get('/i5-connection-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    res.render('i5-connection-project', { newsletterLink });
+  });
+  
+  app.get('/montlake-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    res.render('montlake-project', { newsletterLink });
+  });
+  
+  app.get('/contact', async (req, res) => {
     try {
-        const closuresData = await fetchRecentClosures();
-        res.render('events', { closures: closuresData });
+      const closuresData = await fetchRecentClosures();
+      const newsletterLink = await getNewsletterLink();
+      res.render('contact', { closures: closuresData, newsletterLink });
     } catch (error) {
-        console.error("Error in /events route:", error);
-        res.status(500).send("Server error");
+      console.error("Error in /contact route:", error);
+      res.status(500).send("Server error");
     }
-});
+  });
+  
+  app.get('/events', async (req, res) => {
+    try {
+      const closuresData = await fetchRecentClosures();
+      const newsletterLink = await getNewsletterLink();
+      res.render('events', { closures: closuresData, newsletterLink });
+    } catch (error) {
+      console.error("Error in /events route:", error);
+      res.status(500).send("Server error");
+    }
+  });
+
+
 
 mongoose.connect(dbConnectionString, { 
     useNewUrlParser: true, 
