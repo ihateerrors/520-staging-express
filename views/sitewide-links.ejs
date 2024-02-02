@@ -61,41 +61,42 @@ type="text/css" />
       </header>
       <div class="confirmation-box">
         <% if (locals.success_msg) { %>
-            <div class="alert alert-success">
-                <%= locals.success_msg %>
-            </div>
-        <% } %>
-    
-        <% if (locals.error_msg) { %>
-            <div class="alert alert-danger">
-                <%= locals.error_msg %>
-            </div>
-        <% } %>
-    </div>
-      <div class="container">
-
-        <section class="form-area mt-5 ml-5 mr-5">
-            <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
-               
-                
-                <p><strong></strong></p>
-                <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
-                  Return to Dashboard
-                </a><br><br>
-          <p></p> 
-          <p><b>Files must be PDFs</b></p>
-          
-     
-            <form action="/sitewide-links" method="post">
-                <label>Newsletter Links:</label>
-                <input type="text" name="newsletters"><br><br>
-                <input type="submit">
-            </form>
-            
+        <div class="alert alert-success">
+          <%= locals.success_msg %>
         </div>
- 
+        <% } %>
+  
+        <% if (locals.error_msg) { %>
+        <div class="alert alert-danger">
+          <%= locals.error_msg %>
+        </div>
+        <% } %>
+      </div>
+      <div class="container">
+  
+        <section class="form-area mt-5 ml-5 mr-5">
+          <div class="blockhead navwrap" style="display: block; margin: 3%;">
+  
+  
+            <p><strong></strong></p>
+            <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
+              Return to Dashboard
+            </a><br><br>
+            <p></p>
+            <p><b>Edit Weekly Newsletter URL</b></p>
+  
+            <form action="/update-newsletter-link" method="post">
+              <div>
+                <label for="newsletterUrl">Newsletter URL:</label>
+                <input type="url" id="newsletterUrl" name="url" style="border-radius: 5px; min-width: 150px;color: #007b5f;" placeholder="Enter new newsletter URL" required>
+              </div>
+              <button type="submit" class="btn btn-outline-success btn-lg mt-3">Update Link</button>
+            </form>
+  
+          </div>
+  
         </section>
-    </div>
+      </div>
     
     
   </body>
