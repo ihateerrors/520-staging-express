@@ -26,7 +26,7 @@ router.post('/update-newsletter-link', async (req, res) => {
             const newLink = new NewsletterLink({ url: req.body.url });
             await newLink.save();
         }
-        res.redirect('/dashboard'); // after updating
+        res.redirect('/dashboard'); // after updating -- should add a success/error message not just in the console here
     } catch (error) {
         console.error('Error updating newsletter link:', error);
         res.status(500).send('Internal Server Error');
