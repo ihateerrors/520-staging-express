@@ -97,15 +97,7 @@
                         ></i>
                       </div>
                       <p></p>
-                      <p>
-                        <em
-                          >Read our latest
-                          <a target="_blank"
-                            href="https://content.govdelivery.com/accounts/WADOT/bulletins/385c717"
-                            >Rest of the West News</a
-                          >.</em
-                        >
-                      </p>
+                
                       <p class="card-subtext" style="font-size: 15px">
                         To sign up for one of both of our email newsletters, click the
                         buttons below and enter your email address. You can
@@ -126,11 +118,14 @@
                         justify-content: center;
                       "
                     >
-                      <a
-                        href="https://public.govdelivery.com/accounts/WADOT/subscriber/new?topic_id=WADOT_376"
-                        class="btn btn-primary parallelogram-link-sm mt-2"
-                        >Rest of the West News sign-up</a
-                      >
+                             <!-- This is the bit that renders the newsletter link from the form in the dashboard ... -->
+                <% if (newsletterLink) { %>
+                  <div class="newsletter-section">
+                    Read our latest <a href="<%= newsletterLink %>" target="_blank">Rest of the West News</a>                 
+                  </div>
+              <% } else { %>
+                  <p> </p>
+              <% } %>
                       <p></p>
                       <br />
                       <a
