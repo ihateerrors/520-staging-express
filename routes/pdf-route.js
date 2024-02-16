@@ -53,7 +53,7 @@ router.get('/i5-connection-project', async (req, res) => {
     }
 });
 
-// Route for Portage Bay Project - This is a hack and if this is not here, then portage bay will not render - there currently aren't any PDFs rendered on Portage Bay
+// Route for Portage Bay Project - there currently aren't any PDFs rendered on Portage Bay, but this ensures the route works despite that.
 router.get('/portage-bay-project', async (req, res) => {
     const newsletterLink = await getNewsletterLink();
     const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
