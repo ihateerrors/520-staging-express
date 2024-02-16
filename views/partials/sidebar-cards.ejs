@@ -98,14 +98,14 @@
                       </div>
                       <p></p>
                       <p>
-                        <em
-                          >Read our latest
-                          <a target="_blank"
-                            href="https://content.govdelivery.com/accounts/WADOT/bulletins/385c717"
-                            >Rest of the West News</a
-                          >.</em
-                        >
-                      </p>
+                        <% if (newsletterLink) { %>
+                           <em>
+                              Read our latest 
+                            </em>
+                            <a href="<%= newsletterLink %>" target="_blank">Rest of the West News</a>                 
+                        <% } else { %>
+                        <% } %>
+                    </p>
                       <p class="card-subtext" style="font-size: 15px">
                         To sign up for one of both of our email newsletters, click the
                         buttons below and enter your email address. You can
