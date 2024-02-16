@@ -53,6 +53,25 @@ router.get('/i5-connection-project', async (req, res) => {
     }
 });
 
+// Route for Portage Bay Project - This is a hack and if this is not here, then portage bay will not render - there currently aren't any PDFs rendered on Portage Bay
+router.get('/portage-bay-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
+    if (latestPDF) {
+        console.log("i5 URL:", latestPDF.i5NoiseReportUrl);
+        res.render('portage-bay-project', {
+            i5Url: latestPDF.i5NoiseReportUrl,
+            newsletterLink
+        });
+    } else {
+        console.log("No i5 URL found.");
+        res.render('portage-bay-project', {
+            i5Url: null,
+            NewsletterLink
+        });
+    }
+});
+
 // Handle PDF uploads
 router.post('/pdf-upload', upload.fields([{ name: 'montlakeNoiseReport' }, { name: 'i5NoiseReport' }]), async (req, res) => {
     try {
