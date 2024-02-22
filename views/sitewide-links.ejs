@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8" />
-  <title>SR 520 Construction | Construction Entry Form </title>
+  <title>SR 520 Construction | Sitewide Links </title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
@@ -61,43 +61,42 @@ type="text/css" />
       </header>
       <div class="confirmation-box">
         <% if (locals.success_msg) { %>
-            <div class="alert alert-success">
-                <%= locals.success_msg %>
-            </div>
-        <% } %>
-    
-        <% if (locals.error_msg) { %>
-            <div class="alert alert-danger">
-                <%= locals.error_msg %>
-            </div>
-        <% } %>
-    </div>
-      <div class="container">
-
-        <section class="form-area mt-5 ml-5 mr-5">
-            <div class="blockhead navwrap" style="display: block; margin: 3%;"> 
-               
-                
-                <p><strong></strong></p>
-                <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
-                  Return to Dashboard
-                </a><br><br>
-          <p></p> 
-          <p><b>Files must be PDFs</b></p>
-          
-     
-            <form action="/pdf-upload" method="post" enctype="multipart/form-data">
-                <label>Montlake Noise Report:</label>
-                <input type="file" name="montlakeNoiseReport" accept=".pdf"><br><br>
-                <label>I-5 Noise Report:</label>
-                <input type="file" name="i5NoiseReport" accept=".pdf"><br><br>
-                <input type="submit" value="Upload">
-            </form>
-            
+        <div class="alert alert-success">
+          <%= locals.success_msg %>
         </div>
- 
+        <% } %>
+  
+        <% if (locals.error_msg) { %>
+        <div class="alert alert-danger">
+          <%= locals.error_msg %>
+        </div>
+        <% } %>
+      </div>
+      <div class="container">
+  
+        <section class="form-area mt-5 ml-5 mr-5">
+          <div class="blockhead navwrap" style="display: block; margin: 3%;">
+  
+  
+            <p><strong></strong></p>
+            <a href="/dashboard" style="display: inline-block; padding: 10px 20px; font-size: 20px; background-color: #007b5f; color: #ffffff; text-decoration: none; border-radius: 5px;">
+              Return to Dashboard
+            </a><br><br>
+            <p></p>
+            <p><b>Edit Weekly Newsletter URL</b></p>
+  
+            <form action="/update-newsletter-link" method="post">
+              <div>
+                <label for="newsletterUrl">Newsletter URL:</label>
+                <input type="url" id="newsletterUrl" name="url" style="border-radius: 5px; min-width: 150px;color: #007b5f;" placeholder="Enter new newsletter URL" required>
+              </div>
+              <button type="submit" class="btn btn-outline-success btn-lg mt-3">Update Link</button>
+            </form>
+  
+          </div>
+  
         </section>
-    </div>
+      </div>
     
     
   </body>
