@@ -8,33 +8,67 @@ const upload = multer({ storage: storage });
 
 // Model for the PDFs (assuming you have set it up)
 const PDF = require('../models/PDF');  // Adjust path if needed
+const NewsletterLink = require("../models/NewsletterLink"); 
+
+async function getNewsletterLink() {
+    const newsletterLinkObj = await NewsletterLink.findOne({});
+    return newsletterLinkObj ? newsletterLinkObj.url : null;
+}
 
 // Route for Montlake Project
 router.get('/montlake-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
     const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
     if (latestPDF) {
         console.log("Montlake URL:", latestPDF.montlakeNoiseReportUrl);
         res.render('montlake-project', {
-            montlakeUrl: latestPDF.montlakeNoiseReportUrl
+            montlakeUrl: latestPDF.montlakeNoiseReportUrl,
+            newsletterLink
         });
     } else {
         console.log("No Montlake URL found.");
         res.render('montlake-project', {
-            montlakeUrl: null
+            montlakeUrl: null,
+            NewsletterLink
         });
     }
 });
 
 // Route for I-5 Connection Project
 router.get('/i5-connection-project', async (req, res) => {
-    try {
-        // Fetch the latest PDF entry from the database
-        const latestPDF = await PDF.findOne().sort({ _id: -1 });
+    const newsletterLink = await getNewsletterLink();
+    const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
+    if (latestPDF) {
+        console.log("i5 URL:", latestPDF.i5NoiseReportUrl);
+        res.render('i5-connection-project', {
+            i5Url: latestPDF.i5NoiseReportUrl,
+            newsletterLink
+        });
+    } else {
+        console.log("No i5 URL found.");
+        res.render('i5-connection-project', {
+            i5Url: null,
+            NewsletterLink
+        });
+    }
+});
 
-        // Render the i5-connection-project view with the fetched I-5 URL
-        res.render('i5-connection-project', { i5Url: latestPDF ? latestPDF.i5NoiseReportUrl : null });
-    } catch (err) {
-        res.status(500).send("Error fetching I-5 PDF.");
+// Route for Portage Bay Project - there currently aren't any PDFs rendered on Portage Bay, but this ensures the route works despite that.
+router.get('/portage-bay-project', async (req, res) => {
+    const newsletterLink = await getNewsletterLink();
+    const latestPDF = await PDF.findOne().sort({ _id: -1 }).limit(1);
+    if (latestPDF) {
+        console.log("i5 URL:", latestPDF.i5NoiseReportUrl);
+        res.render('portage-bay-project', {
+            i5Url: latestPDF.i5NoiseReportUrl,
+            newsletterLink
+        });
+    } else {
+        console.log("No i5 URL found.");
+        res.render('portage-bay-project', {
+            i5Url: null,
+            NewsletterLink
+        });
     }
 });
 
