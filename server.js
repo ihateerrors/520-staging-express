@@ -118,12 +118,12 @@ app.get('/', async (req, res) => {
         // Get current closures
         const currentClosures = await Project.find({
             startDate: { $lte: today },
-            endDate: { $gt: today }
+            endDate: { $gte: today }
         }).sort({ postDate: -1 });
 
         // Get upcoming closures
         const upcomingClosures = await Project.find({
-            startDate: { $gte: today }
+            startDate: { $gte: today } // initial typo?
         }).sort({ postDate: -1 });
 
         res.render('index', {
