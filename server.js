@@ -130,7 +130,7 @@ app.get('/', async (req, res) => {
             title: '520 Construction Corner',
             header: 'Welcome to the 520 Construction Corner!',
             project,
-            // closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
+            closures: [...currentClosures, ...upcomingClosures],  // combines both lists, though you may not need to do this
             currentClosures, 
             upcomingClosures,
             messages: req.messages,
