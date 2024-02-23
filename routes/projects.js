@@ -325,7 +325,7 @@ router.get('/api/projects/currentAndUpcoming', async (req, res) => {
 
     // Get upcoming closures
     const upcomingClosures = await Project.find({
-        startDate: { $gt: today } // initial typo?
+        startDate: { $gte: today } // initial typo?
     }).sort({ postDate: -1 });
 
     res.json({ currentClosures, upcomingClosures });
