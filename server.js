@@ -123,7 +123,7 @@ app.get('/', async (req, res) => {
 
         // Get upcoming closures
         const upcomingClosures = await Project.find({
-            startDate: { $gt: today }
+            startDate: { $gte: today }
         }).sort({ postDate: -1 });
 
         res.render('index', {
