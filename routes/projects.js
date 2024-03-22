@@ -317,7 +317,7 @@ router.get('/latest-closures', async (req, res) => {
 router.get('/api/projects/currentAndUpcoming', async (req, res) => {
     const today = new Date();
     // today.setHours(0, 0, 0, 0);  // set to start of the day
-    today.setHours(today.getHours() - 8 );
+    today.setHours(today.getHours() - 7 );
 
     const currentClosures = await Project.find({
         startDate: { $lte: today },
