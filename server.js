@@ -113,8 +113,7 @@ app.get('/', async (req, res) => {
         const project = await Project.findOne({ bannerContent: 'yes' }).sort({ postDate: -1 });
 
         const today = new Date();
-        // today.setHours(0, 0, 0, 0);  // set to start of the day
-        today.setHours(today.getHours() - 7 );
+        today.setHours(today.getHours() - 7 ); // minus 7 hours because prod is off by that for some weird reason
 
         // Get current closures
         const currentClosures = await Project.find({
