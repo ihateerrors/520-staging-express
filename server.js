@@ -114,7 +114,7 @@ app.get('/', async (req, res) => {
 
         const today = new Date();
         // today.setHours(0, 0, 0, 0);  // set to start of the day
-        today.setHours(today.getHours() - 7 );
+        today.setHours(today.getHours() - 6 );
 
         // Get current closures
         const currentClosures = await Project.find({
