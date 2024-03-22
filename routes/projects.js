@@ -316,8 +316,7 @@ router.get('/latest-closures', async (req, res) => {
 
 router.get('/api/projects/currentAndUpcoming', async (req, res) => {
     const today = new Date();
-    // today.setHours(0, 0, 0, 0);  // set to start of the day
-    today.setHours(today.getHours() - 7 );
+    today.setHours(today.getHours() - 7 ); // minus 7 hours because prod is off by that for some weird reason
 
     const currentClosures = await Project.find({
         startDate: { $lte: today },
